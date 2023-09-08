@@ -63,7 +63,7 @@ const AddEmployees = () => {
           <div className="mb-4">
             <label htmlFor="position" className="block text-cyan-950 font-bold mb-2">
               Posisi
-            <select name="position" id="position" className='rounded-md py-5 px-3 text-cyan-400 focus:outline-none focus:ring  w-full'>
+            <select name="position" id="position" className='rounded-md py-2 px-3 text-cyan-400 bg-cyan-950 focus:outline-none focus:ring w-full'>
               <option value="">Junior Developer</option>
               <option value="">Senior Developer</option>
               <option value="">Junior Project Manager</option>
