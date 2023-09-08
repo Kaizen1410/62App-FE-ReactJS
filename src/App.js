@@ -2,24 +2,48 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import Leave from './pages/Leave';
-import Roles from './pages/Roles';
-import UserRoles from './pages/UserRoles';
-import Employees from './pages/Employees';
-import EmployeePositions from './pages/EmployeePositions';
-import Navbar from './components/Navbar';
+import Leave from './pages/leave/Leave';
+import Roles from './pages/roles/Roles';
+import UserRoles from './pages/userroles/UserRoles';
+import Employees from './pages/employees/Employees';
+import EmployeePositions from './pages/employeepositions/EmployeePositions';
+import AddLeave from './pages/leave/AddLeave';
+import EditLeave from './pages/leave/EditLeave';
+import AddRoles from './pages/roles/AddRoles';
+import EditRoles from './pages/roles/EditRoles';
+import AddUserRoles from './pages/userroles/AddUserRoles';
+import EditUserRoles from './pages/userroles/EditUserRoles';
+import AddEmployees from './pages/employees/AddEmployees';
+import EditEmployees from './pages/employees/EditEmployees';
+import AddEmployeePositions from './pages/employeepositions/AddEmployeePositions';
+import EditEmployeePositions from './pages/employeepositions/EditEmployeePositions';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Login />} />
-        <Route path='/home' element={<Home />} />
-        <Route path='/home/leave' element={<Leave />} />
-        <Route path='/home/roles' element={<Roles />} />
-        <Route path='/home/userroles' element={<UserRoles />} />
-        <Route path='/home/employees' element={<Employees />} />
-        <Route path='/home/employeepositions' element={<EmployeePositions />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/' element={<Home />} />
+        
+        <Route path='/leave' element={<Leave />} />
+        <Route path='/leave/add' element={<AddLeave />} />
+        <Route path='/leave/edit' element={<EditLeave />} />
+
+        <Route path='/roles' element={<Roles />} />
+        <Route path='/roles/add' element={<AddRoles />} />
+        <Route path='/roles/edit' element={<EditRoles />} />
+
+        <Route path='/userroles' element={<UserRoles />} />
+        <Route path='/userroles/add' element={<AddUserRoles />} />
+        <Route path='/userroles/edit' element={<EditUserRoles />} />
+
+        <Route path='/employees' element={<Employees />} />
+        <Route path='/employees/add' element={<AddEmployees />} />
+        <Route path='/employees/edit' element={<EditEmployees />} />
+
+        <Route path='/employeepositions' element={<EmployeePositions />} />
+        <Route path='/employeepositions/add' element={<AddEmployeePositions />} />
+        <Route path='/employeepositions/edit' element={<EditEmployeePositions />} />
       </Routes>
     </BrowserRouter>
   );
