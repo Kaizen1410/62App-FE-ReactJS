@@ -7,16 +7,16 @@ function Navbar() {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
                     </label>
                     <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                        <li className="text-cyan-400"><a href='/home/leave'>Leave</a></li>
-                        <li className="text-cyan-400"><a href='/home/role'>Role</a></li>
-                        <li className="text-cyan-400"><a href='/home/useroles'>User Roles</a></li>
-                        <li className="text-cyan-400"><a href='/home/employees'>Employees</a></li>
-                        <li className="text-cyan-400"><a href='/home/employeepositions'>Employee Positions</a></li>
+                        <li className="text-cyan-400"><a href='/leave'>Leave</a></li>
+                        <li className="text-cyan-400"><a href='/roles'>Role</a></li>
+                        <li className="text-cyan-400"><a href='/userroles'>User Roles</a></li>
+                        <li className="text-cyan-400"><a href='/employees'>Employees</a></li>
+                        <li className="text-cyan-400"><a href='/employeepositions'>Employee Positions</a></li>
                     </ul>
                 </div>
             </div>
             <div className="flex-1">
-                <a href='/home' className="btn btn-ghost normal-case text-xl text-cyan-400">daisyUI</a>
+                <a href='/home' className="btn btn-ghost normal-case text-xl text-cyan-400">Selamat Datang</a>
             </div>
             <div className="dropdown dropdown-end">
                 <label tabIndex={0} className="btn btn-ghost btn-circle">
