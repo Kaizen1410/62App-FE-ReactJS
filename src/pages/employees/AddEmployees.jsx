@@ -59,12 +59,12 @@ function AddEmployees() {
               <form onSubmit={saveEmployees}>
                 <div className="mb-3">
                   <label className="text-cyan-950">Name</label>
-                  <input type="text" name="name" value={employees.name} onChange={handleInput} className="form-control border-0 text-info" placeholder="Enter Name" />
+                  <input type="text" name="name" value={employees.name} onChange={handleInput} className="form-control border-0 text-cyan-400 bg-cyan-950" placeholder="Enter Name" />
                 </div>
                 <div className="mb-4">
                   <label htmlFor="position" className="block text-cyan-950  mb-2">
                     Positions
-                    <select name="employee_position_id" id="position" className='rounded-md py-5 px-3 text-cyan-400 focus:outline-none focus:ring  w-full' onChange={handleInput}>
+                    <select name="employee_position_id" id="position" className='rounded-md py-5 px-3 text-cyan-400 bg-cyan-950 focus:outline-none focus:ring  w-full' onChange={handleInput}>
                      {employeePositions.map(p=>(
                       <option value={p.id}>{p.name}</option>
                      ))}
@@ -72,7 +72,7 @@ function AddEmployees() {
                   </label>
                 </div>
                 <div className="mb-3">
-                  <button type="submit" className="btn btn-dark text-info">Save</button>
+                  <button type="submit" className="btn text-cyan-400">Save</button>
                 </div>
               </form>
             </div>
