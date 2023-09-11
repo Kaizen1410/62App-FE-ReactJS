@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios';
+import Loading from '../../components/Loading';
 
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
   const [pagination, setPagination] = useState();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-
+    setIsLoading(true)
     axios.get(`http://127.0.0.1:8000/api/employees?page=${page}&search=${search}`).then(res => {
       console.log(res)
       setEmployees(res.data.data);
       setPagination(res.data);
-    });
+    })
+    .catch(err => console.error(err))
+    .finally(() => setTimeout(()=>{setIsLoading(false)}, 500));
 
   }, [page, search])
 
@@ -73,7 +77,7 @@ const Employees = () => {
               </div>
               <div className="card-body bg-cyan-400">
                 <input type="text" className="form-control mb-3 float-end bg-cyan-950 border-0 text-cyan-400" onChange={Filter} placeholder="Search" />
-                <table className="table-fixed hover:table-fixed">
+                {isLoading ? <Loading /> : <table className="table-fixed hover:table-fixed">
                   <thead>
                     <tr className='text-cyan-950'>
                       <th>Name</th>
@@ -84,7 +88,7 @@ const Employees = () => {
                   <tbody className='text-cyan-950'>
                     {employeesDetails}
                   </tbody>
-                </table>
+                </table>}
                 {pagination?.links.length > 0 && (
                   <nav aria-label="Page navigation example">
                     <ul className="pagination flex justify-center">
