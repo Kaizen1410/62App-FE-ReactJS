@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Loading from '../../components/Loading';
 
 function EmployeePositions() {
   const [positions, setPositions] = useState([]);
@@ -8,6 +9,7 @@ function EmployeePositions() {
   const [pagination, setPagination] = useState();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getEmployeePositions();
@@ -15,6 +17,7 @@ function EmployeePositions() {
   
   // Mengambil data posisi karyawan dari API backend
   const getEmployeePositions = () => {
+    setIsLoading(true);
     axios.get(`/api/employee-positions?search=${search}&page=${page}`)
     .then(res => {
       setPositions(res.data.data);
@@ -23,7 +26,8 @@ function EmployeePositions() {
     })
     .catch(error => {
       console.error('Error fetching employee positions:', error);
-    });
+    })
+    .finally(setIsLoading(false));
   }
 
   const handleAddPosition = (e) => {
@@ -97,7 +101,7 @@ function EmployeePositions() {
 
       <input type="search" className='w-full rounded-md mb-4' placeholder='Search...' onChange={(e) => setSearch(e.target.value)} />
 
-      <table className="w-full border-collapse border">
+      {isLoading ? <Loading /> : <table className="w-full border-collapse border">
         <thead>
           <tr className="bg-gray-200">
             <th className="p-2">No</th>
@@ -159,7 +163,7 @@ function EmployeePositions() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table>}
 
       {pagination?.links.length > 0 && (
         <div className='flex justify-center items-center gap-1 mt-12'>
