@@ -19,6 +19,7 @@ import EditEmployees from './pages/employees/EditEmployees';
 import AddEmployeePositions from './pages/employeepositions/AddEmployeePositions';
 import EditEmployeePositions from './pages/employeepositions/EditEmployeePositions';
 import UserProvider from './context/UserProvider';
+import Layout from './components/Layout';
 
 function App() {
   axios.defaults.baseURL = 'http://localhost:8000/';
@@ -28,27 +29,29 @@ function App() {
       <UserProvider>
         <Routes>
           <Route path='/login' element={<Login />} />
-          <Route path='/' element={<Home />} />
-          
-          <Route path='/leave' element={<Leave />} />
-          <Route path='/leave/add' element={<AddLeave />} />
-          <Route path='/leave/edit' element={<EditLeave />} />
 
-          <Route path='/roles' element={<Roles />} />
-          <Route path='/roles/add' element={<AddRoles />} />
-          <Route path='/roles/edit' element={<EditRoles />} />
+          <Route element={<Layout />} >
+            <Route path='/' element={<Home />} />
+            <Route path='/leave' element={<Leave />} />
+            <Route path='/leave/add' element={<AddLeave />} />
+            <Route path='/leave/:id/edit' element={<EditLeave />} />
 
-          <Route path='/userroles' element={<UserRoles />} />
-          <Route path='/userroles/add' element={<AddUserRoles />} />
-          <Route path='/userroles/edit' element={<EditUserRoles />} />
+            <Route path='/roles' element={<Roles />} />
+            <Route path='/roles/add' element={<AddRoles />} />
+            <Route path='/roles/:id/edit' element={<EditRoles />} />
 
-          <Route path='/employees' element={<Employees />} />
-          <Route path='/employees/add' element={<AddEmployees />} />
-          <Route path='/employees/edit' element={<EditEmployees />} />
+            <Route path='/userroles' element={<UserRoles />} />
+            <Route path='/userroles/add' element={<AddUserRoles />} />
+            <Route path='/userroles/:id/edit' element={<EditUserRoles />} />
 
-          <Route path='/employeepositions' element={<EmployeePositions />} />
-          <Route path='/employeepositions/add' element={<AddEmployeePositions />} />
-          <Route path='/employeepositions/edit' element={<EditEmployeePositions />} />
+            <Route path='employees' element={<Employees />} />
+            <Route path='/employees/add' element={<AddEmployees />} />
+            <Route path='/employees/:id/edit' element={<EditEmployees />} />
+
+            <Route path='/employee-positions' element={<EmployeePositions />} />
+            <Route path='/employee-positions/add' element={<AddEmployeePositions />} />
+            <Route path='/employee-positions/:id/edit' element={<EditEmployeePositions />} />
+          </Route>
         </Routes>
       </UserProvider>
     </BrowserRouter>

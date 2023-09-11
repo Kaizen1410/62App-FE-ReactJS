@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios';
-import Layout from '../../components/Layout';
 
 const Employees = () => {
   const [employee, setEmployee] = useState([]);
@@ -45,7 +44,6 @@ const Employees = () => {
   }
 
   return (
-    <Layout>
       <div className="container mt-5 p-3 mb-2">
         <div className="row">
           <div className="col-start-12">
@@ -84,7 +82,6 @@ const Employees = () => {
           </div>
         </div>
       </div>
-    </Layout>
   )
 }
 
