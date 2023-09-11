@@ -1,10 +1,13 @@
-import React from 'react'
 import Layout from '../components/Layout'
+import { UserState } from '../context/UserProvider';
 
 const Home = () => {
+    const { user } = UserState();
+
     return (
         <Layout>
-            <div className="card w-96 glass">
+            <h1 className='text-2xl mb-3'>Welcome { user?.email }</h1>
+            <div className="card w-96 glass bg-cyan-950">
                 <figure><img src="/logo192.png" alt="car!" /></figure>
                 <div className="card-body">
                     <h2 className="card-title">Life hack</h2>
