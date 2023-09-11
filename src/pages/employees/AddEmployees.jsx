@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Layout from "../../components/Layout";
 
 function AddEmployees() {
 
@@ -48,7 +47,6 @@ function AddEmployees() {
   }
 
   return (
-    <Layout>
     <div className="container mt-5 p-3 mb-2">
       <div className="row">
         <div className="col-start-12">
@@ -82,7 +80,6 @@ function AddEmployees() {
         </div>
       </div>
     </div>
-    </Layout>
   )
 }
 
