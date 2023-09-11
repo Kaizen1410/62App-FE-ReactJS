@@ -2,20 +2,22 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function EmployeePositions() {
-  const [positions, setPositions] = useState([]);
+  const [positions, setPositions] = useState();
   const [newPosition, setNewPosition] = useState('');
   const [editingPosition, setEditingPosition] = useState(null);
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     // Mengambil data posisi karyawan dari API backend
-    axios.get('/api/employee-positions')
+    axios.get(`/api/employee-positions?search=${search}&page=${page}`)
       .then((res) => {
-        setPositions(res.data.data);
+        setPositions(res.data);
       })
       .catch((error) => {
         console.error('Error fetching employee positions:', error);
       });
-  }, []);
+  }, [search, page]);
 
   const handleAddPosition = (e) => {
     e.preventDefault();
@@ -62,9 +64,18 @@ function EmployeePositions() {
       });
   };
 
+  const handlePage = (p) => {
+    if (p === '&laquo; Previous' || p === 'Next &raquo;') {
+      setPage(prev => p === '&laquo; Previous' ? prev - 1 : prev + 1);
+      return;
+    }
+    setPage(p);
+  }
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4 flex justify-center text-white">List Employee Positions</h1>
+
       <form onSubmit={handleAddPosition} className="mb-4 flex">
         <input
           type="text"
@@ -79,6 +90,11 @@ function EmployeePositions() {
           Add
         </button>
       </form>
+
+      <div>
+        <input type="search" className='w-full' placeholder='Search...' onChange={(e) => setSearch(e.target.value)} />
+      </div>
+
       <table className="w-full border-collapse border">
         <thead>
           <tr className="bg-gray-200">
@@ -88,9 +104,9 @@ function EmployeePositions() {
           </tr>
         </thead>
         <tbody>
-          {positions.map((position, i) => (
+          {positions?.data.map((position, i) => (
             <tr key={position.id}>
-              <td className="border p-2">{i + 1}</td>
+              <td className="border p-2">{(i + 1) + positions.per_page * (page - 1)}</td>
               <td className="border p-2">
                 {editingPosition === position.id ? (
                   <input
@@ -143,6 +159,18 @@ function EmployeePositions() {
           ))}
         </tbody>
       </table>
+
+      {positions?.links.length > 0 && (
+        <nav aria-label="Page navigation example">
+          <ul className="pagination flex justify-center">
+            {positions?.links.map((item, i) => (
+              <li key={i} className={`page-item`}>
+                <button onClick={() => handlePage(item.label)} style={{ fontSize: '14px', width: '35px', height: '35px' }} className={`bg-cyan-400 ${item.active ? 'bg-cyan-950 text-cyan-400' : 'text-cyan-950'} rounded-circle  border-0`}>{`${item.label === '&laquo; Previous' ? '<' : item.label === 'Next &raquo;' ? '>' : item.label}`}</button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
     </div>
   );
 }

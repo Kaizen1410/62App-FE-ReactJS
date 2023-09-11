@@ -15,17 +15,18 @@ function AddEmployees() {
 
   useEffect(() => {
     const getEmployeePositions = () => {
-      axios.get(`http://127.0.0.1:8000/api/employee-positions`)
-      .then(res => setEmployeePositions(res.data.data))
+      axios.get('/api/employee-positions')
+        .then(res => setEmployeePositions(res.data.data))
+        .catch(err => console.error(err))
     }
 
     getEmployeePositions()
   }, [])
-  
+
 
   const handleInput = (e) => {
     e.persist();
-    console.log({[e.target.name]: e.target.value})
+    console.log({ [e.target.name]: e.target.value })
     let value = e.target.value;
     setEmployees({ ...employees, [e.target.name]: value });
   }
@@ -37,13 +38,13 @@ function AddEmployees() {
       name: employees.name,
       employee_position_id: employees.employee_position_id
     }
-    console.log(data)
 
     axios.post(`http://127.0.0.1:8000/api/employees`, data)
       .then(res => {
         alert(res.data.message);
         navigate('/employees')
-      });
+      })
+      .catch(err => console.error(err));
   }
 
   return (
@@ -54,7 +55,7 @@ function AddEmployees() {
             <div className="card-title text-cyan-950 bg-cyan-400 flex justify-between p-3">
               <h4>Add Employee</h4>
               <Link to="/employees" className="btn btn-light float-end">Back</Link>
-           </div>
+            </div>
             <div className="card-body">
               <form onSubmit={saveEmployees}>
                 <div className="mb-3">
@@ -65,9 +66,10 @@ function AddEmployees() {
                   <label htmlFor="position" className="block text-cyan-950  mb-2">
                     Positions
                     <select name="employee_position_id" id="position" className='rounded-md py-5 px-3 text-cyan-400 bg-cyan-950 focus:outline-none focus:ring  w-full' onChange={handleInput}>
-                     {employeePositions.map(p=>(
-                      <option value={p.id}>{p.name}</option>
-                     ))}
+                      <option value="">---Select Position---</option>
+                      {employeePositions.map(p => (
+                        <option value={p.id}>{p.name}</option>
+                      ))}
                     </select>
                   </label>
                 </div>
