@@ -4,9 +4,12 @@ import { Outlet } from 'react-router'
 
 const Layout = () => {
   return (
-      <Sidebar>
-        <Outlet />
-      </Sidebar>
+    <>
+      <Sidebar />
+      <div className="p-4 sm:ml-64">
+          <Outlet />
+      </div>
+    </>
   )
 }
 

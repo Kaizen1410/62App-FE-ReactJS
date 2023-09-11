@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function Sidebar({ children }) {
+export default function Sidebar() {
    const navigate = useNavigate();
 
    const handleLogout = async () => {
@@ -68,10 +68,6 @@ export default function Sidebar({ children }) {
                </div>
             </div>
          </aside>
-
-         <div className="p-4 sm:ml-64">
-            {children}
-         </div>
       </>
    )
 }
