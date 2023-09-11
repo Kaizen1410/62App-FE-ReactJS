@@ -1,6 +1,6 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import fetchClient from "../../utils/fetchClient";
 
 
 function EditEmployees() {
@@ -16,7 +16,7 @@ function EditEmployees() {
 
   useEffect(() => {
     const getEmployeePositions = () => {
-      axios.get(`http://127.0.0.1:8000/api/employee-positions`)
+      fetchClient.get('/api/employee-positions')
       .then(res => setEmployeePositions(res.data.data))
     }
 
@@ -24,13 +24,12 @@ function EditEmployees() {
   }, [])
 
   useEffect(() => {
-
-    axios.get(`http://127.0.0.1:8000/api/employees/${id}`).then(res => {
+    fetchClient.get(`/api/employees/${id}`).then(res => {
       console.log(res)
       setEmployees(res.data.data);
     });
 
-  }, [id])
+  }, [id]);
 
   const handleInput = (e) => {
     e.persist();
@@ -44,9 +43,8 @@ function EditEmployees() {
       name: employees.name,
       employee_position_id: employees.employee_position_id
     }
-    console.log(data)
 
-    axios.put(`http://127.0.0.1:8000/api/employees/${id}`, data)
+    fetchClient.put(`/api/employees/${id}`, data)
       .then(res => {
         alert(res.data.message);
         navigate('/employees')

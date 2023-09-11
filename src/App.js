@@ -22,8 +22,6 @@ import UserProvider from './context/UserProvider';
 import Layout from './components/Layout';
 
 function App() {
-  axios.defaults.baseURL = 'http://localhost:8000/';
-
   return (
     <BrowserRouter>
       <UserProvider>
@@ -32,17 +30,17 @@ function App() {
 
           <Route element={<Layout />} >
             <Route path='/' element={<Home />} />
-            <Route path='/leave' element={<Leave />} />
-            <Route path='/leave/add' element={<AddLeave />} />
-            <Route path='/leave/:id/edit' element={<EditLeave />} />
+            <Route path='/leaves' element={<Leave />} />
+            <Route path='/leaves/add' element={<AddLeave />} />
+            <Route path='/leaves/:id/edit' element={<EditLeave />} />
 
             <Route path='/roles' element={<Roles />} />
             <Route path='/roles/add' element={<AddRoles />} />
             <Route path='/roles/:id/edit' element={<EditRoles />} />
 
-            <Route path='/userroles' element={<UserRoles />} />
-            <Route path='/userroles/add' element={<AddUserRoles />} />
-            <Route path='/userroles/:id/edit' element={<EditUserRoles />} />
+            <Route path='/user-roles' element={<UserRoles />} />
+            <Route path='/user-roles/add' element={<AddUserRoles />} />
+            <Route path='/user-roles/:id/edit' element={<EditUserRoles />} />
 
             <Route path='employees' element={<Employees />} />
             <Route path='/employees/add' element={<AddEmployees />} />

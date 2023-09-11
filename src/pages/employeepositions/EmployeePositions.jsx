@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from 'react';
 import Loading from '../../components/Loading';
+import fetchClient from '../../utils/fetchClient';
 
 function EmployeePositions() {
   const [positions, setPositions] = useState([]);
@@ -18,7 +18,7 @@ function EmployeePositions() {
   // Mengambil data posisi karyawan dari API backend
   const getEmployeePositions = () => {
     setIsLoading(true);
-    axios.get(`/api/employee-positions?search=${search}&page=${page}`)
+    fetchClient.get(`/api/employee-positions?search=${search}&page=${page}`)
     .then(res => {
       setPositions(res.data.data);
       delete res.data.data
@@ -33,7 +33,7 @@ function EmployeePositions() {
   const handleAddPosition = (e) => {
     e.preventDefault();
     // Mengirim data posisi baru ke server
-    axios.post('/api/employee-positions', { name: newPosition })
+    fetchClient.post('/api/employee-positions', { name: newPosition })
       .then(() => {
         getEmployeePositions();
         setNewPosition('');
@@ -45,7 +45,7 @@ function EmployeePositions() {
 
   const handleSavePosition = () => {
     // Mengirim data posisi yang diedit ke server
-    axios.put(`/api/employee-positions/${editingPosition.id}`, { name: editingPosition.name })
+    fetchClient.put(`/api/employee-positions/${editingPosition.id}`, { name: editingPosition.name })
       .then(() => {
         const updated = positions.map(p => {
           if (p.id===editingPosition.id) {
@@ -63,7 +63,7 @@ function EmployeePositions() {
 
   const handleDeletePosition = (positionId) => {
     // Menghapus posisi dari server dan daftar posisi
-    axios.delete(`/api/employee-positions/${positionId}`)
+    fetchClient.delete(`/api/employee-positions/${positionId}`)
       .then(() => {
         setPositions(positions.filter((position) => position.id !== positionId));
       })

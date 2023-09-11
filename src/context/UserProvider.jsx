@@ -25,7 +25,7 @@ const UserProvider = ({children}) => {
         }
 
         fetchUser();
-    }, []);
+    }, [navigate]);
 
     return(
         <UserContext.Provider value={{ user, setUser }}>

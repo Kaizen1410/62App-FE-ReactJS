@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import axios from 'axios';
 import Loading from '../../components/Loading';
+import fetchClient from '../../utils/fetchClient';
 
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
@@ -12,7 +12,7 @@ const Employees = () => {
 
   useEffect(() => {
     setIsLoading(true)
-    axios.get(`http://127.0.0.1:8000/api/employees?page=${page}&search=${search}`).then(res => {
+    fetchClient.get(`/api/employees?page=${page}&search=${search}`).then(res => {
       console.log(res)
       setEmployees(res.data.data);
       setPagination(res.data);
@@ -28,11 +28,11 @@ const Employees = () => {
     const thisClicked = e.currentTarget;
     thisClicked.innerText = "Deleting...";
 
-    axios.delete(`http://127.0.0.1:8000/api/employees/${id}`)
+    fetchClient.delete(`/api/employees/${id}`)
         .then(res => {
             alert(res.data.message);
             thisClicked.innerText = "Delete";
-            axios.get(`http://127.0.0.1:8000/api/employees?page=${page}&search=${search}`).then(res => {
+            fetchClient.get(`/api/employees?page=${page}&search=${search}`).then(res => {
                 console.log(res)
                 setEmployees(res.data.data);
                 setPagination(res.data);

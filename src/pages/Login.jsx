@@ -1,7 +1,7 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserState } from '../context/UserProvider';
+import fetchClient from '../utils/fetchClient';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -14,7 +14,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post('/api/auth/login', {email, password});
+      const res = await fetchClient.post('/api/auth/login', {email, password});
       localStorage.setItem('token', res.data.token);
       setUser(res.data.data)
       navigate('/');

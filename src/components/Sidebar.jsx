@@ -1,15 +1,13 @@
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import fetchClient from "../utils/fetchClient";
 
 export default function Sidebar() {
    const navigate = useNavigate();
 
    const handleLogout = async () => {
       try {
-         const res = await axios.get('/api/auth/logout', {
-            headers: {Authorization: `Bearer ${localStorage.getItem('token')}` || ''}
-         });
-         alert(res.data.message);
+         await fetchClient.get('/api/auth/logout');
+         localStorage.removeItem('token');
          navigate('/login');
       } catch (err) {
          console.error(err);
@@ -36,14 +34,19 @@ export default function Sidebar() {
                      </Link>
                   </li>
                   <li>
-                     <button type="button" className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
+                     <button type="button" className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-master" data-collapse-toggle="dropdown-master">
+
                         <i className="fa-solid fa-folder-closed text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+
                         <span className="flex-1 ml-3 text-left whitespace-nowrap">Master</span>
+
                         <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
                         </svg>
+
                      </button>
-                     <ul id="dropdown-example" className="hidden py-2 space-y-2">
+
+                     <ul id="dropdown-master" className="hidden py-2 space-y-2">
                         <li>
                            <Link to="/roles" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Roles</Link>
                         </li>
@@ -71,5 +74,3 @@ export default function Sidebar() {
       </>
    )
 }
-
-

@@ -1,6 +1,6 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import fetchClient from "../../utils/fetchClient";
 
 function AddEmployees() {
 
@@ -15,7 +15,7 @@ function AddEmployees() {
 
   useEffect(() => {
     const getEmployeePositions = () => {
-      axios.get('/api/employee-positions')
+      fetchClient.get('/api/employee-positions')
         .then(res => setEmployeePositions(res.data.data))
         .catch(err => console.error(err))
     }
@@ -39,7 +39,7 @@ function AddEmployees() {
       employee_position_id: employees.employee_position_id
     }
 
-    axios.post(`http://127.0.0.1:8000/api/employees`, data)
+    fetchClient.post('/api/employees', data)
       .then(res => {
         alert(res.data.message);
         navigate('/employees')
