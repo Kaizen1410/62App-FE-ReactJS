@@ -1,11 +1,11 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Layout from "../../components/Layout";
+
 
 function EditEmployees() {
 
-  let { id } = useParams()
+  const { id } = useParams()
   const navigate = useNavigate()
   const [employees, setEmployees] = useState({
     name: '',
@@ -27,7 +27,7 @@ function EditEmployees() {
 
     axios.get(`http://127.0.0.1:8000/api/employees/${id}`).then(res => {
       console.log(res)
-      setEmployees(res.data);
+      setEmployees(res.data.data);
     });
 
   }, [id])
@@ -54,7 +54,6 @@ function EditEmployees() {
   }
 
   return (
-    <Layout>
     <div className="container mt-5 p-3 mb-2">
       <div className="row">
         <div className="col-start-12">
@@ -88,7 +87,6 @@ function EditEmployees() {
         </div>
       </div>
     </div>
-    </Layout>
   )
 }
 
