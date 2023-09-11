@@ -8,20 +8,21 @@ function EmployeePositions() {
 
   useEffect(() => {
     // Mengambil data posisi karyawan dari API backend
-    axios.get('/api/employee_positions')
-      .then((response) => {
-        setPositions(response.data);
+    axios.get('/api/employee-positions')
+      .then((res) => {
+        setPositions(res.data.data);
       })
       .catch((error) => {
         console.error('Error fetching employee positions:', error);
       });
   }, []);
 
-  const handleAddPosition = () => {
+  const handleAddPosition = (e) => {
+    e.preventDefault();
     // Mengirim data posisi baru ke server
-    axios.post('/api/employee_positions', { name: newPosition })
+    axios.post('/api/employee-positions', { name: newPosition })
       .then((response) => {
-        setPositions([...positions, response.data]);
+        setPositions([...positions, response.data.data]);
         setNewPosition('');
       })
       .catch((error) => {
@@ -69,29 +70,27 @@ function EmployeePositions() {
           type="text"
           value={newPosition}
           onChange={(e) => setNewPosition(e.target.value)}
-          className="border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-300 w-2/3"
+          className="border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-300 w-full"
           placeholder="Add New Position"
         />
         <button
-          onClick={handleAddPosition}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md ml-2"
         >
           Add
         </button>
-      </div>
+      </form>
       <table className="w-full border-collapse border">
         <thead>
           <tr className="bg-gray-200">
             <th className="p-2">No</th>
             <th className="p-2">Name</th>
-            <th className="p-2">Position</th>
             <th className="p-2">Action</th>
           </tr>
         </thead>
         <tbody>
-          {positions.map((position) => (
+          {positions.map((position, i) => (
             <tr key={position.id}>
-              <td className="border p-2">{position.id}</td>
+              <td className="border p-2">{i + 1}</td>
               <td className="border p-2">
                 {editingPosition === position.id ? (
                   <input
