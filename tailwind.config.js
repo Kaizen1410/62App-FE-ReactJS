@@ -3,11 +3,12 @@ module.exports = {
   darkMode: 'class',
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
-    "./public/*.{html}"
+    "./public/*.{html}",
+    "./node_modules/flowbite/**/*.js"
   ],
   theme: {
     extend: {},
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui"), require('flowbite/plugin')],
 }
 

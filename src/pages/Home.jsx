@@ -4,7 +4,7 @@ import Layout from '../components/Layout'
 const Home = () => {
     return (
         <Layout>
-            <div className="card w-96 glass bg-cyan-950">
+            <div className="card w-96 glass">
                 <figure><img src="/logo192.png" alt="car!" /></figure>
                 <div className="card-body">
                     <h2 className="card-title">Life hack</h2>
