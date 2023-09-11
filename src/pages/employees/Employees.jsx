@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios';
 
 const Employees = () => {
-  const [employee, setEmployee] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [pagination, setPagination] = useState();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
@@ -12,11 +12,29 @@ const Employees = () => {
 
     axios.get(`http://127.0.0.1:8000/api/employees?page=${page}&search=${search}`).then(res => {
       console.log(res)
-      setEmployee(res.data.data);
+      setEmployees(res.data.data);
       setPagination(res.data);
     });
 
   }, [page, search])
+
+  const deleteEmployees = (e, id) => {
+    e.preventDefault();
+
+    const thisClicked = e.currentTarget;
+    thisClicked.innerText = "Deleting...";
+
+    axios.delete(`http://127.0.0.1:8000/api/employees/${id}`)
+        .then(res => {
+            alert(res.data.message);
+            thisClicked.innerText = "Delete";
+            axios.get(`http://127.0.0.1:8000/api/employees?page=${page}&search=${search}`).then(res => {
+                console.log(res)
+                setEmployees(res.data.data);
+                setPagination(res.data);
+            });
+        });
+}
 
   const handlePage = (p) => {
     if (p === '&laquo; Previous' || p === 'Next &raquo;') {
@@ -27,13 +45,14 @@ const Employees = () => {
   }
 
   var employeesDetails = '';
-  employeesDetails = employee.map((item, index) => {
+  employeesDetails = employees.map((item, index) => {
     return (
       <tr key={index}>
         <td>{item.name}</td>
         <td>{item.employee_position.name}</td>
-        <td>
-          <Link to={`/employees/${item.id}/edit`} className="btn btn-cyan-400 text-cyan-400">Edit</Link>
+        <td className='flex justify-center gap-10'>
+          <Link to={`/employees/${item.id}/edit`} className="btn text-cyan-400">Edit</Link>
+          <button type="button" onClick={(e) => deleteEmployees(e, item.id)} className="btn text-red-600">Delete</button>
         </td>
       </tr>
     )
@@ -59,7 +78,7 @@ const Employees = () => {
                     <tr className='text-cyan-950'>
                       <th>Name</th>
                       <th>Employee Position</th>
-                      <th>Edit</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody className='text-cyan-950'>
