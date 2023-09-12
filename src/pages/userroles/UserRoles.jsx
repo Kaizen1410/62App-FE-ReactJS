@@ -40,7 +40,7 @@ const UserRoles = () => {
       </div>
 
       {isLoading ? <Loading size='xl' /> : <Table striped>
-        <Table.Head>
+        <Table.Head className="text-center">
           <Table.HeadCell className="w-1">
             No
           </Table.HeadCell>
@@ -54,9 +54,7 @@ const UserRoles = () => {
             Roles
           </Table.HeadCell>
           <Table.HeadCell>
-            <span className="sr-only">
-              Edit
-            </span>
+            Action
           </Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
@@ -80,10 +78,10 @@ const UserRoles = () => {
                   ))}
                 </div>
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell className="text-center">
                 <Link
                   to={`/user-roles/${u.id}/edit`}
-                  className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 mr-5"
+                  className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
                 >
                   Edit
                 </Link>

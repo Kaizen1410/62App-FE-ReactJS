@@ -57,18 +57,16 @@ const Roles = () => {
         />
 
         <Button as={Link} to="/roles/add">
-          Add
+          Add Role
         </Button>
       </div>
         {isLoading ? <Loading size='xl' /> : (
         <Table striped>
-          <Table.Head>
+          <Table.Head className="text-center">
             <Table.HeadCell className="w-1">No</Table.HeadCell>
             <Table.HeadCell>Roles</Table.HeadCell>
             <Table.HeadCell>Members</Table.HeadCell>
-            <Table.HeadCell>
-              <span className="sr-only">Edit</span>
-            </Table.HeadCell>
+            <Table.HeadCell>Action</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
             {roles.map((r, i) => (
@@ -77,10 +75,10 @@ const Roles = () => {
                   {(i + 1) + pagination?.per_page * (page - 1)}
                 </Table.Cell>
                 <Table.Cell>{r.name}</Table.Cell>
-                <Table.Cell>
+                <Table.Cell className="text-center">
                   {r.users_count}
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell className="text-center">
                   <Link
                     to={`/roles/${r.id}/edit`}
                     className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 mr-5"

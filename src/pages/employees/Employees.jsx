@@ -4,6 +4,7 @@ import fetchClient from '../../utils/fetchClient';
 import { Table, Button } from "flowbite-react";
 import PopUpModal from "../../components/DeleteModal";
 import Loading from '../../components/Loading';
+import Pagination from '../../components/Pagination';
 
 const Employees = () => {
 
@@ -72,7 +73,7 @@ const Employees = () => {
       </div>
 
       {isLoading ? <Loading size='xl' /> : <Table striped>
-        <Table.Head>
+        <Table.Head className='text-center'>
           <Table.HeadCell className="w-1">No</Table.HeadCell>
           <Table.HeadCell>Name</Table.HeadCell>
           <Table.HeadCell>Position</Table.HeadCell>
@@ -86,7 +87,7 @@ const Employees = () => {
               </Table.Cell>
               <Table.Cell>{e.name}</Table.Cell>
               <Table.Cell>{e.employee_position.name}</Table.Cell>
-              <Table.Cell>
+              <Table.Cell className='text-center'>
                 <Link
                   to={`/employees/${e.id}/edit`}
                   className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 mr-5"
@@ -106,22 +107,8 @@ const Employees = () => {
           ))}
         </Table.Body>
       </Table>}
-   
 
-    {pagination?.links.length > 0 && (
-        <div className="flex justify-center items-center gap-1 mt-12">
-          {pagination?.links.length > 0 && (
-            <div className='flex justify-center items-center gap-1 mt-12'>
-              {pagination?.links.map((l, i) => (
-                <button key={i} className={`py-1 rounded-full w-8 h-8 text-center ${l.label === page.toString() ? 'bg-white text-black ' : 'text-white'} ${l.url && 'cursor-pointer hover:bg-slate-400 hover:text-black'}`}
-                  onClick={() => handlePage(l.label)} disabled={!l.url && 'disabled'}>
-                  {(l.label === '&laquo; Previous' ? '<' : (l.label === 'Next &raquo;' ? '>' : l.label))}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+      <Pagination pagination={pagination} page={page} setPage={setPage} />
 
       <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => handleDeleteEmployee(selectedEmployee)} />
     </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Loading from '../../components/Loading';
 import fetchClient from '../../utils/fetchClient';
-import { Table } from 'flowbite-react';
+import { Button, Table } from 'flowbite-react';
 import Pagination from '../../components/Pagination';
 
 function EmployeePositions() {
@@ -86,11 +86,9 @@ function EmployeePositions() {
           className="border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-300 w-full"
           placeholder="Add New Position"
         />
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md ml-2"
-        >
+        <Button className='ml-3'>
           Add
-        </button>
+        </Button>
       </form>
 
       <div className="relative mb-4">
@@ -100,7 +98,7 @@ function EmployeePositions() {
 
       {isLoading ? <Loading size='xl' /> : (
         <Table striped>
-          <Table.Head>
+          <Table.Head className='text-center'>
             <Table.HeadCell className='w-1'>No</Table.HeadCell>
             <Table.HeadCell>Name</Table.HeadCell>
             <Table.HeadCell>Action</Table.HeadCell>
@@ -125,7 +123,7 @@ function EmployeePositions() {
                     position.name
                   )}
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell className='text-center'>
                   {editingPosition?.id === position.id ? (
                     <>
                       <button

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
 import PopUpModal from "../../components/DeleteModal";
+import Pagination from "../../components/Pagination";
 
 const Leave = () => {
   const [leave, setLeave] = useState([]);
@@ -102,7 +103,7 @@ const Leave = () => {
               <Table.Cell>
                 {l.approved_by?.name}
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell className="text-center">
                 <Link
                   to={`/leaves/${l.id}/edit`}
                   className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 mr-5"
@@ -123,16 +124,7 @@ const Leave = () => {
         </Table.Body>
       </Table>}
 
-      {pagination?.links.length > 0 && (
-        <div className='flex justify-center items-center gap-1 mt-12'>
-          {pagination?.links.map((l, i) => (
-            <button key={i} className={`py-1 rounded-full w-8 h-8 text-center ${l.label === page.toString() ? 'bg-white text-black ' : 'text-white'} ${l.url && 'cursor-pointer hover:bg-slate-400 hover:text-black'}`}
-              onClick={() => handlePage(l.label)} disabled={!l.url && 'disabled'}>
-              {(l.label === '&laquo; Previous' ? '<' : (l.label === 'Next &raquo;' ? '>' : l.label))}
-            </button>
-          ))}
-        </div>
-      )}
+      <Pagination pagination={pagination} page={page} setPage={setPage} />
 
       <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => handleDeleteLeave(selectedLeave)} />
     </div>
