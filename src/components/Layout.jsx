@@ -7,7 +7,7 @@ const Layout = () => {
     <>
       {/* <Sidebar /> */}
       <SidebarReact />
-      <div className="p-4 ml-auto min-h-screen flex items-center" style={{width: 'calc(100vw - 16rem)'}}>
+      <div className="md:p-4 ml-auto min-h-screen flex items-center w-close md:w-open">
         <div className='w-full px-2'>
           <Outlet />
         </div>

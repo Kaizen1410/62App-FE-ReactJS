@@ -7,7 +7,12 @@ module.exports = {
     'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
   ],
   theme: {
-    extend: {},
+    extend: {
+      spacing: {
+        'open': 'calc(100vw - 16rem)',
+        'close': 'calc(100vw)',
+      }
+    },
   },
   plugins: [require('flowbite/plugin')],
 }

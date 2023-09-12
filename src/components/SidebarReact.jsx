@@ -33,7 +33,7 @@ const SidebarReact = () => {
     }
 
     return (
-        <Sidebar className='h-screen fixed z-50'>
+        <Sidebar className='h-screen fixed z-50 w-0 overflow-x-hidden md:w-64 transition-all'>
             <Link to='/' className='block text-black text-center font-bold text-2xl mb-4 dark:text-white'>
                 Employee Absent
             </Link>
