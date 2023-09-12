@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Loading from '../../components/Loading';
 import fetchClient from '../../utils/fetchClient';
+import { Table } from 'flowbite-react';
 
 function EmployeePositions() {
   const [positions, setPositions] = useState([]);
@@ -82,7 +83,7 @@ function EmployeePositions() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 flex justify-center text-white">List Employee Positions</h1>
+      <h1 className="text-2xl font-bold mb-8 flex justify-center text-white">List Employee Positions</h1>
 
       <form onSubmit={handleAddPosition} className="mb-4 flex">
         <input
@@ -101,19 +102,18 @@ function EmployeePositions() {
 
       <input type="search" className='w-full rounded-md mb-4' placeholder='Search...' onChange={(e) => setSearch(e.target.value)} />
 
-      {isLoading ? <Loading /> : <table className="w-full border-collapse border">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="p-2">No</th>
-            <th className="p-2">Name</th>
-            <th className="p-2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
+      {isLoading ? <Loading /> : (
+      <Table striped>
+        <Table.Head>
+            <Table.HeadCell className='w-1'>No</Table.HeadCell>
+            <Table.HeadCell>Name</Table.HeadCell>
+            <Table.HeadCell>Action</Table.HeadCell>
+        </Table.Head>
+        <Table.Body>
           {positions.map((position, i) => (
-            <tr key={position.id}>
-              <td className="border p-2">{(i + 1) + pagination?.per_page * (page - 1)}</td>
-              <td className="border p-2">
+            <Table.Row key={position.id}>
+              <Table.Cell>{(i + 1) + pagination?.per_page * (page - 1)}</Table.Cell>
+              <Table.Cell>
                 {editingPosition?.id === position.id ? (
                   <input
                     type="text"
@@ -121,13 +121,13 @@ function EmployeePositions() {
                     onChange={(e) => {
                       setEditingPosition({ ...editingPosition, name: e.target.value });
                     }}
-                    className="border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-300 w-full"
+                    className="border rounded-md py-1 px-2 text-gray-700 focus:outline-none focus:ring focus:border-blue-300 w-full"
                   />
                 ) : (
                   position.name
                 )}
-              </td>
-              <td className="border p-2">
+              </Table.Cell>
+              <Table.Cell>
                 {editingPosition?.id === position.id ? (
                   <>
                     <button
@@ -159,11 +159,12 @@ function EmployeePositions() {
                     </button>
                   </>
                 )}
-              </td>
-            </tr>
+              </Table.Cell>
+            </Table.Row>
           ))}
-        </tbody>
-      </table>}
+        </Table.Body>
+      </Table>
+      )}
 
       {pagination?.links.length > 0 && (
         <div className='flex justify-center items-center gap-1 mt-12'>
