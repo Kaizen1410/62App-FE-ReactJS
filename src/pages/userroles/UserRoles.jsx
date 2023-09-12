@@ -3,15 +3,13 @@ import fetchClient from "../../utils/fetchClient"
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
-import PopUpModal from "../../components/DeleteModal";
 
 const UserRoles = () => {
   const [userRoles, setUserRoles] = useState([]);
   const [pagination, setPagination] = useState();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const [openModal, setOpenModal] = useState();
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setisLoading] = useState(true);
 
   useEffect(() => {
     getAllUserRoles();
@@ -85,7 +83,7 @@ const UserRoles = () => {
               <Table.Cell>
                 <div className="flex flex-wrap gap-1">
                   {u.roles.map(r => (
-                    <span className="border px-2 py-1 rounded-md">
+                    <span className="border flex gap-2 items-center px-2 py-1 rounded-md">
                       {r.name}
                     </span>
                   ))}
@@ -98,12 +96,6 @@ const UserRoles = () => {
                 >
                   Edit
                 </Link>
-                <button
-                  onClick={() => setOpenModal('pop-up')}
-                  className="font-medium text-red-600 hover:underline dark:text-red-500"
-                >
-                  Delete
-                </button>
               </Table.Cell>
             </Table.Row>
           ))}
@@ -120,8 +112,6 @@ const UserRoles = () => {
           ))}
         </div>
       )}
-
-      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} />
     </div>
   )
 }

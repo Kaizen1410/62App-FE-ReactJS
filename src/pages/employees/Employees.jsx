@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Loading from '../../components/Loading';
 import fetchClient from '../../utils/fetchClient';
+import { Table, Button } from "flowbite-react";
+import PopUpModal from "../../components/DeleteModal";
 
 const Employees = () => {
+  const [userRoles, setUserRoles] = useState([]);
+  const [openModal, setOpenModal] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [pagination, setPagination] = useState();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     setIsLoading(true)
@@ -67,45 +70,89 @@ const Employees = () => {
   }
 
   return (
-      <div className="container mt-5 p-3 mb-2">
-        <div className="row">
-          <div className="col-start-12">
-            <div className="card border-0">
-              <div className="card-title text-cyan-950 bg-cyan-400 flex justify-between p-3">
-                <h4>Employee List</h4>
-                <Link to={`/employees/add`} className="btn btn-cyan-950  text-cyan-400">Add Employee</Link>
-              </div>
-              <div className="card-body bg-cyan-400">
-                <input type="text" className="form-control mb-3 float-end bg-cyan-950 border-0 text-cyan-400" onChange={Filter} placeholder="Search" />
-                {isLoading ? <Loading /> : <table className="table-fixed hover:table-fixed">
-                  <thead>
-                    <tr className='text-cyan-950'>
-                      <th>Name</th>
-                      <th>Employee Position</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className='text-cyan-950'>
-                    {employeesDetails}
-                  </tbody>
-                </table>}
-                {pagination?.links.length > 0 && (
-                  <nav aria-label="Page navigation example">
-                    <ul className="pagination flex justify-center">
-                      {pagination?.links.map((item, i) => (
-                        <li key={i} className={`page-item`}>
-                          <button onClick={() => handlePage(item.label)} style={{ fontSize: '14px', width: '35px', height: '35px' }} className={`bg-cyan-400 ${item.active ? 'bg-cyan-950 text-cyan-400' : 'text-cyan-950'} rounded-circle  border-0`}>{`${item.label === '&laquo; Previous' ? '<' : item.label === 'Next &raquo;' ? '>' : item.label}`}</button>
-                        </li>
-                      ))}
-                    </ul>
-                  </nav>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-  )
-}
+    <div className="mx-auto p-4">
+    <h1 className="text-center font-bold text-white text-2xl mb-8"> Employees List</h1>
 
+    <div className="relative flex justify-between mb-4">
+      <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
+      <input
+        type="search"
+        className="w-56 pl-8 rounded-md"
+        placeholder="Search..."
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
+      <Button as={Link} to="/employess/add">
+        Add
+      </Button>
+    </div>
+      <Table striped>
+        <Table.Head>
+          <Table.HeadCell className="w-1">No</Table.HeadCell>
+          <Table.HeadCell>Name</Table.HeadCell>
+          <Table.HeadCell>Position</Table.HeadCell>
+          <Table.HeadCell>
+            <span className="sr-only">Edit</span>
+          </Table.HeadCell>
+        </Table.Head>
+        <Table.Body className="divide-y">
+          {userRoles.map((u, i) => (
+            <Table.Row key={u.id}>
+              <Table.Cell className="text-center">
+                {(i + 1) + pagination?.per_page * (page - 1)}
+              </Table.Cell>
+              <Table.Cell>{u.email}</Table.Cell>
+              <Table.Cell>{u.employee.name}</Table.Cell>
+              <Table.Cell>
+                <div className="flex flex-wrap gap-1">
+                  {u.roles.map((r, j) => (
+                    <span key={j} className="border px-2 py-1 rounded-md">
+                      {r.name}
+                    </span>
+                  ))}
+                </div>
+              </Table.Cell>
+              <Table.Cell>
+                <Link
+                  to={`/employees/${u.id}/edit`}
+                  className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 mr-5"
+                >
+                  Edit
+                </Link>
+                <button
+                  onClick={() => setOpenModal('pop-up')}
+                  className="font-medium text-red-600 hover:underline dark:text-red-500"
+                >
+                  Delete
+                </button>
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+   
+
+    {pagination?.links.length > 0 && (
+      <div className="flex justify-center items-center gap-1 mt-12">
+        {pagination?.links.map((l, i) => (
+          <button
+            key={i}
+            className={`py-1 rounded-full w-8 h-8 text-center ${
+              l.label === page.toString()
+                ? 'bg-white text-black '
+                : 'text-white'
+            } ${l.url ? 'cursor-pointer hover:bg-slate-400 hover:text-black' : 'cursor-not-allowed text-gray-400'}`}
+            onClick={() => (l.label)}
+            disabled={!l.url}
+          >
+            {l.label === '&laquo; Previous' ? '<' : l.label === 'Next &raquo;' ? '>' : l.label}
+          </button>
+        ))}
+      </div>
+    )}
+
+    <PopUpModal openModal={openModal} setOpenModal={setOpenModal} />
+  </div>
+);
+}
 export default Employees;

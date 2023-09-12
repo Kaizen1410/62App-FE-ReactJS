@@ -10,7 +10,7 @@ function EmployeePositions() {
   const [pagination, setPagination] = useState();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getEmployeePositions();
