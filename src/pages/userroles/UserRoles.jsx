@@ -9,7 +9,7 @@ const UserRoles = () => {
   const [pagination, setPagination] = useState();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const [isLoading, setisLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getAllUserRoles();
@@ -17,7 +17,7 @@ const UserRoles = () => {
 
 
   const getAllUserRoles = async () => {
-    setisLoading(true);
+    setIsLoading(true);
     try {
       const res = await fetchClient.get(`/api/user-roles?search=${search}&page=${page}`);
       setUserRoles(res.data.data);
@@ -26,7 +26,7 @@ const UserRoles = () => {
     } catch (err) {
       console.error(err);
     }
-    setisLoading(false);
+    setIsLoading(false);
   }
 
   const handlePage = (p) => {
@@ -70,7 +70,7 @@ const UserRoles = () => {
         </Table.Head>
         <Table.Body className="divide-y">
           {userRoles.map((u, i) => (
-            <Table.Row>
+            <Table.Row key={i}>
               <Table.Cell className="text-center">
                 {(i + 1) + pagination?.per_page * (page - 1)}
               </Table.Cell>
@@ -83,7 +83,7 @@ const UserRoles = () => {
               <Table.Cell>
                 <div className="flex flex-wrap gap-1">
                   {u.roles.map(r => (
-                    <span className="border flex gap-2 items-center px-2 py-1 rounded-md">
+                    <span key={r.id} className="border flex gap-2 items-center px-2 py-1 rounded-md">
                       {r.name}
                     </span>
                   ))}
