@@ -29,7 +29,7 @@ const UserProvider = ({children}) => {
 
     return(
         <UserContext.Provider value={{ user, setUser }}>
-            {isLoading ? <Loading /> : children}
+            {isLoading ? <Loading size='xl' /> : children}
         </UserContext.Provider>
     );
 }
