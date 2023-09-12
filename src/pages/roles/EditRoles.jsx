@@ -1,5 +1,5 @@
 import { Button } from "flowbite-react"
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import fetchClient from "../../utils/fetchClient";
 import Loading from "../../components/Loading";

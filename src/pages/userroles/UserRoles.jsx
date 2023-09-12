@@ -3,6 +3,7 @@ import fetchClient from "../../utils/fetchClient"
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
+import Pagination from "../../components/Pagination";
 
 const UserRoles = () => {
   const [userRoles, setUserRoles] = useState([]);
@@ -27,14 +28,6 @@ const UserRoles = () => {
       console.error(err);
     }
     setIsLoading(false);
-  }
-
-  const handlePage = (p) => {
-    if (p === '&laquo; Previous' || p === 'Next &raquo;') {
-      setPage(prev => p === '&laquo; Previous' ? prev - 1 : prev + 1);
-      return;
-    }
-    setPage(p);
   }
 
   return (
@@ -102,16 +95,7 @@ const UserRoles = () => {
         </Table.Body>
       </Table>}
 
-      {pagination?.links.length > 0 && (
-        <div className='flex justify-center items-center gap-1 mt-12'>
-          {pagination?.links.map((l, i) => (
-            <button key={i} className={`py-1 rounded-full w-8 h-8 text-center ${l.label === page.toString() ? 'bg-white text-black ' : 'text-white'} ${l.url && 'cursor-pointer hover:bg-slate-400 hover:text-black'}`}
-              onClick={() => handlePage(l.label)} disabled={!l.url && 'disabled'}>
-              {(l.label === '&laquo; Previous' ? '<' : (l.label === 'Next &raquo;' ? '>' : l.label))}
-            </button>
-          ))}
-        </div>
-      )}
+      <Pagination pagination={pagination} page={page} setPage={setPage} />
     </div>
   )
 }
