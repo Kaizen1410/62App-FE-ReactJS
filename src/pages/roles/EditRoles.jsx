@@ -57,7 +57,6 @@ const EditRoles = () => {
               type="text"
               value={role?.name}
               id="name"
-              name="name"
               className="border rounded-md py-1 px-2 text-gray-700 focus:outline-none focus:ring focus:border-blue-300 w-full"
               onChange={(e) => setRole({...role, name: e.target.value})}
             />

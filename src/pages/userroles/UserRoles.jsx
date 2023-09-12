@@ -34,11 +34,9 @@ const UserRoles = () => {
     <div className="mx-auto p-4">
       <h1 className="text-center font-bold text-white text-2xl mb-8">User Roles</h1>
 
-      <div className="relative flex justify-between mb-4">
+      <div className="relative mb-4">
         <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
         <input type="search" className="w-56 pl-8 rounded-md" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
-
-        <Button as={Link} to='/user-roles/add'>Add</Button>
       </div>
 
       {isLoading ? <Loading size='xl' /> : <Table striped>
