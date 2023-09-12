@@ -8,7 +8,7 @@ const Employees = () => {
   const [pagination, setPagination] = useState();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     setIsLoading(true)
