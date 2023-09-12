@@ -28,7 +28,7 @@ const SidebarReact = () => {
     }
 
     return (
-        <Sidebar className='h-screen fixed'>
+        <Sidebar className='h-screen fixed z-50'>
             <h1 className='text-black text-center font-bold text-2xl mb-4'>
                 Employee Absent
             </h1>

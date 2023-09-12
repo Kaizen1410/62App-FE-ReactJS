@@ -22,24 +22,24 @@ code {
     
 }
 
-::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+/* ::-webkit-input-placeholder { 
   color:    #009ca9 !important;
 }
-:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+:-moz-placeholder { 
  color:    #009ca9 !important;
  opacity:  1 !important;
 }
-::-moz-placeholder { /* Mozilla Firefox 19+ */
+::-moz-placeholder {
  color:    #009ca9 !important;
  opacity:  1 !important;
 }
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
+:-ms-input-placeholder {
  color:    #009ca9 !important;
 }
-::-ms-input-placeholder { /* Microsoft Edge */
+::-ms-input-placeholder {
  color:    #009ca9 !important;
 }
 
-::placeholder { /* Most modern browsers support this now. */
+::placeholder { 
  color:    #009ca9 !important;
-}
+} */
