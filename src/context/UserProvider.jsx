@@ -20,7 +20,7 @@ const UserProvider = ({children}) => {
             } catch (err) {
                 console.error(err);
                 setIsLoading(false);
-                navigate('/login');
+                // navigate('/login');
             }
         }
 

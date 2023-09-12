@@ -1,157 +1,95 @@
-import { Table } from "flowbite-react"
+import { Table, Button } from "flowbite-react"
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Loading from "../../components/Loading";
+import PopUpModal from "../../components/DeleteModal";
 
 const Roles = () => {
+  const [userRoles, setUserRoles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [openModal, setOpenModal] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState(null);
+
+  
   return (
     <div className="mx-auto p-4">
-      <Table striped>
-        <Table.Head>
-          <Table.HeadCell>
-            Product name
-          </Table.HeadCell>
-          <Table.HeadCell>
-            Color
-          </Table.HeadCell>
-          <Table.HeadCell>
-            Category
-          </Table.HeadCell>
-          <Table.HeadCell>
-            Price
-          </Table.HeadCell>
-          <Table.HeadCell>
-            <span className="sr-only">
-              Edit
-            </span>
-          </Table.HeadCell>
-        </Table.Head>
-        <Table.Body className="divide-y">
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Apple MacBook Pro 17"
-            </Table.Cell>
-            <Table.Cell>
-              Sliver
-            </Table.Cell>
-            <Table.Cell>
-              Laptop
-            </Table.Cell>
-            <Table.Cell>
-              $2999
-            </Table.Cell>
-            <Table.Cell>
-              <a
-                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                href="/tables"
-              >
-                <p>
-                  Edit
-                </p>
-              </a>
-            </Table.Cell>
-          </Table.Row>
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              <p>
-                Microsoft Surface Pro
-              </p>
-            </Table.Cell>
-            <Table.Cell>
-              White
-            </Table.Cell>
-            <Table.Cell>
-              Laptop PC
-            </Table.Cell>
-            <Table.Cell>
-              $1999
-            </Table.Cell>
-            <Table.Cell>
-              <a
-                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                href="/tables"
-              >
-                <p>
-                  Edit
-                </p>
-              </a>
-            </Table.Cell>
-          </Table.Row>
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Magic Mouse 2
-            </Table.Cell>
-            <Table.Cell>
-              Black
-            </Table.Cell>
-            <Table.Cell>
-              Accessories
-            </Table.Cell>
-            <Table.Cell>
-              $99
-            </Table.Cell>
-            <Table.Cell>
-              <a
-                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                href="/tables"
-              >
-                <p>
-                  Edit
-                </p>
-              </a>
-            </Table.Cell>
-          </Table.Row>
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              <p>
-                Google Pixel Phone
-              </p>
-            </Table.Cell>
-            <Table.Cell>
-              Gray
-            </Table.Cell>
-            <Table.Cell>
-              Phone
-            </Table.Cell>
-            <Table.Cell>
-              $799
-            </Table.Cell>
-            <Table.Cell>
-              <a
-                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                href="/tables"
-              >
-                <p>
-                  Edit
-                </p>
-              </a>
-            </Table.Cell>
-          </Table.Row>
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Apple Watch 5
-            </Table.Cell>
-            <Table.Cell>
-              Red
-            </Table.Cell>
-            <Table.Cell>
-              Wearables
-            </Table.Cell>
-            <Table.Cell>
-              $999
-            </Table.Cell>
-            <Table.Cell>
-              <a
-                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                href="/tables"
-              >
-                <p>
-                  Edit
-                </p>
-              </a>
-            </Table.Cell>
-          </Table.Row>
-        </Table.Body>
-      </Table>
-    </div>
-  )
-}
+      <h1 className="text-center font-bold text-white text-2xl mb-8"> Roles</h1>
 
+      <div className="relative flex justify-between mb-4">
+        <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
+        <input
+          type="search"
+          className="w-56 pl-8 rounded-md"
+          placeholder="Search..."
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        <Button as={Link} to="/roles/add">
+          Add
+        </Button>
+      </div>
+        <Table striped>
+          <Table.Head>
+            <Table.HeadCell className="w-1">No</Table.HeadCell>
+            <Table.HeadCell>Roles</Table.HeadCell>
+            <Table.HeadCell>Members</Table.HeadCell>
+            <Table.HeadCell>
+              <span className="sr-only">Edit</span>
+            </Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y">
+            
+              <Table.Row>
+                <Table.Cell className="text-center">
+                  1
+                </Table.Cell>
+                <Table.Cell>Admin</Table.Cell>
+                <Table.Cell>
+                  12
+                </Table.Cell>
+                <Table.Cell>
+                  <Link
+                    to={`/roles/1/edit`}
+                    className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 mr-5"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    onClick={() => setOpenModal('pop-up')}
+                    className="font-medium text-red-600 hover:underline dark:text-red-500"
+                  >
+                    Delete
+                  </button>
+                </Table.Cell>
+              </Table.Row>
+            
+          </Table.Body>
+        </Table>
+     
+
+      {pagination?.links.length > 0 && (
+        <div className="flex justify-center items-center gap-1 mt-12">
+          {pagination?.links.map((l, i) => (
+            <button
+              key={i}
+              className={`py-1 rounded-full w-8 h-8 text-center ${
+                l.label === page.toString()
+                  ? 'bg-white text-black '
+                  : 'text-white'
+              } ${l.url ? 'cursor-pointer hover:bg-slate-400 hover:text-black' : 'cursor-not-allowed text-gray-400'}`}
+              onClick={() => (l.label)}
+              disabled={!l.url}
+            >
+              {l.label === '&laquo; Previous' ? '<' : l.label === 'Next &raquo;' ? '>' : l.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} />
+    </div>
+  );
+}
 export default Roles
