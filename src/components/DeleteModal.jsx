@@ -10,7 +10,7 @@ export default function PopUpModal({ openModal, setOpenModal, action }) {
                     <div className="text-center">
                         <i class="fa-solid fa-circle-exclamation text-5xl text-gray-400 text-center mb-6"></i>
                         <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                            Are you sure you want to delete this product?
+                            Are you sure you want to delete?
                         </h3>
                         <div className="flex justify-center gap-4">
                             <Button color="failure" onClick={action}>

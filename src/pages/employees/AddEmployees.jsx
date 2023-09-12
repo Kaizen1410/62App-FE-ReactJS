@@ -1,25 +1,29 @@
+import { Button } from "flowbite-react"
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import fetchClient from "../../utils/fetchClient";
+import Loading from "../../components/Loading";
 
 function AddEmployees() {
 
+  const [isLoading, setIsLoading] = useState(true)
+  const [employeePositions, setEmployeePositions] = useState([])
+  const navigate = useNavigate()
   const [employees, setEmployees] = useState({
     name: '',
     employee_position_id: ''
   });
 
-  const [employeePositions, setEmployeePositions] = useState([])
-
-  const navigate = useNavigate()
-
   useEffect(() => {
-    const getEmployeePositions = () => {
-      fetchClient.get('/api/employee-positions')
-        .then(res => setEmployeePositions(res.data.data))
-        .catch(err => console.error(err))
+    const getEmployeePositions = async () => {
+      try {
+        const res = await fetchClient.get('/api/employee-positions')
+        setEmployeePositions(res.data.data)
+      } catch (err) {
+        console.error(err);
+      }
+      setIsLoading(false)
     }
-
     getEmployeePositions()
   }, [])
 
@@ -41,47 +45,66 @@ function AddEmployees() {
 
     fetchClient.post('/api/employees', data)
       .then(res => {
-        alert(res.data.message);
         navigate('/employees')
       })
       .catch(err => console.error(err));
   }
+  
 
   return (
-    <div className="container mt-5 p-3 mb-2">
-      <div className="row">
-        <div className="col-start-12">
-          <div className="card border-0 bg-cyan-400">
-            <div className="card-title text-cyan-950 bg-cyan-400 flex justify-between p-3">
-              <h4>Add Employee</h4>
-              <Link to="/employees" className="btn btn-light float-end">Back</Link>
-            </div>
-            <div className="card-body">
-              <form onSubmit={saveEmployees}>
-                <div className="mb-3">
-                  <label className="text-cyan-950">Name</label>
-                  <input type="text" name="name" value={employees.name} onChange={handleInput} className="form-control border-0 text-cyan-400 bg-cyan-950" placeholder="Enter Name" />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="position" className="block text-cyan-950  mb-2">
-                    Positions
-                    <select name="employee_position_id" id="position" className='rounded-md py-5 px-3 text-cyan-400 bg-cyan-950 focus:outline-none focus:ring  w-full' onChange={handleInput}>
-                      <option value="">---Select Position---</option>
-                      {employeePositions.map(p => (
-                        <option value={p.id}>{p.name}</option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-                <div className="mb-3">
-                  <button type="submit" className="btn text-cyan-400">Save</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
+    
+    <>
+      <div className="text-cyan-950 flex justify-between p-3 xt-">
+        <Button as={Link} to="/employees">
+          <i className="fa-solid fa-angle-left"></i>
+        </Button>
       </div>
-    </div>
+
+      {isLoading ? <Loading size='xl' /> : <div>
+        <form
+          className="max-w-md mx-auto p-4 bg-white shadow-md rounded-md"
+          onSubmit={saveEmployees}
+        >
+          <h4 className="text-xl font-semibold text-center">Add Employee</h4>
+          <div className="mb-4">
+            <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
+              Name
+            </label>
+            <input
+              type="text"
+              value={employees?.name}
+              id="name"
+              name="name"
+              className="border rounded-md py-1 px-2 text-gray-700 focus:outline-none focus:ring focus:border-blue-300 w-full"
+              onChange={(e) => setEmployees({ ...employees, name: e.target.value })}
+            />
+            <label htmlFor="position" className="block text-gray-700 font-bold mb-2 mt-5">
+              Positions
+              <select name="employee_position_id" id="position" className='rounded-md py-1 px-2 text-gray-700 w-full' onChange={handleInput}>
+              <option value='' selected>Select Position</option>
+                {employeePositions.map(p => (
+                  <option value={p.id}>{p.name}</option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="flex justify-end">
+            <Link
+              to='/employees'
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md mr-2"
+            >
+              Cancel
+            </Link>
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </div>}
+    </>
   )
 }
 
