@@ -14,9 +14,15 @@ const Pagination = ({ pagination, page, setPage }) => {
                     <button
                         key={i}
                         className={`py-1 rounded-full w-8 h-8 text-center ${l.label === page.toString()
-                                ? 'bg-white text-black '
-                                : 'text-white'
-                            } ${l.url ? 'cursor-pointer hover:bg-slate-400 hover:text-black' : 'cursor-not-allowed text-gray-400'}`}
+                                // Active
+                                ? 'bg-cyan-700 text-white'
+                                // Not Active
+                                : l.url
+                                // Clickable
+                                ? 'cursor-pointer dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700'
+                                // Not Clickable
+                                : 'cursor-not-allowed text-gray-400'
+                            }`}
                         onClick={() => handlePage(l.label)}
                         disabled={!l.url}
                     >

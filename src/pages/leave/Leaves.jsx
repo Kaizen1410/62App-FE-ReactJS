@@ -17,8 +17,7 @@ const Leaves = () => {
 
   useEffect(() => {
     getAllLeaves();
-  }, [search, page])
-
+  }, [search, page]);
 
   const getAllLeaves = async () => {
     setIsLoading(true);
@@ -95,7 +94,7 @@ const Leaves = () => {
                     }
                   </Table.Cell>
                   <Table.Cell>
-                    {leave.approved_by?.name}
+                    {leave.approved_by?.name || '-'}
                   </Table.Cell>
                   <Table.Cell className="text-center">
                     <Link
