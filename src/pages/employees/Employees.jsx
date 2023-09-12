@@ -86,7 +86,7 @@ const Employees = () => {
                 {(i + 1) + pagination?.per_page * (page - 1)}
               </Table.Cell>
               <Table.Cell>{e.name}</Table.Cell>
-              <Table.Cell>{e.employee_position.name}</Table.Cell>
+              <Table.Cell>{e.employee_position?.name}</Table.Cell>
               <Table.Cell className='text-center'>
                 <Link
                   to={`/employees/${e.id}/edit`}
