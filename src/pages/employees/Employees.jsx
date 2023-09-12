@@ -3,45 +3,47 @@ import { Link } from 'react-router-dom'
 import fetchClient from '../../utils/fetchClient';
 import { Table, Button } from "flowbite-react";
 import PopUpModal from "../../components/DeleteModal";
+import Loading from '../../components/Loading';
 
 const Employees = () => {
-  const [userRoles, setUserRoles] = useState([]);
+
   const [openModal, setOpenModal] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [pagination, setPagination] = useState();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true)
+  const [selectedEmployee, setSelectedEmployee] = useState(1)
 
   useEffect(() => {
-    setIsLoading(true)
-    fetchClient.get(`/api/employees?page=${page}&search=${search}`).then(res => {
-      console.log(res)
+    getAllEmployee();
+  }, [search, page])
+
+  const getAllEmployee = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetchClient.get(`/api/employees?search=${search}&page=${page}`);
       setEmployees(res.data.data);
+      delete res.data.data;
       setPagination(res.data);
-    })
-    .catch(err => console.error(err))
-    .finally(() => setTimeout(()=>{setIsLoading(false)}, 500));
+    } catch (err) {
+      console.error(err);
+    }
+    setIsLoading(false);
+  }
 
-  }, [page, search])
-
-  const deleteEmployees = (e, id) => {
-    e.preventDefault();
-
-    const thisClicked = e.currentTarget;
-    thisClicked.innerText = "Deleting...";
-
-    fetchClient.delete(`/api/employees/${id}`)
-        .then(res => {
-            alert(res.data.message);
-            thisClicked.innerText = "Delete";
-            fetchClient.get(`/api/employees?page=${page}&search=${search}`).then(res => {
-                console.log(res)
-                setEmployees(res.data.data);
-                setPagination(res.data);
-            });
-        });
-}
+  const handleDeleteEmployee = (employeesId) => {
+    console.log(employeesId)
+    fetchClient.delete(`/api/employees/${employeesId}`)
+      .then(res => {
+        console.log(res.data)
+        setEmployees(employees.filter((employees) => employees.id !== employeesId));
+        setOpenModal(null);
+      })
+      .catch((error) => {
+        console.error('Error deleting employee position:', error);
+      });
+  };
 
   const handlePage = (p) => {
     if (p === '&laquo; Previous' || p === 'Next &raquo;') {
@@ -51,76 +53,50 @@ const Employees = () => {
     setPage(p);
   }
 
-  var employeesDetails = '';
-  employeesDetails = employees.map((item, index) => {
-    return (
-      <tr key={index}>
-        <td>{item.name}</td>
-        <td>{item.employee_position.name}</td>
-        <td className='flex justify-center gap-10'>
-          <Link to={`/employees/${item.id}/edit`} className="btn text-cyan-400">Edit</Link>
-          <button type="button" onClick={(e) => deleteEmployees(e, item.id)} className="btn text-red-600">Delete</button>
-        </td>
-      </tr>
-    )
-  })
-
-  const Filter = (event) => {
-    setSearch(event.target.value)
-  }
 
   return (
     <div className="mx-auto p-4">
-    <h1 className="text-center font-bold text-white text-2xl mb-8"> Employees List</h1>
+      <h1 className="text-center font-bold text-white text-2xl mb-8"> Employees List</h1>
+      <div className="relative flex justify-between mb-4">
+        <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
+        <input
+          type="search"
+          className="w-56 pl-8 rounded-md"
+          placeholder="Search..."
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
-    <div className="relative flex justify-between mb-4">
-      <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
-      <input
-        type="search"
-        className="w-56 pl-8 rounded-md"
-        placeholder="Search..."
-        onChange={(e) => setSearch(e.target.value)}
-      />
+        <Button as={Link} to="/employees/add">
+          Add Employee
+        </Button>
+      </div>
 
-      <Button as={Link} to="/employess/add">
-        Add
-      </Button>
-    </div>
-      <Table striped>
+      {isLoading ? <Loading size='xl' /> : <Table striped>
         <Table.Head>
           <Table.HeadCell className="w-1">No</Table.HeadCell>
           <Table.HeadCell>Name</Table.HeadCell>
           <Table.HeadCell>Position</Table.HeadCell>
-          <Table.HeadCell>
-            <span className="sr-only">Edit</span>
-          </Table.HeadCell>
+          <Table.HeadCell>Action</Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
-          {userRoles.map((u, i) => (
-            <Table.Row key={u.id}>
+          {employees.map((e, i) => (
+            <Table.Row key={e.id}>
               <Table.Cell className="text-center">
                 {(i + 1) + pagination?.per_page * (page - 1)}
               </Table.Cell>
-              <Table.Cell>{u.email}</Table.Cell>
-              <Table.Cell>{u.employee.name}</Table.Cell>
-              <Table.Cell>
-                <div className="flex flex-wrap gap-1">
-                  {u.roles.map((r, j) => (
-                    <span key={j} className="border px-2 py-1 rounded-md">
-                      {r.name}
-                    </span>
-                  ))}
-                </div>
-              </Table.Cell>
+              <Table.Cell>{e.name}</Table.Cell>
+              <Table.Cell>{e.employee_position.name}</Table.Cell>
               <Table.Cell>
                 <Link
-                  to={`/employees/${u.id}/edit`}
+                  to={`/employees/${e.id}/edit`}
                   className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 mr-5"
                 >
                   Edit
                 </Link>
                 <button
-                  onClick={() => setOpenModal('pop-up')}
+                  onClick={() => {
+                    setSelectedEmployee(e.id)
+                    setOpenModal('pop-up')}}
                   className="font-medium text-red-600 hover:underline dark:text-red-500"
                 >
                   Delete
@@ -129,30 +105,26 @@ const Employees = () => {
             </Table.Row>
           ))}
         </Table.Body>
-      </Table>
+      </Table>}
    
 
     {pagination?.links.length > 0 && (
-      <div className="flex justify-center items-center gap-1 mt-12">
-        {pagination?.links.map((l, i) => (
-          <button
-            key={i}
-            className={`py-1 rounded-full w-8 h-8 text-center ${
-              l.label === page.toString()
-                ? 'bg-white text-black '
-                : 'text-white'
-            } ${l.url ? 'cursor-pointer hover:bg-slate-400 hover:text-black' : 'cursor-not-allowed text-gray-400'}`}
-            onClick={() => (l.label)}
-            disabled={!l.url}
-          >
-            {l.label === '&laquo; Previous' ? '<' : l.label === 'Next &raquo;' ? '>' : l.label}
-          </button>
-        ))}
-      </div>
-    )}
+        <div className="flex justify-center items-center gap-1 mt-12">
+          {pagination?.links.length > 0 && (
+            <div className='flex justify-center items-center gap-1 mt-12'>
+              {pagination?.links.map((l, i) => (
+                <button key={i} className={`py-1 rounded-full w-8 h-8 text-center ${l.label === page.toString() ? 'bg-white text-black ' : 'text-white'} ${l.url && 'cursor-pointer hover:bg-slate-400 hover:text-black'}`}
+                  onClick={() => handlePage(l.label)} disabled={!l.url && 'disabled'}>
+                  {(l.label === '&laquo; Previous' ? '<' : (l.label === 'Next &raquo;' ? '>' : l.label))}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
-    <PopUpModal openModal={openModal} setOpenModal={setOpenModal} />
-  </div>
-);
+      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => handleDeleteEmployee(selectedEmployee)} />
+    </div>
+  );
 }
 export default Employees;

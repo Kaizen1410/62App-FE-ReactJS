@@ -15,8 +15,6 @@ import AddUserRoles from './pages/userroles/AddUserRoles';
 import EditUserRoles from './pages/userroles/EditUserRoles';
 import AddEmployees from './pages/employees/AddEmployees';
 import EditEmployees from './pages/employees/EditEmployees';
-import AddEmployeePositions from './pages/employeepositions/AddEmployeePositions';
-import EditEmployeePositions from './pages/employeepositions/EditEmployeePositions';
 import UserProvider from './context/UserProvider';
 import Layout from './components/Layout';
 
@@ -31,8 +29,7 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/leaves' element={<Leave />} />
             <Route path='/leaves/add' element={<AddLeave />} />
-            {/* <Route path='/leaves/:id/edit' element={<EditLeave />} /> */}
-            <Route path='/leaves/edit' element={<EditLeave />} />
+            <Route path='/leaves/:id/edit' element={<EditLeave />} />
 
             <Route path='/roles' element={<Roles />} />
             <Route path='/roles/add' element={<AddRoles />} />
@@ -42,13 +39,11 @@ function App() {
             <Route path='/user-roles/add' element={<AddUserRoles />} />
             <Route path='/user-roles/:id/edit' element={<EditUserRoles />} />
 
-            <Route path='employees' element={<Employees />} />
+            <Route path='/employees' element={<Employees />} />
             <Route path='/employees/add' element={<AddEmployees />} />
             <Route path='/employees/:id/edit' element={<EditEmployees />} />
 
             <Route path='/employee-positions' element={<EmployeePositions />} />
-            <Route path='/employee-positions/add' element={<AddEmployeePositions />} />
-            <Route path='/employee-positions/:id/edit' element={<EditEmployeePositions />} />
           </Route>
         </Routes>
       </UserProvider>

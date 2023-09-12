@@ -11,7 +11,7 @@ const Leave = () => {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [openModal, setOpenModal] = useState();
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedLeave, setSelectedLeave] = useState();
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const Leave = () => {
 
 
   const getAllLeave = async () => {
-    setisLoading(true);
+    setIsLoading(true);
     try {
       const res = await fetchClient.get(`/api/leaves?search=${search}&page=${page}`);
       setLeave(res.data.data);
@@ -29,7 +29,7 @@ const Leave = () => {
     } catch (err) {
       console.error(err);
     }
-    setisLoading(false);
+    setIsLoading(false);
   }
 
   const handlePage = (p) => {
@@ -47,7 +47,7 @@ const Leave = () => {
         setOpenModal(null);
       })
       .catch((error) => {
-        console.error('Error deleting employee position:', error);
+        console.error('Error deleting leaves:', error);
       });
   };
 
