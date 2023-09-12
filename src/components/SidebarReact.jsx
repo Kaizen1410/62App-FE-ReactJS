@@ -29,9 +29,9 @@ const SidebarReact = () => {
 
     return (
         <Sidebar className='h-screen fixed'>
-            <h1 className='text-black text-center font-bold text-2xl mb-4'>
+            <Link to='/' className='text-black text-center font-bold text-2xl mb-4'>
                 Employee Absent
-            </h1>
+            </Link>
             <Sidebar.Items>
                 <Sidebar.ItemGroup>
                     <Sidebar.Item as={Link} to='/leaves' className="group"

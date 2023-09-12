@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import axios from 'axios';
 import './App.css';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -32,7 +31,8 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/leaves' element={<Leave />} />
             <Route path='/leaves/add' element={<AddLeave />} />
-            <Route path='/leaves/:id/edit' element={<EditLeave />} />
+            {/* <Route path='/leaves/:id/edit' element={<EditLeave />} /> */}
+            <Route path='/leaves/edit' element={<EditLeave />} />
 
             <Route path='/roles' element={<Roles />} />
             <Route path='/roles/add' element={<AddRoles />} />
