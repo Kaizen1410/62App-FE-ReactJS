@@ -36,8 +36,7 @@ const Employees = () => {
   const handleDeleteEmployee = (employeesId) => {
     console.log(employeesId)
     fetchClient.delete(`/api/employees/${employeesId}`)
-      .then(res => {
-        console.log(res.data)
+      .then(() => {
         setEmployees(employees.filter((employees) => employees.id !== employeesId));
         setOpenModal(null);
       })

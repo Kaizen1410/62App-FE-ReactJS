@@ -12,8 +12,9 @@ const Leaves = () => {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [openModal, setOpenModal] = useState();
-  const [isLoading, setIsLoading] = useState(false);
   const [selectedLeave, setSelectedLeave] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [deleteIsLoading, setDeleteIsLoading] = useState(false);
 
   useEffect(() => {
     getAllLeaves();
@@ -33,6 +34,7 @@ const Leaves = () => {
   }
 
   const handleDeleteLeave = (leaveId) => {
+    setDeleteIsLoading(true);
     fetchClient.delete(`/api/leaves/${leaveId}`)
       .then(() => {
         setLeaves(leaves.filter((leave) => leave.id !== leaveId));
@@ -40,7 +42,8 @@ const Leaves = () => {
       })
       .catch((error) => {
         console.error('Error deleting leaves:', error);
-      });
+      })
+      .finally(() => setDeleteIsLoading(false));
   };
 
   return (
@@ -79,7 +82,7 @@ const Leaves = () => {
             </Table.Head>
             <Table.Body className="divide-y">
               {leaves.map((leave, i) => (
-                <Table.Row className="text-center">
+                <Table.Row className="text-center" key={i}>
                   <Table.Cell>
                     {(i + 1) + pagination?.per_page * (page - 1)}
                   </Table.Cell>
@@ -122,7 +125,7 @@ const Leaves = () => {
         <Pagination pagination={pagination} page={page} setPage={setPage} />
       </div>
 
-      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => handleDeleteLeave(selectedLeave)} />
+      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => handleDeleteLeave(selectedLeave)} isLoading={deleteIsLoading} />
     </>
   )
 }

@@ -91,7 +91,7 @@ function EmployeePositions() {
             className="border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-300 w-full"
             placeholder="Add New Position"
           />
-          <Button className='ml-3'>
+          <Button className='ml-3' type='submit'>
             Add
           </Button>
         </form>
@@ -134,13 +134,13 @@ function EmployeePositions() {
                         <>
                           <button
                             onClick={() => handleSavePosition()}
-                            className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded-md mr-2"
+                            className="font-medium text-green-600 hover:underline dark:text-green-500 mr-5"
                           >
                             Simpan
                           </button>
                           <button
                             onClick={() => setEditingPosition(null)}
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-md"
+                            className="font-medium text-red-600 hover:underline dark:text-red-500 mr-5"
                           >
                             Batal
                           </button>
