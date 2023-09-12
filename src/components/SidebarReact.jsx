@@ -29,7 +29,7 @@ const SidebarReact = () => {
 
     return (
         <Sidebar className='h-screen fixed z-50'>
-            <Link to='/' className='block text-black text-center font-bold text-2xl mb-4'>
+            <Link to='/' className='block text-black text-center font-bold text-2xl mb-4 dark:text-white'>
                 Employee Absent
             </Link>
             <Sidebar.Items>
@@ -60,7 +60,7 @@ const SidebarReact = () => {
                     </Sidebar.Collapse>
 
                     <div className='absolute bottom-5 left-5 right-5'>
-                        <button className="flex items-center justify-center w-full p-2 border border-black text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" onClick={handleLogout}>
+                        <button className="flex items-center justify-center w-full p-2 border border-black dark:border-white text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" onClick={handleLogout}>
                             <i className="fa-solid fa-right-from-bracket -scale-x-100 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
                             <span className="ml-2 font-semibold">Logout</span>
                         </button>

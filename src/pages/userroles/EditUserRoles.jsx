@@ -67,7 +67,7 @@ const EditUserRoles = () => {
   }
 
   return (
-    <>
+    <div className="h-screen">
       <div className="text-cyan-950 flex justify-between p-3 xt-">
         <Button as={Link} to="/user-roles">
           <i className="fa-solid fa-angle-left"></i>
@@ -136,7 +136,7 @@ const EditUserRoles = () => {
           </div>
         </form>
       </div>}
-    </>
+    </div>
   );
 }
 

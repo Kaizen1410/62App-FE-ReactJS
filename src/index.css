@@ -1,11 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@layer components {
-  .sidebar{
-    transition:all .4s ease-in-out;
-  }
-}
 
 body {
   margin: 0;
@@ -20,26 +15,4 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
     
-}
-
-::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-  color:    #009ca9 !important;
-}
-:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
- color:    #009ca9 !important;
- opacity:  1 !important;
-}
-::-moz-placeholder { /* Mozilla Firefox 19+ */
- color:    #009ca9 !important;
- opacity:  1 !important;
-}
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
- color:    #009ca9 !important;
-}
-::-ms-input-placeholder { /* Microsoft Edge */
- color:    #009ca9 !important;
-}
-
-::placeholder { /* Most modern browsers support this now. */
- color:    #009ca9 !important;
 }

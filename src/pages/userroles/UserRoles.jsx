@@ -1,4 +1,4 @@
-import { Table, Button } from "flowbite-react"
+import { Table } from "flowbite-react"
 import fetchClient from "../../utils/fetchClient"
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
@@ -31,16 +31,18 @@ const UserRoles = () => {
   }
 
   return (
-    <div className="mx-auto p-4">
-      <h1 className="text-center font-bold text-white text-2xl mb-8">User Roles</h1>
+    <>
+    <div className="bg-white rounded-md p-4 dark:bg-gray-800">
+      <h1 className="font-bold dark:text-white text-2xl mb-8">User Roles List</h1>
 
       <div className="relative mb-4">
         <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
         <input type="search" className="w-56 pl-8 rounded-md" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
       </div>
 
+      <div className="h-96 overflow-y-auto">
       {isLoading ? <Loading size='xl' /> : <Table striped>
-        <Table.Head className="text-center">
+        <Table.Head className="text-center sticky top-0">
           <Table.HeadCell className="w-1">
             No
           </Table.HeadCell>
@@ -58,29 +60,29 @@ const UserRoles = () => {
           </Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
-          {userRoles.map((u, i) => (
+          {userRoles.map((userRole, i) => (
             <Table.Row key={i}>
               <Table.Cell className="text-center">
                 {(i + 1) + pagination?.per_page * (page - 1)}
               </Table.Cell>
               <Table.Cell>
-                {u.email}
+                {userRole.email}
               </Table.Cell>
               <Table.Cell>
-                {u.employee.name}
+                {userRole.employee.name}
               </Table.Cell>
               <Table.Cell>
                 <div className="flex flex-wrap gap-1">
-                  {u.roles.map(r => (
-                    <span key={r.id} className="border flex gap-2 items-center px-2 py-1 rounded-md">
-                      {r.name}
+                  {userRole.roles.map(role => (
+                    <span key={role.id} className="border flex gap-2 items-center px-2 py-1 rounded-md">
+                      {role.name}
                     </span>
                   ))}
                 </div>
               </Table.Cell>
               <Table.Cell className="text-center">
                 <Link
-                  to={`/user-roles/${u.id}/edit`}
+                  to={`/user-roles/${userRole.id}/edit`}
                   className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
                 >
                   Edit
@@ -90,9 +92,11 @@ const UserRoles = () => {
           ))}
         </Table.Body>
       </Table>}
+      </div>
 
       <Pagination pagination={pagination} page={page} setPage={setPage} />
-    </div>
+      </div>
+    </>
   )
 }
 

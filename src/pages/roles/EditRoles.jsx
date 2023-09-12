@@ -36,8 +36,8 @@ const EditRoles = () => {
   }
 
   return (
-    <>
-      <div className="text-cyan-950 flex justify-between p-3 xt-">
+    <div className="h-screen">
+      <div className="text-cyan-950 flex justify-between p-3">
         <Button as={Link} to="/roles">
           <i className="fa-solid fa-angle-left"></i>
         </Button>
@@ -77,7 +77,7 @@ const EditRoles = () => {
           </div>
         </form>
       </div>}
-    </>
+    </div>
   );
 }
 
