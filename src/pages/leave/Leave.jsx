@@ -1,45 +1,35 @@
-import { Checkbox, Table } from 'flowbite-react';
-import { useState, useEffect } from 'react';
-import fetchClient from '../../utils/fetchClient';
-import { Link } from 'react-router-dom';
-
+import { Table, Button } from "flowbite-react"
+import fetchClient from "../../utils/fetchClient"
+import { useEffect, useState } from "react";
+import Loading from "../../components/Loading";
+import { Link } from "react-router-dom";
+import PopUpModal from "../../components/DeleteModal";
 
 const Leave = () => {
-
   const [leave, setLeave] = useState([]);
   const [pagination, setPagination] = useState();
-  const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
-  const [isLoading, setIsLoading] = useState(false)
+  const [page, setPage] = useState(1);
+  const [openModal, setOpenModal] = useState();
+  const [isLoading, setisLoading] = useState(false);
+  const [selectedLeave, setSelectedLeave] = useState();
 
   useEffect(() => {
-    setIsLoading(true)
-    fetchClient.get(`/api/leaves?page=${page}&search=${search}`).then(res => {
-      console.log(res)
+    getAllLeave();
+  }, [search, page])
+
+
+  const getAllLeave = async () => {
+    setisLoading(true);
+    try {
+      const res = await fetchClient.get(`/api/leaves?search=${search}&page=${page}`);
       setLeave(res.data.data);
+      delete res.data.data;
       setPagination(res.data);
-    })
-      .catch(err => console.error(err))
-      .finally(() => setTimeout(() => { setIsLoading(false) }, 500));
-
-  }, [page, search])
-
-  const deleteLeave = (e, id) => {
-    e.preventDefault();
-
-    const thisClicked = e.currentTarget;
-    thisClicked.innerText = "Deleting...";
-
-    fetchClient.delete(`/api/leaves/${id}`)
-      .then(res => {
-        alert(res.data.message);
-        thisClicked.innerText = "Delete";
-        fetchClient.get(`/api/leaves?page=${page}&search=${search}`).then(res => {
-          console.log(res)
-          setLeave(res.data.data);
-          setPagination(res.data);
-        });
-      });
+    } catch (err) {
+      console.error(err);
+    }
+    setisLoading(false);
   }
 
   const handlePage = (p) => {
@@ -50,97 +40,101 @@ const Leave = () => {
     setPage(p);
   }
 
-  var leaveDetails = '';
-  leaveDetails = leave.map((item, index) => {
-    return (
-      <tr key={index}>
-        <td>{item.name}</td>
-        <td>{item.employee_position.name}</td>
-        <td className='flex justify-center gap-10'>
-          <Link to={`/leaves/${item.id}/edit`} className="btn text-cyan-400">Edit</Link>
-          <button type="button" onClick={(e) => deleteLeave(e, item.id)} className="btn text-red-600">Delete</button>
-        </td>
-      </tr>
-    )
-  })
-
-  const Filter = (event) => {
-    setSearch(event.target.value)
-  }
+  const handleDeleteLeave = (leaveId) => {
+    fetchClient.delete(`/api/leaves/${leaveId}`)
+      .then(() => {
+        setLeave(leave.filter((leave) => leave.id !== leaveId));
+        setOpenModal(null);
+      })
+      .catch((error) => {
+        console.error('Error deleting employee position:', error);
+      });
+  };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 flex justify-center text-white">Leaves List</h1>
-      <form className='mb-4 flex'>
-        <input
-          type="search"
-          className="border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-300 w-full"
-          placeholder='Search...'
-          onChange={(e) => setSearch(e.target.value)} />
-        <Link to='/leaves/add'
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md ml-2"
-        >
-          Add Leaves
-        </Link>
-      </form>
-      <Table hoverable>
-        <Table.Head>
-          <Table.HeadCell>
-            Approved
+    <div className="mx-auto p-4">
+      <h1 className="text-center font-bold text-white text-2xl mb-8">Leaves</h1>
+
+      <div className="relative flex justify-between mb-4">
+        <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
+        <input type="search" className="w-56 pl-8 rounded-md" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+
+        <Button as={Link} to='/leaves/add'>Add Leave</Button>
+      </div>
+
+      {isLoading ? <Loading size='xl' /> : <Table striped>
+        <Table.Head className="text-center">
+          <Table.HeadCell className="w-1">
+            No
           </Table.HeadCell>
           <Table.HeadCell>
-            Employee
+            Name
           </Table.HeadCell>
           <Table.HeadCell>
             Date Leave
           </Table.HeadCell>
           <Table.HeadCell>
+            Is Approved
+          </Table.HeadCell>
+          <Table.HeadCell>
             Approved By
           </Table.HeadCell>
           <Table.HeadCell>
-            Edit
-          </Table.HeadCell>
-          <Table.HeadCell>
-            Delete
+            Action
           </Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <Table.Cell>
-              <Checkbox className='' />
-            </Table.Cell>
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Jongkieess
-            </Table.Cell>
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              17 Oktober
-            </Table.Cell>
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Muhajir
-            </Table.Cell>
-            <Table.Cell>
-              <Link
-                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                to="/leaves/edit"
-              >
-                <p>
+          {leave.map((l, i) => (
+            <Table.Row className="text-center">
+              <Table.Cell>
+                {(i + 1) + pagination?.per_page * (page - 1)}
+              </Table.Cell>
+              <Table.Cell className="text-start">
+                {l.employee.name}
+              </Table.Cell>
+              <Table.Cell>
+                {l.date_leave}
+              </Table.Cell>
+              <Table.Cell>
+                {l.is_approved ? <i className="fa-solid fa-check text-green-400"></i> : <i className="fa-solid fa-xmark text-red-600"></i>
+                }
+              </Table.Cell>
+              <Table.Cell>
+                {l.approved_by?.name}
+              </Table.Cell>
+              <Table.Cell>
+                <Link
+                  to={`/leaves/${l.id}/edit`}
+                  className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 mr-5"
+                >
                   Edit
-                </p>
-              </Link>
-            </Table.Cell>
-            <Table.Cell>
-              <Link
-                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                to="/leaves/edit"
-              >
-                <p>
+                </Link>
+                <button
+                  onClick={() => {
+                    setSelectedLeave(l.id)
+                    setOpenModal('pop-up')}}
+                  className="font-medium text-red-600 hover:underline dark:text-red-500"
+                >
                   Delete
-                </p>
-              </Link>
-            </Table.Cell>
-          </Table.Row>
+                </button>
+              </Table.Cell>
+            </Table.Row>
+          ))}
         </Table.Body>
-      </Table>
+      </Table>}
+
+      {pagination?.links.length > 0 && (
+        <div className='flex justify-center items-center gap-1 mt-12'>
+          {pagination?.links.map((l, i) => (
+            <button key={i} className={`py-1 rounded-full w-8 h-8 text-center ${l.label === page.toString() ? 'bg-white text-black ' : 'text-white'} ${l.url && 'cursor-pointer hover:bg-slate-400 hover:text-black'}`}
+              onClick={() => handlePage(l.label)} disabled={!l.url && 'disabled'}>
+              {(l.label === '&laquo; Previous' ? '<' : (l.label === 'Next &raquo;' ? '>' : l.label))}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => handleDeleteLeave(selectedLeave)} />
     </div>
   )
 }

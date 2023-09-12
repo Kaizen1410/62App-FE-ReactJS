@@ -152,15 +152,15 @@ function EmployeePositions() {
                     <>
                       <button
                         onClick={() => setEditingPosition(position)}
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-md mr-2"
+                        className=" text-cyan-600 font-bold py-1 px-2 rounded-md mr-2"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDeletePosition(position.id)}
-                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-md"
+                        className=" text-red-600 font-bold py-1 px-2 rounded-md"
                       >
-                        Hapus
+                        Delete
                       </button>
                     </>
                   )}

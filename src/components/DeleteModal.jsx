@@ -1,6 +1,6 @@
 import { Button, Modal } from 'flowbite-react';
 
-export default function PopUpModal({ openModal, setOpenModal }) {
+export default function PopUpModal({ openModal, setOpenModal, action }) {
 
     return (
         <>
@@ -13,7 +13,7 @@ export default function PopUpModal({ openModal, setOpenModal }) {
                             Are you sure you want to delete this product?
                         </h3>
                         <div className="flex justify-center gap-4">
-                            <Button color="failure" onClick={() => setOpenModal(undefined)}>
+                            <Button color="failure" onClick={action}>
                                 Yes, I'm sure
                             </Button>
                             <Button color="gray" onClick={() => setOpenModal(undefined)}>
