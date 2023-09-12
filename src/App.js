@@ -11,7 +11,6 @@ import AddLeave from './pages/leave/AddLeave';
 import EditLeave from './pages/leave/EditLeave';
 import AddRoles from './pages/roles/AddRoles';
 import EditRoles from './pages/roles/EditRoles';
-import AddUserRoles from './pages/userroles/AddUserRoles';
 import EditUserRoles from './pages/userroles/EditUserRoles';
 import AddEmployees from './pages/employees/AddEmployees';
 import EditEmployees from './pages/employees/EditEmployees';
@@ -37,7 +36,6 @@ function App() {
             <Route path='/roles/:id/edit' element={<EditRoles />} />
 
             <Route path='/user-roles' element={<UserRoles />} />
-            <Route path='/user-roles/add' element={<AddUserRoles />} />
             <Route path='/user-roles/:id/edit' element={<EditUserRoles />} />
 
             <Route path='/employees' element={<Employees />} />
@@ -45,8 +43,6 @@ function App() {
             <Route path='/employees/:id/edit' element={<EditEmployees />} />
 
             <Route path='/employee-positions' element={<EmployeePositions />} />
-            <Route path='/employee-positions/add' element={<AddEmployeePositions />} />
-            <Route path='/employee-positions/:id/edit' element={<EditEmployeePositions />} />
             <Route path='/calendar' element={<Calendar />} />
           </Route>
         </Routes>
