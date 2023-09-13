@@ -8,16 +8,15 @@ import { BeatLoader } from 'react-spinners';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const { setUser } = UserState();
+  const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-
+  setIsLoading(true)
     try {
       const res = await fetchClient.post('/api/auth/login', { email, password });
       localStorage.setItem('token', res.data.token);
@@ -27,8 +26,7 @@ function Login() {
       console.error(err.response);
       setMessage(err.response?.data.message || 'Cant send data to server');
     }
-
-    setIsLoading(false);
+    setIsLoading(false)
   };
 
   return (
