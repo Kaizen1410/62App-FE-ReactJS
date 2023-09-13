@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        'backdrop': 'rgba(0, 0, 0, 0.5)'
+      },
       spacing: {
         'open': 'calc(100vw - 16rem)',
         'close': 'calc(100vw)',
