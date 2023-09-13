@@ -1,6 +1,8 @@
 import { Sidebar } from 'flowbite-react';
 import { Link, useNavigate } from "react-router-dom";
 import fetchClient from "../utils/fetchClient";
+import { useState } from 'react';
+import { BeatLoader } from 'react-spinners';
 
 const Leave = () => {
     return (
@@ -16,8 +18,10 @@ const Master = () => {
 
 const SidebarReact = () => {
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleLogout = async () => {
+        setIsLoading(true);
         try {
             await fetchClient.get('/api/auth/logout');
             localStorage.removeItem('token');
@@ -25,11 +29,12 @@ const SidebarReact = () => {
         } catch (err) {
             console.error(err);
         }
+        setIsLoading(false);
     }
 
     return (
         <Sidebar className='h-screen fixed z-50'>
-            <Link to='/' className='block text-black text-center font-bold text-2xl mb-4'>
+            <Link to='/' className='block text-black text-center font-bold text-2xl mb-4 dark:text-white'>
                 Employee Absent
             </Link>
             <Sidebar.Items>
@@ -60,9 +65,13 @@ const SidebarReact = () => {
                     </Sidebar.Collapse>
 
                     <div className='absolute bottom-5 left-5 right-5'>
-                        <button className="flex items-center justify-center w-full p-2 border border-black text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" onClick={handleLogout}>
-                            <i className="fa-solid fa-right-from-bracket -scale-x-100 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
-                            <span className="ml-2 font-semibold">Logout</span>
+                        <button className="flex items-center justify-center w-full p-2 border border-black dark:border-white text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" onClick={handleLogout}>
+                            {isLoading
+                                ? <BeatLoader color="white" size={10} className='my-1' />
+                                : <>
+                                    <i className="fa-solid fa-right-from-bracket -scale-x-100 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+                                    <span className="ml-2 font-semibold">Logout</span>
+                                </>}
                         </button>
                     </div>
                 </Sidebar.ItemGroup>

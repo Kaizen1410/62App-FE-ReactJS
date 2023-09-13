@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import Loading from '../components/Loading';
+import { Spinner } from "flowbite-react"
 import fetchClient from '../utils/fetchClient';
 
 const UserContext = createContext();
@@ -28,7 +28,12 @@ const UserProvider = ({children}) => {
 
     return(
         <UserContext.Provider value={{ user, setUser }}>
-            {isLoading ? <Loading size='xl' /> : children}
+            {isLoading
+            ?
+            <div className='h-screen flex items-center justify-center'>
+                <Spinner size='xl' />
+            </div>
+            : children}
         </UserContext.Provider>
     );
 }

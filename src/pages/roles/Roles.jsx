@@ -42,66 +42,71 @@ const Roles = () => {
       console.error(err);
     }
   }
-  
+
   return (
-    <div className="mx-auto p-4">
-      <h1 className="text-center font-bold text-white text-2xl mb-8">Roles</h1>
+    <>
+      <div className="bg-white rounded-md p-4 dark:bg-gray-800">
+        <h1 className="font-bold text-2xl mb-8 dark:text-white">Roles List</h1>
+        <div className="relative flex justify-between mb-6">
+          <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
+          <input
+            type="search"
+            className="w-56 pl-8 rounded-md"
+            placeholder="Search..."
+            onChange={(e) => setSearch(e.target.value)}
+          />
 
-      <div className="relative flex justify-between mb-4">
-        <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
-        <input
-          type="search"
-          className="w-56 pl-8 rounded-md"
-          placeholder="Search..."
-          onChange={(e) => setSearch(e.target.value)}
-        />
+          <Button as={Link} to="/roles/add">
+            Add Role
+          </Button>
+        </div>
+        
+        <div className="h-96 overflow-y-auto">
+          {isLoading ? <Loading size='xl' /> : (
+            <Table striped>
+              <Table.Head className="text-center sticky top-0">
+                <Table.HeadCell className="w-1">No</Table.HeadCell>
+                <Table.HeadCell>Roles</Table.HeadCell>
+                <Table.HeadCell>Members</Table.HeadCell>
+                <Table.HeadCell>Action</Table.HeadCell>
+              </Table.Head>
+              <Table.Body className="divide-y">
+                {roles.map((role, i) => (
+                  <Table.Row key={i}>
+                    <Table.Cell className="text-center">
+                      {(i + 1) + pagination?.per_page * (page - 1)}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {role.name}
+                    </Table.Cell>
+                    <Table.Cell className="text-center">
+                      {role.users_count}
+                    </Table.Cell>
+                    <Table.Cell className="text-center">
+                      <Link
+                        to={`/roles/${role.id}/edit`}
+                        className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 mr-5"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        onClick={() => { setSelectedRoles(role.id); setOpenModal('pop-up') }}
+                        className="font-medium text-red-600 hover:underline dark:text-red-500"
+                      >
+                        Delete
+                      </button>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>)}
+        </div>
 
-        <Button as={Link} to="/roles/add">
-          Add Role
-        </Button>
+        <Pagination pagination={pagination} page={page} setPage={setPage} />
       </div>
-        {isLoading ? <Loading size='xl' /> : (
-        <Table striped>
-          <Table.Head className="text-center">
-            <Table.HeadCell className="w-1">No</Table.HeadCell>
-            <Table.HeadCell>Roles</Table.HeadCell>
-            <Table.HeadCell>Members</Table.HeadCell>
-            <Table.HeadCell>Action</Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            {roles.map((r, i) => (
-              <Table.Row key={i}>
-                <Table.Cell className="text-center">
-                  {(i + 1) + pagination?.per_page * (page - 1)}
-                </Table.Cell>
-                <Table.Cell>{r.name}</Table.Cell>
-                <Table.Cell className="text-center">
-                  {r.users_count}
-                </Table.Cell>
-                <Table.Cell className="text-center">
-                  <Link
-                    to={`/roles/${r.id}/edit`}
-                    className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 mr-5"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    onClick={() => {setSelectedRoles(r.id); setOpenModal('pop-up')}}
-                    className="font-medium text-red-600 hover:underline dark:text-red-500"
-                  >
-                    Delete
-                  </button>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-            
-          </Table.Body>
-        </Table>)}
-
-      <Pagination pagination={pagination} page={page} setPage={setPage} />
 
       <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => deleteRole(selectedRoles)} />
-    </div>
+    </>
   );
 }
 export default Roles

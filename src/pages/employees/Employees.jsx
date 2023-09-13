@@ -36,8 +36,7 @@ const Employees = () => {
   const handleDeleteEmployee = (employeesId) => {
     console.log(employeesId)
     fetchClient.delete(`/api/employees/${employeesId}`)
-      .then(res => {
-        console.log(res.data)
+      .then(() => {
         setEmployees(employees.filter((employees) => employees.id !== employeesId));
         setOpenModal(null);
       })
@@ -46,72 +45,68 @@ const Employees = () => {
       });
   };
 
-  const handlePage = (p) => {
-    if (p === '&laquo; Previous' || p === 'Next &raquo;') {
-      setPage(prev => p === '&laquo; Previous' ? prev - 1 : prev + 1);
-      return;
-    }
-    setPage(p);
-  }
-
-
   return (
-    <div className="mx-auto p-4">
-      <h1 className="text-center font-bold text-white text-2xl mb-8"> Employees List</h1>
-      <div className="relative flex justify-between mb-4">
-        <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
-        <input
-          type="search"
-          className="w-56 pl-8 rounded-md"
-          placeholder="Search..."
-          onChange={(e) => setSearch(e.target.value)}
-        />
+    <>
+      <div className="bg-white rounded-md p-4 dark:bg-gray-800">
+        <h1 className="font-bold dark:text-white text-2xl mb-8"> Employees List</h1>
+        <div className="relative flex justify-between mb-4">
+          <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
+          <input
+            type="search"
+            className="w-56 pl-8 rounded-md"
+            placeholder="Search..."
+            onChange={(e) => setSearch(e.target.value)}
+          />
 
-        <Button as={Link} to="/employees/add">
-          Add Employee
-        </Button>
+          <Button as={Link} to="/employees/add">
+            Add Employee
+          </Button>
+        </div>
+
+        <div className="h-96 overflow-y-auto">
+          {isLoading ? <Loading size='xl' /> : <Table striped>
+            <Table.Head className='text-center sticky top-0'>
+              <Table.HeadCell className="w-1">No</Table.HeadCell>
+              <Table.HeadCell>Name</Table.HeadCell>
+              <Table.HeadCell>Position</Table.HeadCell>
+              <Table.HeadCell>Action</Table.HeadCell>
+            </Table.Head>
+            <Table.Body className="divide-y">
+              {employees.map((employee, i) => (
+                <Table.Row key={employee.id}>
+                  <Table.Cell className="text-center">
+                    {(i + 1) + pagination?.per_page * (page - 1)}
+                  </Table.Cell>
+                  <Table.Cell>{employee.name}</Table.Cell>
+                  <Table.Cell>{employee.employee_position?.name}</Table.Cell>
+                  <Table.Cell className='text-center'>
+                    <Link
+                      to={`/employees/${employee.id}/edit`}
+                      className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 mr-5"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setSelectedEmployee(employee.id)
+                        setOpenModal('pop-up')
+                      }}
+                      className="font-medium text-red-600 hover:underline dark:text-red-500"
+                    >
+                      Delete
+                    </button>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>}
+        </div>
+
+        <Pagination pagination={pagination} page={page} setPage={setPage} />
       </div>
 
-      {isLoading ? <Loading size='xl' /> : <Table striped>
-        <Table.Head className='text-center'>
-          <Table.HeadCell className="w-1">No</Table.HeadCell>
-          <Table.HeadCell>Name</Table.HeadCell>
-          <Table.HeadCell>Position</Table.HeadCell>
-          <Table.HeadCell>Action</Table.HeadCell>
-        </Table.Head>
-        <Table.Body className="divide-y">
-          {employees.map((e, i) => (
-            <Table.Row key={e.id}>
-              <Table.Cell className="text-center">
-                {(i + 1) + pagination?.per_page * (page - 1)}
-              </Table.Cell>
-              <Table.Cell>{e.name}</Table.Cell>
-              <Table.Cell>{e.employee_position.name}</Table.Cell>
-              <Table.Cell className='text-center'>
-                <Link
-                  to={`/employees/${e.id}/edit`}
-                  className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 mr-5"
-                >
-                  Edit
-                </Link>
-                <button
-                  onClick={() => {
-                    setSelectedEmployee(e.id)
-                    setOpenModal('pop-up')}}
-                  className="font-medium text-red-600 hover:underline dark:text-red-500"
-                >
-                  Delete
-                </button>
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>}
-
-      <Pagination pagination={pagination} page={page} setPage={setPage} />
-
       <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => handleDeleteEmployee(selectedEmployee)} />
-    </div>
+    </>
   );
 }
 export default Employees;

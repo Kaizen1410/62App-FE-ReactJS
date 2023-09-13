@@ -58,8 +58,7 @@ function EditEmployees() {
   }
 
   return (
-
-    <>
+    <div className="h-screen">
       <div className="text-cyan-950 flex justify-between p-3 xt-">
         <Button as={Link} to="/employees">
           <i className="fa-solid fa-angle-left"></i>
@@ -109,7 +108,7 @@ function EditEmployees() {
           </div>
         </form>
       </div>}
-    </>
+    </div>
   )
 }
 
