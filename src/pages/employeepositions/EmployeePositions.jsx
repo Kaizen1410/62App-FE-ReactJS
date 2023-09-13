@@ -134,28 +134,28 @@ function EmployeePositions() {
                         <>
                           <button
                             onClick={() => handleSavePosition()}
-                            className="font-medium text-green-600 hover:underline dark:text-green-500 mr-5"
+                            className="font-medium text-green-600 hover:underline dark:text-green-600 mr-5"
                           >
-                            Simpan
+                            Save
                           </button>
                           <button
                             onClick={() => setEditingPosition(null)}
-                            className="font-medium text-red-600 hover:underline dark:text-red-500 mr-5"
+                            className="font-medium text-red-600 hover:underline dark:text-red-600 mr-5"
                           >
-                            Batal
+                            Cancel
                           </button>
                         </>
                       ) : (
                         <>
                           <button
                             onClick={() => setEditingPosition(position)}
-                            className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 mr-5"
+                            className="font-medium text-cyan-600 hover:underline dark:text-cyan-600 mr-5"
                           >
                             Edit
                           </button>
                           <button
                             onClick={() => { setSelectedPosition(position.id); setOpenModal('pop-up') }}
-                            className="font-medium text-red-600 hover:underline dark:text-red-500"
+                            className="font-medium text-red-600 hover:underline dark:text-red-600"
                           >
                             Delete
                           </button>

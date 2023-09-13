@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { Table } from 'flowbite-react';
 import { UserState } from '../context/UserProvider';
+import { DarkThemeToggle } from 'flowbite-react';
 
 const Dashboard = () => {
   const { user } = UserState();
 
   return (
     <>
+    <DarkThemeToggle className='absolute top-10 right-10'/>
     <div className='mb-10'>
       <h1 className='text-4xl font-bold text-white'>Dashboard</h1>
       <h3 className='text-white font-semibold text-xl'>Welcome {user?.email}</h3>
