@@ -76,28 +76,28 @@ const EditUserRoles = () => {
 
       {isLoading ? <Loading size='xl' /> : <div>
         <form
-          className="max-w-md mx-auto p-4 bg-white shadow-md rounded-md"
+          className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
           onSubmit={updateUserRoles}
         >
-          <h4 className="text-xl font-semibold text-center mb-4">Edit User Role</h4>
+          <h4 className="text-xl font-semibold text-center mb-4 dark:text-gray-50">Edit User Role</h4>
           
-          <div className="mb-4">
+          <div className="mb-4 dark:text-gray-50">
             <div>
-              <span className="text-gray-700 font-bold">Email: </span>
+              <span className="text-gray-700 font-bold dark:text-gray-50">Email: </span>
                 {userRoles?.email}
               </div>
             <div>
-              <span className="text-gray-700 font-bold">Name: </span>
+              <span className="text-gray-700 font-bold dark:text-gray-50">Name: </span>
               {userRoles?.employee.name}
             </div>
 
-            <label htmlFor="roles" className="block text-gray-700 font-bold mb-2">
+            <label htmlFor="roles" className="block text-gray-700 font-bold mb-2 dark:text-gray-50">
               Roles:
             </label>
 
             <div className="flex flex-wrap gap-1 mb-4">
               {userRoles.roles.map(role => (
-                <div className="border px-3 py-2 rounded-md" key={role.id}>
+                <div className="border px-3 py-2 rounded-md dark:text-gray-50" key={role.id}>
                   <span>{role.name}</span>
                   <i className="fa-solid fa-xmark ml-2 cursor-pointer" onClick={() => removeRole(role.id)}></i>
                 </div>
@@ -107,14 +107,14 @@ const EditUserRoles = () => {
             <input
               type="text"
               id="roles"
-              className="border rounded-md py-1 px-2 text-gray-700 focus:outline-none focus:ring focus:border-blue-300 w-full"
+              className="border rounded-md py-1 px-2 text-gray-700  focus:outline-none focus:ring focus:border-blue-300 w-full"
               onChange={(e) => setSearchRole(e.target.value)}
             />
           </div>
 
           <div className="mb-4 max-h-64 overflow-y-auto">
             {roles.map(r => (
-              <div key={r.id} className="border px-3 py-2 mb-1 rounded-md cursor-pointer" onClick={() => addRole(r)}>
+              <div key={r.id} className="border px-3 py-2 mb-1 dark:text-gray-50 rounded-md cursor-pointer" onClick={() => addRole(r)}>
                 {r.name}
               </div>
             ))}

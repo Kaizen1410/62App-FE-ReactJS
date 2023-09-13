@@ -5,6 +5,7 @@ import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
 import PopUpModal from "../../components/DeleteModal";
 import Pagination from "../../components/Pagination";
+import moment from "moment"
 
 const Leaves = () => {
   const [leaves, setLeaves] = useState([]);
@@ -90,7 +91,7 @@ const Leaves = () => {
                     {leave.employee.name}
                   </Table.Cell>
                   <Table.Cell>
-                    {leave.date_leave}
+                    {moment(leave.date_leave).format('DD MMMM YYYY')}
                   </Table.Cell>
                   <Table.Cell>
                     {leave.is_approved ? <i className="fa-solid fa-check text-green-400"></i> : <i className="fa-solid fa-xmark text-red-600"></i>
