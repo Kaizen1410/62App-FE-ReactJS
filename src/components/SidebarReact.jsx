@@ -41,7 +41,7 @@ const SidebarReact = () => {
                 </svg>
             </Button>
 
-            {isOpenOnSmallScreen && <div className='bg-backdrop absolute w-screen h-screen md:hidden' onClick={() => setIsOpenOnSmallScreen(false)}></div>}
+            {isOpenOnSmallScreen && <div className='bg-backdrop z-40 absolute w-screen h-screen md:hidden' onClick={() => setIsOpenOnSmallScreen(false)}></div>}
 
             <Sidebar className={`h-screen fixed z-50 ${!isOpenOnSmallScreen && 'w-0'} overflow-x-hidden md:w-64 transition-all`}>
                 <Link to='/' className='block text-black text-center font-bold text-2xl mb-4 dark:text-white'>

@@ -1,12 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Table } from 'flowbite-react';
+import { UserState } from '../context/UserProvider';
 
 const Dashboard = () => {
+  const { user } = UserState();
 
   return (
+    <>
+    <div className='mb-10'>
+      <h1 className='text-4xl font-bold text-white'>Dashboard</h1>
+      <h3 className='text-white font-semibold text-xl'>Welcome {user?.email}</h3>
+    </div>
     <div className="bg-white rounded-md p-4 dark:bg-gray-800">
-      <h1 className="font-bold dark:text-white text-2xl mb-8">Dashboard</h1>
+      <h1 className="font-bold dark:text-white text-2xl mb-8">Leaves Summary</h1>
 
       <div className="relative mb-4">
         <i className="fa-solid fa-calendar absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
@@ -208,6 +215,7 @@ const Dashboard = () => {
 
       </div>
     </div>
+    </>
   );
 };
 
