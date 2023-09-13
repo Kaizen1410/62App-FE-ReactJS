@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import PopUpModal from "../../components/DeleteModal";
 import Pagination from "../../components/Pagination";
 import moment from "moment"
+import { FileInput } from 'flowbite-react';
 
 const Leaves = () => {
   const [leaves, setLeaves] = useState([]);
@@ -47,6 +48,23 @@ const Leaves = () => {
       .finally(() => setDeleteIsLoading(false));
   };
 
+  const handleImport = (target) => {
+    const file = target.files[0];
+    if(!file) return;
+  
+    const formData = new FormData();
+    formData.append('csv', file);
+
+      fetchClient.post(`/api/leaves/import`, formData, {headers: {"Content-Type": 'multipart/form-data'}})
+      .then((res) => {
+        console.log(res.data);
+        target.value = null;
+      })
+      .catch((error) => {
+        console.error('Error Import Leaves', error)
+      })
+  }
+
   return (
     <>
       <div className="bg-white rounded-md p-4 dark:bg-gray-800">
@@ -55,6 +73,19 @@ const Leaves = () => {
         <div className="relative flex justify-between mb-4">
           <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
           <input type="search" className="w-56 pl-8 rounded-md" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+
+
+          <div
+            className="max-w-md"
+            id="fileUpload"
+          >
+            <div className="mb-2 block">
+            </div>
+            <FileInput
+              onChange={(e) => handleImport(e.target)}
+            />
+          </div>
+
 
           <Button as={Link} to='/leaves/add'>Add Leave</Button>
         </div>
