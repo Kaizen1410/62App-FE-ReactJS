@@ -1,103 +1,87 @@
-import { useState } from 'react';
+import { Button } from "flowbite-react"
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import fetchClient from "../../utils/fetchClient";
+import Loading from "../../components/Loading";
+import { Datepicker } from 'flowbite-react';
+import { UserState } from "../../context/UserProvider";
+import moment from "moment"
 
-const AddLeave = () => {
+function AddLeave() {
 
-    const initialLeaves = { id: null, name: '', position: '' };
-    const [leave, setLeave] = useState([]);
-    const [currentLeaves, setCurrentLeaves] = useState(initialLeaves);
-    const [editing, setEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
+  const { user } = UserState()
+  const navigate = useNavigate()
+  const [leave, setLeave] = useState({
+    date_leave: '',
+  });
+
+  const handleInput = (e) => {
+    e.persist();
+    console.log({ [e.target.name]: e.target.value })
+    let value = e.target.value;
+    setLeave({ ...leave, [e.target.name]: value });
+  }
+
+  const saveLeave = () => {
+
+    const inputEl = document.querySelector('input')
+
+    const data = {
+      employee_id: user.employee.id,
+      date_leave: moment(inputEl.value).format('YYYY-MM-DD') ,
+      is_approved: false,
+    }
+    console.log(data)
+
+    fetchClient.post('/api/leaves', data)
+      .then(res => {
+        navigate('/leaves')
+      })
+      .catch(err => console.error(err));
+  }
   
-    // Fungsi untuk menambahkan karyawan
-    const addLeaves = (leaves) => {
-      leaves.id = leave.length + 1;
-      setLeave([...leave, leaves]);
-    };
-  
-    // Fungsi untuk mengedit karyawan
-    const editLeaves = (id, updatedLeaves) => {
-      setEditing(false);
-      setLeave(leave.map((leaves) => (leaves.id === id ? updatedLeaves : leaves)));
-    };
-  
-    // Fungsi untuk menghapus karyawan
-    const deleteLeave = (id) => {
-      setLeave(leave.filter((leaves) => leaves.id !== id));
-    };
-  
-    // Fungsi untuk mengisi formulir edit dengan data karyawan
-    const editForm = (leaves) => {
-      setEditing(true);
-      setCurrentLeaves({ id: leaves.id, name: leaves.name, position: leaves.position });
-    };
-  
-    return (
-      <div className="container mx-auto p-4 h-screen">
-        <h1 className="text-2xl font-bold mb-4 flex justify-center">Daftar Karyawan</h1>
-  
-        {/* Formulir Tambah/Edit */}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (editing) {
-              editLeaves(currentLeaves.id, currentLeaves);
-            } else {
-              addLeaves(currentLeaves);
-            }
-            setCurrentLeaves(initialLeaves);
-          }}
-          className="max-w-md mx-auto p-4 bg-cyan-400 shadow-md rounded-md"
+
+  return (
+    
+    <div className="h-screen">
+      <div className="text-cyan-950 flex justify-between p-3 ">
+        <Button as={Link} to="/leaves">
+          <i className="fa-solid fa-angle-left"></i>
+        </Button>
+      </div>
+
+      {isLoading ? <Loading size='xl' /> : <div>
+        <div
+          className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
+          
         >
+          <h4 className="text-xl font-semibold text-center dark:text-gray-50">Add Leave</h4>
           <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
-              Nama
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={currentLeaves.name}
-              onChange={(e) => setCurrentLeaves({ ...currentLeaves, name: e.target.value })}
-              className="rounded-md py-2 px-3 text-cyan-400 bg-cyan-950 focus:outline-none focus:ring border-0 w-full"
-              placeholder='Enter Name'
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="position" className="block text-cyan-950 font-bold mb-2">
-              Posisi
-            <select name="position" id="position" className='rounded-md py-5 px-3 text-cyan-400 focus:outline-none focus:ring  w-full'>
-              <option value="">Junior Developer</option>
-              <option value="">Senior Developer</option>
-              <option value="">Junior Project Manager</option>
-              <option value="">Senior Project Manager</option>
-              <option value="">Junior Quality Assurance</option>
-              <option value="">Senior Quality Assurance</option>
-              <option value="">Junior Design</option>
-              <option value="">Senior Design</option>
-            </select>
+            <label htmlFor="date_leave" className="block text-gray-700 dark:text-gray-50 font-bold mb-2 mt-5">
+              Date Leave
+              <Datepicker />
             </label>
           </div>
           <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={() => {
-                setEditing(false);
-                setCurrentLeaves(initialLeaves);
-              }}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md mr-2"
+            <Link
+              to='/leaves'
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md mr-2"
             >
-              Batal
-            </button>
+              Cancel
+            </Link>
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md"
+              className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-md"
+              onClick={saveLeave}
             >
-              {editing ? 'Simpan' : 'Tambah Karyawan'}
+              Save
             </button>
           </div>
-        </form>
-  
-      </div>
-    )
+        </div>
+      </div>}
+    </div>
+  )
 }
 
-export default AddLeave
+export default AddLeave;

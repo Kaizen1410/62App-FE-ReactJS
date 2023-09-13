@@ -30,12 +30,12 @@ const AddRoles = () => {
 
       <div>
         <form
-          className="max-w-md mx-auto p-4 bg-white shadow-md rounded-md"
+          className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
           onSubmit={addRole}
         >
-          <h4 className="text-xl font-semibold text-center">Add Role</h4>
+          <h4 className="text-xl font-semibold text-center dark:text-gray-50">Add Role</h4>
           <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
+            <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
               Role
             </label>
             <input
@@ -50,13 +50,13 @@ const AddRoles = () => {
           <div className="flex justify-end">
             <Link
               to='/roles'
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md mr-2"
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md mr-2"
             >
               Cancel
             </Link>
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md"
+              className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-md"
             >
               Save
             </button>
