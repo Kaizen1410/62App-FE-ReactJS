@@ -1,14 +1,17 @@
-import { Button } from "flowbite-react"
+import { Button, TextInput } from "flowbite-react"
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import fetchClient from "../../utils/fetchClient";
 import Loading from "../../components/Loading";
+import { SearchIcon } from "../../components/Icons";
+import { BeatLoader } from "react-spinners";
 
 const EditUserRoles = () => {
   const [userRoles, setUserRoles] = useState([]);
   const [roles, setRoles] = useState([]);
   const [searchRole, setSearchRole] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [updateIsLoading, setUpdateIsLoading] = useState(false);
 
   const { id } = useParams();
   const navigate = useNavigate()
@@ -39,6 +42,7 @@ const EditUserRoles = () => {
 
   const updateUserRoles = async (e) => {
     e.preventDefault();
+    setUpdateIsLoading(true);
 
     const data = {
       role_id: userRoles.roles.map(role => role.id)
@@ -52,10 +56,11 @@ const EditUserRoles = () => {
     } catch (err) {
       console.error(err);
     }
+    setUpdateIsLoading(false);
   }
 
   const addRole = (r) => {
-    const check = userRoles.roles.find(role => role === r);
+    const check = userRoles.roles.find(role => role.id === r.id);
     if (!check) {
       setUserRoles(prev => ({ ...prev, roles: [...prev.roles, r] }));
     }
@@ -67,25 +72,19 @@ const EditUserRoles = () => {
   }
 
   return (
-    <div className="h-screen">
-      <div className="text-cyan-950 flex justify-between p-3 xt-">
-        <Button as={Link} to="/user-roles">
-          <i className="fa-solid fa-angle-left"></i>
-        </Button>
-      </div>
-
+    <div className="min-h-96">
       {isLoading ? <Loading size='xl' /> : <div>
         <form
           className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
           onSubmit={updateUserRoles}
         >
-          <h4 className="text-xl font-semibold text-center mb-4 dark:text-gray-50">Edit User Role</h4>
-          
+          <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Edit User Role</h4>
+
           <div className="mb-4 dark:text-gray-50">
             <div>
               <span className="text-gray-700 font-bold dark:text-gray-50">Email: </span>
-                {userRoles?.email}
-              </div>
+              {userRoles?.email}
+            </div>
             <div>
               <span className="text-gray-700 font-bold dark:text-gray-50">Name: </span>
               {userRoles?.employee.name}
@@ -104,15 +103,15 @@ const EditUserRoles = () => {
               ))}
             </div>
 
-            <input
-              type="text"
-              id="roles"
-              className="border rounded-md py-1 px-2 text-gray-700  focus:outline-none focus:ring focus:border-blue-300 w-full"
+            <TextInput
+              type="search"
+              icon={SearchIcon}
+              placeholder="Search role..."
               onChange={(e) => setSearchRole(e.target.value)}
             />
           </div>
 
-          <div className="mb-4 max-h-64 overflow-y-auto">
+          <div className="mb-4 max-h-56 overflow-y-auto">
             {roles.map(r => (
               <div key={r.id} className="border px-3 py-2 mb-1 dark:text-gray-50 rounded-md cursor-pointer" onClick={() => addRole(r)}>
                 {r.name}
@@ -121,18 +120,26 @@ const EditUserRoles = () => {
           </div>
 
           <div className="flex justify-end">
-            <Link
+            <Button
+              as={Link}
+              color="failure"
               to='/user-roles'
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md mr-2"
+              className="mr-2"
             >
               Cancel
-            </Link>
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md"
-            >
-              Save
-            </button>
+            </Button>
+            {updateIsLoading
+              ? <Button
+                type="submit"
+                disabled
+              >
+                <BeatLoader color="white" size={6} className='my-1 mx-2' />
+              </Button>
+              : <Button
+                type="submit"
+              >
+                Save
+              </Button>}
           </div>
         </form>
       </div>}

@@ -16,7 +16,7 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  setIsLoading(true)
+    setIsLoading(true);
     try {
       const res = await fetchClient.post('/api/auth/login', { email, password });
       localStorage.setItem('token', res.data.token);
@@ -26,7 +26,7 @@ function Login() {
       console.error(err.response);
       setMessage(err.response?.data.message || 'Cant send data to server');
     }
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   return (

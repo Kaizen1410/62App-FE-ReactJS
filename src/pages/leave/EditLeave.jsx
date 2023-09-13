@@ -5,10 +5,11 @@ import fetchClient from "../../utils/fetchClient";
 import Loading from "../../components/Loading";
 import { UserState } from "../../context/UserProvider";
 import moment from "moment"
+import { BeatLoader } from "react-spinners";
 
 function EditLeave() {
-
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
+  const [updateIsLoading, setUpdateIsLoading] = useState(false);
   const { id } = useParams()
   const { user } = UserState()
   const navigate = useNavigate()
@@ -26,9 +27,10 @@ function EditLeave() {
     }
 
     getLeave();
-  }, []);
+  }, [id]);
 
   const updateLeave = async (e) => {
+    setUpdateIsLoading(true);
     const data = {...leave, is_approved : true, approved_by : user?.employee.id}
     try {
       await fetchClient.put(`api/leaves/${id}`, data);
@@ -36,22 +38,17 @@ function EditLeave() {
     } catch (err) {
       console.error(err);
     }
+    setUpdateIsLoading(false);
   }
 
 
   return (
-    <div className="h-screen">
-      <div className="text-cyan-950 flex justify-between p-3">
-        <Button as={Link} to="/leaves">
-          <i className="fa-solid fa-angle-left"></i>
-        </Button>
-      </div>
-
+    <div className="min-h-96">
       {isLoading ? <Loading size='xl' /> : <div>
         <div
           className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
         >
-          <h4 className="text-xl font-semibold text-center dark:text-gray-50">Edit Leave</h4>
+          <h4 className="text-xl font-semibold text-center mb-5 dark:text-gray-50">Edit Leave</h4>
           <div className="mb-4 dark:text-gray-50">
             <div>
               <span className="text-gray-700 font-bold dark:text-gray-50">Name: </span>
@@ -63,19 +60,21 @@ function EditLeave() {
             </div>
           </div>
           <div className="flex justify-end">
-            <Link
+            <Button
+              color="failure"
+              as={Link}
               to='/leaves'
-              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md mr-2"
+              className="mr-2"
             >
               Cancel
-            </Link>
-            <button
-              type="submit"
-              className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-md"
-              onClick={updateLeave}
-            >
+            </Button>
+            {updateIsLoading
+            ? <Button type="button" disabled>
+                <BeatLoader color="white" size={6} className='my-1 mx-2' />
+              </Button>
+            : <Button type="button" onClick={updateLeave}>
               Approve
-            </button>
+            </Button>}
           </div>
         </div>
       </div>}

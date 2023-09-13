@@ -1,10 +1,11 @@
-import { Table, Button } from "flowbite-react"
+import { Table, Button, TextInput } from "flowbite-react"
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Loading from "../../components/Loading";
 import PopUpModal from "../../components/DeleteModal";
 import fetchClient from "../../utils/fetchClient";
 import Pagination from "../../components/Pagination";
+import { SearchIcon } from "../../components/Icons";
 
 const Roles = () => {
   const [roles, setRoles] = useState([]);
@@ -50,14 +51,8 @@ const Roles = () => {
     <>
       <div className="bg-white rounded-md p-4 dark:bg-gray-800">
         <h1 className="font-bold text-2xl mb-8 dark:text-white">Roles List</h1>
-        <div className="relative flex justify-between mb-6">
-          <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
-          <input
-            type="search"
-            className="w-56 pl-8 rounded-md"
-            placeholder="Search..."
-            onChange={(e) => setSearch(e.target.value)}
-          />
+        <div className="flex justify-between mb-4">
+          <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
 
           <Button as={Link} to="/roles/add">
             Add Role

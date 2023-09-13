@@ -3,18 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import fetchClient from "../utils/fetchClient";
 import { useEffect, useState } from 'react';
 import { BeatLoader } from 'react-spinners';
+import { MasterIcon, LeaveIcon } from './Icons';
 
-const Leave = () => {
-    return (
-        <i className="fa-solid fa-plane text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
-    )
-}
-
-const Master = () => {
-    return (
-        <i className="fa-solid fa-folder-closed text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
-    )
-}
 
 const SidebarReact = () => {
     const navigate = useNavigate();
@@ -40,13 +30,13 @@ const SidebarReact = () => {
 
     return (
         <>
-            <Button className='absolute top-1 left-1' color='rgba(0, 0, 0, 0)' onClick={() => setIsOpenOnSmallScreen(true)}>
+            <Button className='absolute top-5 left-5' color='rgba(0, 0, 0, 0)' onClick={() => setIsOpenOnSmallScreen(true)}>
                 <svg className="w-6 h-6 text-white" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path clipRule="evenodd" fillRule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
                 </svg>
             </Button>
 
-            <DarkThemeToggle className='absolute top-10 right-10' />
+            <DarkThemeToggle className='absolute top-5 right-5' />
 
             {isOpenOnSmallScreen && <div className='bg-backdrop z-40 absolute w-screen h-screen md:hidden' onClick={() => setIsOpenOnSmallScreen(false)}></div>}
 
@@ -57,27 +47,31 @@ const SidebarReact = () => {
                 <Sidebar.Items>
                     <Sidebar.ItemGroup>
                         <Sidebar.Item as={Link} to='/leaves' className="group"
-                            icon={Leave}
+                            icon={LeaveIcon}
                         >
                             Leave
                         </Sidebar.Item>
                         <Sidebar.Collapse
-                            icon={Master}
+                            icon={MasterIcon}
                             label="Master"
                         >
                             <Sidebar.Item as={Link} to='/roles'>
-                                Roles
+                                <i className="fa-solid fa-users-gear mr-3 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+                                <span>Roles</span>
                             </Sidebar.Item>
                             <Sidebar.Item as={Link} to='/user-roles'>
-                                User Roles
+                                <i className="fa-solid fa-user-gear mr-3 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+                                <span>User Roles</span>
                             </Sidebar.Item>
                             <Sidebar.Item as={Link} to='/employees'>
                                 <Link to='/employees' className='inline-block w-full'>
-                                    Employees
+                                    <i className="fa-solid fa-briefcase mr-4 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+                                    <span>Employees</span>
                                 </Link>
                             </Sidebar.Item>
                             <Sidebar.Item as={Link} to='/employee-positions'>
-                                Employee Positions
+                                <i className="fa-solid fa-network-wired mr-3 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+                                <span>Employee Positions</span>
                             </Sidebar.Item>
                         </Sidebar.Collapse>
 

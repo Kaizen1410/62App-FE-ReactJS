@@ -1,12 +1,14 @@
-import { Button } from "flowbite-react"
+import { Button, TextInput } from "flowbite-react"
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import fetchClient from "../../utils/fetchClient";
 import Loading from "../../components/Loading";
+import { BeatLoader } from "react-spinners";
 
 const EditRoles = () => {
   const [role, setRole] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [updateIsLoading, setUpdateIsLoading] = useState(false);
 
   const { id } = useParams();
   const navigate = useNavigate()
@@ -27,53 +29,56 @@ const EditRoles = () => {
 
   const updateRole = async (e) => {
     e.preventDefault();
+    setUpdateIsLoading(true);
     try {
       await fetchClient.put(`api/roles/${id}`, role);
       navigate('/roles');
     } catch (err) {
       console.error(err);
     }
+    setUpdateIsLoading(false);
   }
 
   return (
-    <div className="h-screen">
-      <div className="text-cyan-950 flex justify-between p-3">
-        <Button as={Link} to="/roles">
-          <i className="fa-solid fa-angle-left"></i>
-        </Button>
-      </div>
-
+    <div className="min-h-96">
       {isLoading ? <Loading size='xl' /> : <div>
         <form
           className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
           onSubmit={updateRole}
         >
-          <h4 className="text-xl font-semibold text-center dark:text-gray-50">Edit Role</h4>
+          <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Edit Role</h4>
           <div className="mb-4">
             <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
               Role
             </label>
-            <input
-              type="text"
+            <TextInput
               value={role?.name}
               id="name"
-              className="border rounded-md py-1 px-2 text-gray-700 focus:outline-none focus:ring focus:border-blue-300 w-full"
-              onChange={(e) => setRole({...role, name: e.target.value})}
+              className="w-full"
+              onChange={(e) => setRole({ ...role, name: e.target.value })}
             />
           </div>
           <div className="flex justify-end">
-            <Link
+            <Button
+              as={Link}
+              color="failure"
               to='/roles'
-              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md mr-2"
+              className="mr-2"
             >
               Cancel
-            </Link>
-            <button
+            </Button>
+            {updateIsLoading
+            ? <Button
+            type="submit"
+            disabled
+          >
+            <BeatLoader color="white" size={6} className='my-1 mx-2' />
+          </Button>
+            : <Button
               type="submit"
-              className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-md"
             >
               Save
-            </button>
+            </Button>}
           </div>
         </form>
       </div>}

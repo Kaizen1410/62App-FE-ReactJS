@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import Loading from '../../components/Loading';
 import fetchClient from '../../utils/fetchClient';
-import { Button, Table } from 'flowbite-react';
+import { Button, Table, TextInput } from 'flowbite-react';
 import Pagination from '../../components/Pagination';
 import PopUpModal from '../../components/DeleteModal';
+import { SearchIcon } from '../../components/Icons';
+import { BeatLoader } from 'react-spinners';
 
 function EmployeePositions() {
   const [positions, setPositions] = useState([]);
@@ -12,16 +14,20 @@ function EmployeePositions() {
   const [pagination, setPagination] = useState();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const [openModal, setOpenModal] = useState(null);
   const [selectedPosition, setSelectedPosition] = useState();
+
+  // Loading State
+  const [isLoading, setIsLoading] = useState(true);
+  const [deleteIsLoading, setDeleteIsLoading] = useState(false);
+  const [updateIsLoading, setUpdateIsLoading] = useState(false);
+  const [addIsLoading, setAddIsLoading] = useState(false);
 
   useEffect(() => {
     getEmployeePositions();
   }, [search, page]);
 
-  // Mengambil data posisi karyawan dari API backend
+  // Retrive Employee Positions data
   const getEmployeePositions = () => {
     setIsLoading(true);
     fetchClient.get(`/api/employee-positions?search=${search}&page=${page}`)
@@ -36,9 +42,10 @@ function EmployeePositions() {
       .finally(() => setIsLoading(false));
   }
 
+  // Add Employee Position
   const handleAddPosition = (e) => {
     e.preventDefault();
-    // Mengirim data posisi baru ke server
+    setAddIsLoading(true);
     fetchClient.post('/api/employee-positions', { name: newPosition })
       .then(() => {
         getEmployeePositions();
@@ -46,11 +53,13 @@ function EmployeePositions() {
       })
       .catch(error => {
         console.error('Error adding employee position:', error);
-      });
+      })
+      .finally(() => setAddIsLoading(false));
   };
 
+  // Update Employee Position
   const handleSavePosition = () => {
-    // Mengirim data posisi yang diedit ke server
+    setUpdateIsLoading(true);
     fetchClient.put(`/api/employee-positions/${editingPosition.id}`, { name: editingPosition.name })
       .then(() => {
         const updated = positions.map(p => {
@@ -64,12 +73,13 @@ function EmployeePositions() {
       })
       .catch((error) => {
         console.error('Error editing employee position:', error);
-      });
+      })
+      .finally(() => setUpdateIsLoading(false));
   };
 
+  // Delete Employee Position
   const handleDeletePosition = (positionId) => {
     setDeleteIsLoading(true);
-    // Menghapus posisi dari server dan daftar posisi
     fetchClient.delete(`/api/employee-positions/${positionId}`)
       .then(() => {
         getEmployeePositions()
@@ -87,21 +97,20 @@ function EmployeePositions() {
         <h1 className="text-2xl font-bold mb-8 dark:text-white">Employee Positions List</h1>
 
         <form onSubmit={handleAddPosition} className="mb-4 flex">
-          <input
-            type="text"
-            value={newPosition}
-            onChange={(e) => setNewPosition(e.target.value)}
-            className="border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-300 w-full"
+          <TextInput value={newPosition} onChange={(e) => setNewPosition(e.target.value)} className="w-full"
             placeholder="Add New Position"
           />
-          <Button className='ml-3' type='submit'>
-            Add
-          </Button>
+          {addIsLoading
+            ? <Button className='ml-3' type='submit' disabled>
+              <BeatLoader color="white" size={6} className='my-1 mx-2' />
+            </Button>
+            : <Button className='ml-3' type='submit'>
+              Add
+            </Button>}
         </form>
 
-        <div className="relative mb-4">
-          <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
-          <input type="search" className="w-full pl-8 rounded-md" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+        <div className="mb-4">
+          <TextInput className="w-full" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
         </div>
 
         <div className="h-96 overflow-y-auto">
@@ -135,15 +144,22 @@ function EmployeePositions() {
                     <Table.Cell className='text-center'>
                       {editingPosition?.id === position.id ? (
                         <>
-                          <button
-                            onClick={() => handleSavePosition()}
-                            className="font-medium text-green-600 hover:underline dark:text-green-600 mr-5"
-                          >
-                            Save
-                          </button>
+                          {updateIsLoading
+                            ? <button
+                              className="font-medium text-green-600 cursor-not-allowed dark:text-green-600 mr-5"
+                              disabled
+                            >
+                              Saving...
+                            </button>
+                            : <button
+                              onClick={() => handleSavePosition()}
+                              className="font-medium text-green-600 hover:underline dark:text-green-600 mr-5"
+                            >
+                              Save
+                            </button>}
                           <button
                             onClick={() => setEditingPosition(null)}
-                            className="font-medium text-red-600 hover:underline dark:text-red-600 mr-5"
+                            className="font-medium text-red-600 hover:underline dark:text-red-600"
                           >
                             Cancel
                           </button>

@@ -1,10 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import Loading from '../components/Loading';
 import { Link } from 'react-router-dom';
-import { Table } from 'flowbite-react';
+import { Select, Table } from 'flowbite-react';
 import { UserState } from '../context/UserProvider';
 import fetchClient from '../utils/fetchClient';
+import { CalendarIcon } from '../components/Icons';
 
 
 const Dashboard = () => {
@@ -34,12 +34,11 @@ const Dashboard = () => {
             <div className="bg-white rounded-md p-4 dark:bg-gray-800">
                 <h1 className="font-bold dark:text-white text-2xl mb-8">Leaves Summary</h1>
 
-                <div className="relative mb-4">
-                    <i className="fa-solid fa-calendar absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
-                    <select className="w-56 pl-8 rounded-md" onChange={(e) => setYear(e.target.value)}>
+                <div className="mb-4">
+                    <Select className="w-56" icon={CalendarIcon} onChange={(e) => setYear(e.target.value)}>
                         <option value={new Date().getFullYear()}>{new Date().getFullYear()}</option>
                         <option value={new Date().getFullYear() - 1}>{new Date().getFullYear() - 1}</option>
-                    </select>
+                    </Select>
                 </div>
 
                 <div className="h-96 overflow-y-auto">

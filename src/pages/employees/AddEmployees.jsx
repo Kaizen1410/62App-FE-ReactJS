@@ -1,18 +1,20 @@
-import { Button } from "flowbite-react"
+import { Button, Select, TextInput } from "flowbite-react"
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import fetchClient from "../../utils/fetchClient";
 import Loading from "../../components/Loading";
+import { BeatLoader } from 'react-spinners';
 
 function AddEmployees() {
-
-  const [isLoading, setIsLoading] = useState(true)
-  const [employeePositions, setEmployeePositions] = useState([])
-  const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(true);
+  const [addIsLoading, setAddIsLoading] = useState(false);
+  const [employeePositions, setEmployeePositions] = useState([]);
   const [employees, setEmployees] = useState({
     name: '',
     employee_position_id: ''
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getEmployeePositions = async () => {
@@ -36,6 +38,7 @@ function AddEmployees() {
   }
 
   const saveEmployees = (e) => {
+    setAddIsLoading(true);
     e.preventDefault();
 
     const data = {
@@ -44,63 +47,67 @@ function AddEmployees() {
     }
 
     fetchClient.post('/api/employees', data)
-      .then(res => {
+      .then(() => {
         navigate('/employees')
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error(err))
+      .finally(() => setAddIsLoading(false));
   }
-  
+
 
   return (
-    
-    <div className="h-screen">
-      <div className="text-cyan-950 flex justify-between p-3 ">
-        <Button as={Link} to="/employees">
-          <i className="fa-solid fa-angle-left"></i>
-        </Button>
-      </div>
 
+    <div className="min-h-96">
       {isLoading ? <Loading size='xl' /> : <div>
         <form
           className="max-w-md mx-auto p-4 bg-white dark:bg-gray-800 shadow-md rounded-md"
           onSubmit={saveEmployees}
         >
-          <h4 className="text-xl font-semibold text-center dark:text-gray-50">Add Employee</h4>
+          <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Add Employee</h4>
           <div className="mb-4">
             <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
               Name
             </label>
-            <input
-              type="text"
+            <TextInput
               value={employees?.name}
               id="name"
               name="name"
-              className="border rounded-md py-1 px-2 text-gray-700 focus:outline-none focus:ring focus:border-blue-300 w-full"
+              className="w-full"
               onChange={(e) => setEmployees({ ...employees, name: e.target.value })}
             />
+
             <label htmlFor="position" className="block text-gray-700 dark:text-gray-50 font-bold mb-2 mt-5">
               Positions
-              <select name="employee_position_id" id="position" className='rounded-md py-1 px-2 text-gray-700 w-full' onChange={handleInput}>
-              <option value='' selected>Select Position</option>
-                {employeePositions.map(p => (
-                  <option value={p.id}>{p.name}</option>
-                ))}
-              </select>
             </label>
+            <Select name="employee_position_id" id="position" className='w-full' onChange={handleInput}>
+              <option value='' selected>---Select Position---</option>
+              {employeePositions.map(p => (
+                <option value={p.id}>{p.name}</option>
+              ))}
+            </Select>
+
           </div>
           <div className="flex justify-end">
-            <Link
+            <Button
+              as={Link}
+              color="failure"
               to='/employees'
-              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md mr-2"
+              className="mr-2"
             >
               Cancel
-            </Link>
-            <button
+            </Button>
+            {addIsLoading
+            ? <Button
+            type="submit"
+            disabled
+          >
+            <BeatLoader color="white" size={6} className='my-1 mx-2' />
+          </Button>
+            : <Button
               type="submit"
-              className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-md"
             >
               Save
-            </button>
+            </Button>}
           </div>
         </form>
       </div>}

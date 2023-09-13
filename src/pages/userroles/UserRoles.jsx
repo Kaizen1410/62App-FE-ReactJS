@@ -1,9 +1,10 @@
-import { Table } from "flowbite-react"
+import { Table, TextInput } from "flowbite-react"
 import fetchClient from "../../utils/fetchClient"
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
 import Pagination from "../../components/Pagination";
+import { SearchIcon } from "../../components/Icons";
 
 const UserRoles = () => {
   const [userRoles, setUserRoles] = useState([]);
@@ -35,9 +36,8 @@ const UserRoles = () => {
     <div className="bg-white rounded-md p-4 dark:bg-gray-800">
       <h1 className="font-bold dark:text-white text-2xl mb-8">User Roles List</h1>
 
-      <div className="relative mb-4">
-        <i className="fa-solid fa-magnifying-glass absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
-        <input type="search" className="w-56 pl-8 rounded-md" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+      <div className="mb-4">
+        <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
       </div>
 
       <div className="h-96 overflow-y-auto">
