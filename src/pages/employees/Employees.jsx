@@ -37,8 +37,8 @@ const Employees = () => {
     console.log(employeesId)
     fetchClient.delete(`/api/employees/${employeesId}`)
       .then(() => {
-        setEmployees(employees.filter((employees) => employees.id !== employeesId));
         setOpenModal(null);
+        getAllEmployee()
       })
       .catch((error) => {
         console.error('Error deleting employee position:', error);

@@ -36,8 +36,8 @@ const Roles = () => {
   const deleteRole = async (id) => {
     try {
       await fetchClient.delete(`api/roles/${id}`)
-      setRoles(roles.filter((role) => role.id !== id));
       setOpenModal(null);
+      getAllRoles()
     } catch (err) {
       console.error(err);
     }

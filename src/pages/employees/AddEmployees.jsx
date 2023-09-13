@@ -53,8 +53,8 @@ function AddEmployees() {
 
   return (
     
-    <>
-      <div className="text-cyan-950 flex justify-between p-3 xt-">
+    <div className="h-screen">
+      <div className="text-cyan-950 flex justify-between p-3 ">
         <Button as={Link} to="/employees">
           <i className="fa-solid fa-angle-left"></i>
         </Button>
@@ -104,7 +104,7 @@ function AddEmployees() {
           </div>
         </form>
       </div>}
-    </>
+    </div>
   )
 }
 

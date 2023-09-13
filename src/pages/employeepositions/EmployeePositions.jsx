@@ -70,7 +70,7 @@ function EmployeePositions() {
     // Menghapus posisi dari server dan daftar posisi
     fetchClient.delete(`/api/employee-positions/${positionId}`)
       .then(() => {
-        setPositions(positions.filter((position) => position.id !== positionId));
+        getEmployeePositions()
         setOpenModal(null);
       })
       .catch((error) => {

@@ -37,8 +37,8 @@ const Leaves = () => {
     setDeleteIsLoading(true);
     fetchClient.delete(`/api/leaves/${leaveId}`)
       .then(() => {
-        setLeaves(leaves.filter((leave) => leave.id !== leaveId));
         setOpenModal(null);
+        getAllLeaves()
       })
       .catch((error) => {
         console.error('Error deleting leaves:', error);
