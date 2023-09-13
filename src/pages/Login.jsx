@@ -8,7 +8,6 @@ import { BeatLoader } from 'react-spinners';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const { setUser } = UserState();
   const [isLoading, setIsLoading] = useState(false)

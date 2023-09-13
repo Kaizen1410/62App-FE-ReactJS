@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css';
 import Login from './pages/Login';
-import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
 import Leaves from './pages/leave/Leaves';
 import Roles from './pages/roles/Roles';
 import UserRoles from './pages/userroles/UserRoles';
@@ -26,7 +26,8 @@ function App() {
           <Route path='/login' element={<Login />} />
 
           <Route element={<Layout />} >
-            <Route path='/' element={<Home />} />
+            <Route path='/' element={<Dashboard />} />
+
             <Route path='/leaves' element={<Leaves />} />
             <Route path='/leaves/add' element={<AddLeave />} />
             <Route path='/leaves/:id/edit' element={<EditLeave />} />
