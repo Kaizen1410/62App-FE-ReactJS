@@ -11,6 +11,7 @@ import fetchClient from '../utils/fetchClient';
 const Dashboard = () => {
     const { user } = UserState();
     const [year, setYear] = useState(2023);
+
     const [monthData, setMonthData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -60,7 +61,7 @@ const Dashboard = () => {
                                         <Table.Cell>
                                             <Link
                                                 className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 text-center"
-                                                to={`/calendar?date=${year}-${month.month}`}
+                                                to={`/calendar/${year}-${month}`}
                                             >
                                                 <p>
                                                     {month.data_count}
