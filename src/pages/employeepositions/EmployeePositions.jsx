@@ -13,6 +13,7 @@ function EmployeePositions() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const [openModal, setOpenModal] = useState(null);
   const [selectedPosition, setSelectedPosition] = useState();
 
@@ -67,6 +68,7 @@ function EmployeePositions() {
   };
 
   const handleDeletePosition = (positionId) => {
+    setDeleteIsLoading(true);
     // Menghapus posisi dari server dan daftar posisi
     fetchClient.delete(`/api/employee-positions/${positionId}`)
       .then(() => {
@@ -75,7 +77,8 @@ function EmployeePositions() {
       })
       .catch((error) => {
         console.error('Error deleting employee position:', error);
-      });
+      })
+      .finally(() => setDeleteIsLoading(false));
   };
 
   return (
@@ -172,7 +175,7 @@ function EmployeePositions() {
         <Pagination pagination={pagination} page={page} setPage={setPage} />
       </div>
 
-      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => handleDeletePosition(selectedPosition)} />
+      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => handleDeletePosition(selectedPosition)} isLoading={deleteIsLoading} />
     </>
   );
 }

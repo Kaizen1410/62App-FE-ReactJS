@@ -13,8 +13,9 @@ const Employees = () => {
   const [pagination, setPagination] = useState();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
-  const [isLoading, setIsLoading] = useState(true)
-  const [selectedEmployee, setSelectedEmployee] = useState(1)
+  const [isLoading, setIsLoading] = useState(true);
+  const [deleteIsLoading, setDeleteIsLoading] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(1);
 
   useEffect(() => {
     getAllEmployee();
@@ -34,7 +35,7 @@ const Employees = () => {
   }
 
   const handleDeleteEmployee = (employeesId) => {
-    console.log(employeesId)
+    setDeleteIsLoading(true);
     fetchClient.delete(`/api/employees/${employeesId}`)
       .then(() => {
         setOpenModal(null);
@@ -42,7 +43,8 @@ const Employees = () => {
       })
       .catch((error) => {
         console.error('Error deleting employee position:', error);
-      });
+      })
+      .finally(() => setDeleteIsLoading(false));
   };
 
   return (
@@ -105,7 +107,7 @@ const Employees = () => {
         <Pagination pagination={pagination} page={page} setPage={setPage} />
       </div>
 
-      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => handleDeleteEmployee(selectedEmployee)} />
+      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => handleDeleteEmployee(selectedEmployee)} isLoading={deleteIsLoading} />
     </>
   );
 }

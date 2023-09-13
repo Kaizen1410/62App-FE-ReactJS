@@ -4,18 +4,18 @@ import Loading from '../components/Loading';
 import { Link } from 'react-router-dom';
 import { Table } from 'flowbite-react';
 import { UserState } from '../context/UserProvider';
-import { DarkThemeToggle } from 'flowbite-react';
 import fetchClient from '../utils/fetchClient';
 
 
 const Dashboard = () => {
     const { user } = UserState();
-    const [year, setYear] = useState(2023);
+    const [year, setYear] = useState(new Date().getFullYear());
     const [monthData, setMonthData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const getMonthData = () => {
+            console.log(year)
             setIsLoading(true);
             fetchClient.get(`/api/leaves/summary/${year}`)
                 .then(res => setMonthData(res.data.data))
@@ -23,12 +23,10 @@ const Dashboard = () => {
                 .finally(() => setIsLoading(false));
         }
         getMonthData();
-    }, [year])
-
+    }, [year]);
 
     return (
         <>
-    <DarkThemeToggle className='absolute top-10 right-10'/>
             <div className='mb-10'>
                 <h1 className='text-4xl font-bold text-white'>Dashboard</h1>
                 <h3 className='text-white font-semibold text-xl'>Welcome {user?.email}</h3>
@@ -39,8 +37,8 @@ const Dashboard = () => {
                 <div className="relative mb-4">
                     <i className="fa-solid fa-calendar absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
                     <select className="w-56 pl-8 rounded-md" onChange={(e) => setYear(e.target.value)}>
-                        <option value={2023}>2023</option>
-                        <option value={2024}>2024</option>
+                        <option value={new Date().getFullYear()}>{new Date().getFullYear()}</option>
+                        <option value={new Date().getFullYear() - 1}>{new Date().getFullYear() - 1}</option>
                     </select>
                 </div>
 

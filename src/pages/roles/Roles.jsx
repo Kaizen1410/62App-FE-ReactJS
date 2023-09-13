@@ -9,6 +9,7 @@ import Pagination from "../../components/Pagination";
 const Roles = () => {
   const [roles, setRoles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [openModal, setOpenModal] = useState(null);
   const [page, setPage] = useState(1);
@@ -34,6 +35,7 @@ const Roles = () => {
   }
 
   const deleteRole = async (id) => {
+    setDeleteIsLoading(true);
     try {
       await fetchClient.delete(`api/roles/${id}`)
       setOpenModal(null);
@@ -41,6 +43,7 @@ const Roles = () => {
     } catch (err) {
       console.error(err);
     }
+    setDeleteIsLoading(false);
   }
 
   return (
@@ -105,7 +108,7 @@ const Roles = () => {
         <Pagination pagination={pagination} page={page} setPage={setPage} />
       </div>
 
-      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => deleteRole(selectedRoles)} />
+      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => deleteRole(selectedRoles)} isLoading={deleteIsLoading} />
     </>
   );
 }
