@@ -7,12 +7,13 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { setUser } = UserState();
+  const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  setIsLoading(true)
     try {
       const res = await fetchClient.post('/api/auth/login', {email, password});
       localStorage.setItem('token', res.data.token);
@@ -21,6 +22,7 @@ function Login() {
     } catch (err) {
       console.error(err);
     }
+    setIsLoading(false)
   };
 
   return (
@@ -65,12 +67,21 @@ function Login() {
                 placeholder="Masukkan kata sandi Anda"
               />
             </div>
+            {isLoading ? (
+              <button
+              type="submit"
+              className="bg-cyan-950 hover:bg-cyan-950 text-gray-50 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring border-0 w-full"
+              disabled
+            >
+              Login...
+            </button>
+            ) : (
             <button
               type="submit"
               className="bg-cyan-950 hover:bg-cyan-950 text-gray-50 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring border-0 w-full"
             >
               Login
-            </button>
+            </button>)}
           </form>
         </div>
       </div>
