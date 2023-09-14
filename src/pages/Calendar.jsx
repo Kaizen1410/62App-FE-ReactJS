@@ -11,8 +11,6 @@ const Calendar = () => {
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
-  const { date } = location.state;
-  console.log(date)
 
   useEffect(() => {
     getLeavesMonth();
@@ -22,8 +20,7 @@ const Calendar = () => {
     setIsLoading(true);
     try {
       const res = await fetchClient.get('/api/leaves/calendar');
-      console.log(res.data.data)
-      const data = (res.data.data).map(d => ({title: d.employee?.name || '(Deleted Employee)', date: d.date_leave}));
+      const data = res.data.data.map(d => ({title: d.employee?.name || '(Deleted Employee)', date: d.date_leave}));
       setEvents(data);
     } catch (err) {;
       console.error(err)
@@ -40,7 +37,7 @@ const Calendar = () => {
       : <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        initialDate={date || undefined}
+        initialDate={location.state?.date || undefined}
         events={events}
         headerToolbar={{
           left: 'prev,next today',
