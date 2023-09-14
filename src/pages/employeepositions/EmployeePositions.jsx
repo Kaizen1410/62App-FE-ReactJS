@@ -21,17 +21,20 @@ function EmployeePositions() {
   // Loading State
   const [isLoading, setIsLoading] = useState(true);
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
-  const [updateIsLoading, setUpdateIsLoading] = useState(false);
-  const [addIsLoading, setAddIsLoading] = useState(false);
+
+  // Sort State
+  const [sort, setSort] = useState('name')
+  const [direction, setDirection] = useState('desc')
+  const [nameDirection, setNameDirection] = useState('desc')
 
   useEffect(() => {
     getEmployeePositions();
-  }, [search, page]);
+  }, [search, page, sort, direction]);
 
   // Retrive Employee Positions data
   const getEmployeePositions = () => {
     setIsLoading(true);
-    fetchClient.get(`/api/employee-positions?search=${search}&page=${page}`)
+    fetchClient.get(`/api/employee-positions?search=${search}&page=${page}&direction=${direction}`)
       .then(res => {
         setPositions(res.data.data);
         delete res.data.data
@@ -42,41 +45,6 @@ function EmployeePositions() {
       })
       .finally(() => setIsLoading(false));
   }
-
-  // Add Employee Position
-  const handleAddPosition = (e) => {
-    e.preventDefault();
-    setAddIsLoading(true);
-    fetchClient.post('/api/employee-positions', { name: newPosition })
-      .then(() => {
-        getEmployeePositions();
-        setNewPosition('');
-      })
-      .catch(error => {
-        console.error('Error adding employee position:', error);
-      })
-      .finally(() => setAddIsLoading(false));
-  };
-
-  // Update Employee Position
-  const handleSavePosition = () => {
-    setUpdateIsLoading(true);
-    fetchClient.put(`/api/employee-positions/${editingPosition.id}`, { name: editingPosition.name })
-      .then(() => {
-        const updated = positions.map(p => {
-          if (p.id === editingPosition.id) {
-            p = editingPosition;
-          }
-          return p
-        });
-        setPositions(updated);
-        setEditingPosition(null);
-      })
-      .catch((error) => {
-        console.error('Error editing employee position:', error);
-      })
-      .finally(() => setUpdateIsLoading(false));
-  };
 
   // Delete Employee Position
   const handleDeletePosition = (positionId) => {
@@ -91,6 +59,15 @@ function EmployeePositions() {
       })
       .finally(() => setDeleteIsLoading(false));
   };
+
+  const handleSort = (field) => {
+    if (field === sort && field === 'name') {
+      setDirection(nameDirection === 'asc' ? 'desc' : 'asc')
+      setNameDirection(prev => prev === 'asc' ? 'desc' : 'asc')
+    }
+
+    setSort(field)
+  }
 
   return (
     <>
@@ -109,7 +86,10 @@ function EmployeePositions() {
             <Table striped>
               <Table.Head className='text-center sticky top-0'>
                 <Table.HeadCell className='w-1'>No</Table.HeadCell>
-                <Table.HeadCell>Name</Table.HeadCell>
+                <Table.HeadCell className="cursor-pointer" onClick={() => handleSort('name')}>
+                  {nameDirection === 'asc' ? <i className="fa-solid fa-sort-up mr-2"></i> : <i className="fa-solid fa-sort-down mr-2"></i>}
+                Name
+                </Table.HeadCell>
                 <Table.HeadCell>Action</Table.HeadCell>
               </Table.Head>
               <Table.Body>
