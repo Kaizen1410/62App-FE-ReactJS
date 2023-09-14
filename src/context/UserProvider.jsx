@@ -8,6 +8,7 @@ const UserContext = createContext();
 const UserProvider = ({children}) => {
     const [user, setUser] = useState();
     const [isLoading, setIsLoading] = useState(true);
+    const [notif, setNotif] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,7 +28,7 @@ const UserProvider = ({children}) => {
     }, []);
 
     return(
-        <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider value={{ user, setUser, notif, setNotif }}>
             {isLoading
             ?
             <div className='h-screen flex items-center justify-center'>

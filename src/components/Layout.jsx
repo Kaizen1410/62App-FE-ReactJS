@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router';
 import Sidebar from './Sidebar';
 import { Flowbite } from 'flowbite-react';
+import Notif from './Notif';
 
 const Layout = () => {
   return (
@@ -11,6 +12,7 @@ const Layout = () => {
           <Outlet />
         </div>
       </div>
+      <Notif />
     </Flowbite>
   )
 }

@@ -10,7 +10,7 @@ import { BeatLoader } from "react-spinners";
 function AddLeave() {
 
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = UserState();
+  const { user, setNotif } = UserState();
   const navigate = useNavigate();
 
   const saveLeave = () => {
@@ -24,8 +24,9 @@ function AddLeave() {
     }
 
     fetchClient.post('/api/leaves', data)
-      .then(() => {
-        navigate('/leaves')
+      .then(res => {
+        setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
+        navigate('/leaves');
       })
       .catch(err => console.error(err))
       .finally(() => setIsLoading(false));

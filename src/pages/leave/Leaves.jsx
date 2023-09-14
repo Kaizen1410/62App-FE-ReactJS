@@ -8,6 +8,7 @@ import Pagination from "../../components/Pagination";
 import moment from "moment"
 import { SearchIcon } from "../../components/Icons";
 import { BeatLoader } from "react-spinners";
+import { UserState } from "../../context/UserProvider";
 
 const Leaves = () => {
   const [leaves, setLeaves] = useState([]);
@@ -20,6 +21,7 @@ const Leaves = () => {
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const [importIsLoading, setImportIsLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const { setNotif } = UserState();
 
   useEffect(() => {
     getAllLeaves();
@@ -41,9 +43,10 @@ const Leaves = () => {
   const handleDeleteLeave = (leaveId) => {
     setDeleteIsLoading(true);
     fetchClient.delete(`/api/leaves/${leaveId}`)
-      .then(() => {
+      .then(res => {
         setOpenModal(null);
-        getAllLeaves()
+        setNotif(prev => [...prev, {type: 'delete', message: res.data.message}]);
+        getAllLeaves();
       })
       .catch((error) => {
         console.error('Error deleting leaves:', error);
