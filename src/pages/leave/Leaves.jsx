@@ -1,4 +1,4 @@
-import { Table, Button, TextInput, Dropdown } from "flowbite-react"
+import { Table, Button, TextInput, Dropdown, Tooltip } from "flowbite-react"
 import fetchClient from "../../utils/fetchClient"
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
@@ -125,14 +125,16 @@ const Leaves = () => {
               ? <Button disabled className="cursor-pointer h-full">
                 <BeatLoader color="white" size={6} className='my-1 mx-2' />
               </Button>
-              : <Button as='label' className="cursor-pointer h-full">
-                <i className="fa-solid fa-file-import"></i>
-                <input
-                  type="file"
-                  onChange={(e) => handleImport(e.target)}
-                  hidden
-                />
-              </Button>}
+              : <Tooltip content='Import CSV file'>
+                <Button as='label' className="cursor-pointer h-full">
+                  <i className="fa-solid fa-file-import"></i>
+                  <input
+                    type="file"
+                    onChange={(e) => handleImport(e.target)}
+                    hidden
+                  />
+                </Button>
+              </Tooltip>}
 
             <Button as={Link} to='/leaves/add'>Add Leave</Button>
           </div>
