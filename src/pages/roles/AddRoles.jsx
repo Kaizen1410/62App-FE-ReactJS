@@ -3,10 +3,12 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import fetchClient from "../../utils/fetchClient";
 import { BeatLoader } from 'react-spinners';
+import { UserState } from "../../context/UserProvider";
 
 const AddRoles = () => {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const {setNotif} = UserState();
 
   const navigate = useNavigate();
 
@@ -14,8 +16,9 @@ const AddRoles = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await fetchClient.post('/api/roles', { name });
+      const res = await fetchClient.post('/api/roles', { name });
       navigate('/roles');
+      setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
     } catch (err) {
       console.error(err);
     }

@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import fetchClient from "../../utils/fetchClient";
 import Loading from "../../components/Loading";
 import { BeatLoader } from 'react-spinners';
+import { UserState } from "../../context/UserProvider";
 
 function EditEmployees() {
   const [employeePositions, setEmployeePositions] = useState([])
@@ -13,7 +14,7 @@ function EditEmployees() {
     name: '',
     employee_position_id: ''
   });
-
+  const {setNotif} = UserState();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -52,7 +53,8 @@ function EditEmployees() {
     e.preventDefault();
     setUpdateIsLoading(true);
     try {
-      await fetchClient.put(`api/employees/${id}`, employees);
+     const res = await fetchClient.put(`api/employees/${id}`, employees);
+     setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
       navigate('/employees');
     } catch (err) {
       console.error(err);

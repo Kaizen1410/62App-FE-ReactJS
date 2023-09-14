@@ -6,6 +6,7 @@ import PopUpModal from "../../components/DeleteModal";
 import fetchClient from "../../utils/fetchClient";
 import Pagination from "../../components/Pagination";
 import { SearchIcon } from "../../components/Icons";
+import { UserState } from "../../context/UserProvider";
 
 const Roles = () => {
   const [roles, setRoles] = useState([]);
@@ -20,7 +21,7 @@ const Roles = () => {
   const [sort, setSort] = useState('name')
   const [direction, setDirection] = useState('desc')
   const [nameDirection, setNameDirection] = useState('desc')
-
+  const {setNotif} = UserState();
 
   useEffect(() => {
     getAllRoles();
@@ -43,8 +44,9 @@ const Roles = () => {
   const deleteRole = async (id) => {
     setDeleteIsLoading(true);
     try {
-      await fetchClient.delete(`api/roles/${id}`)
+      const res = await fetchClient.delete(`api/roles/${id}`)
       setOpenModal(null);
+      setNotif(prev => [...prev, {type: 'delete', message: res.data.message}]);
       getAllRoles()
     } catch (err) {
       console.error(err);

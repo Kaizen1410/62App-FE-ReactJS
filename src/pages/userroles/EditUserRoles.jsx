@@ -5,6 +5,7 @@ import fetchClient from "../../utils/fetchClient";
 import Loading from "../../components/Loading";
 import { SearchIcon } from "../../components/Icons";
 import { BeatLoader } from "react-spinners";
+import { UserState } from "../../context/UserProvider";
 
 const EditUserRoles = () => {
   const [userRoles, setUserRoles] = useState([]);
@@ -15,6 +16,7 @@ const EditUserRoles = () => {
 
   const { id } = useParams();
   const navigate = useNavigate()
+  const {setNotif} = UserState();
 
   useEffect(() => {
     const getUserRoles = async () => {
@@ -47,11 +49,10 @@ const EditUserRoles = () => {
     const data = {
       role_id: userRoles.roles.map(role => role.id)
     }
-
-    console.log(data)
-
+    
     try {
-      await fetchClient.put(`api/user-roles/${id}`, data);
+      const res = await fetchClient.put(`api/user-roles/${id}`, data);
+      setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
       navigate('/user-roles');
     } catch (err) {
       console.error(err);

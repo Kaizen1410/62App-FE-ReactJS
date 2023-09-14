@@ -14,6 +14,7 @@ function EditLeave() {
   const { user } = UserState()
   const navigate = useNavigate()
   const [leave, setLeave] = useState()
+  const {setNotif} = UserState()
 
   useEffect(() => {
     const getLeave = async () => {
@@ -33,7 +34,8 @@ function EditLeave() {
     setUpdateIsLoading(true);
     const data = {...leave, is_approved : true, approved_by : user?.employee.id}
     try {
-      await fetchClient.put(`api/leaves/${id}`, data);
+      const res = await fetchClient.put(`api/leaves/${id}`, data);
+      setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
       navigate('/leaves');
     } catch (err) {
       console.error(err);

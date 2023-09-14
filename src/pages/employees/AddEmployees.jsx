@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import fetchClient from "../../utils/fetchClient";
 import Loading from "../../components/Loading";
 import { BeatLoader } from 'react-spinners';
+import { UserState } from "../../context/UserProvider";
 
 function AddEmployees() {
   const [isLoading, setIsLoading] = useState(true);
@@ -13,7 +14,7 @@ function AddEmployees() {
     name: '',
     employee_position_id: ''
   });
-
+  const {setNotif} = UserState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,7 +48,8 @@ function AddEmployees() {
     }
 
     fetchClient.post('/api/employees', data)
-      .then(() => {
+      .then(res => {
+        setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
         navigate('/employees')
       })
       .catch(err => console.error(err))

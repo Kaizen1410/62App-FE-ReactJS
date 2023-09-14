@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import fetchClient from "../../utils/fetchClient";
 import Loading from "../../components/Loading";
 import { BeatLoader } from "react-spinners";
+import { UserState } from "../../context/UserProvider";
 
 const EditRoles = () => {
   const [role, setRole] = useState();
@@ -12,6 +13,7 @@ const EditRoles = () => {
 
   const { id } = useParams();
   const navigate = useNavigate()
+  const { setNotif} = UserState();
 
   useEffect(() => {
     const getRole = async () => {
@@ -31,8 +33,10 @@ const EditRoles = () => {
     e.preventDefault();
     setUpdateIsLoading(true);
     try {
-      await fetchClient.put(`api/roles/${id}`, role);
+     const res = await fetchClient.put(`api/roles/${id}`, role);
+      setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
       navigate('/roles');
+      
     } catch (err) {
       console.error(err);
     }

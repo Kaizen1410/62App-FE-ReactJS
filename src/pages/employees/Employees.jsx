@@ -6,6 +6,7 @@ import PopUpModal from "../../components/DeleteModal";
 import Loading from '../../components/Loading';
 import Pagination from '../../components/Pagination';
 import { SearchIcon } from '../../components/Icons';
+import { UserState } from '../../context/UserProvider';
 
 const Employees = () => {
 
@@ -21,6 +22,7 @@ const Employees = () => {
   const [sort, setSort] = useState('name')
   const [direction, setDirection] = useState('desc')
   const [nameDirection, setNameDirection] = useState('desc')
+  const {setNotif} = UserState();
 
   useEffect(() => {
     getAllEmployee();
@@ -42,8 +44,9 @@ const Employees = () => {
   const handleDeleteEmployee = (employeesId) => {
     setDeleteIsLoading(true);
     fetchClient.delete(`/api/employees/${employeesId}`)
-      .then(() => {
+      .then(res => {
         setOpenModal(null);
+        setNotif(prev => [...prev, {type: 'delete', message: res.data.message}]);
         getAllEmployee()
       })
       .catch((error) => {

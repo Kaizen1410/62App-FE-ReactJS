@@ -7,6 +7,7 @@ import PopUpModal from '../../components/DeleteModal';
 import { SearchIcon } from '../../components/Icons';
 import { BeatLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
+import { UserState } from '../../context/UserProvider';
 
 function EmployeePositions() {
   const [positions, setPositions] = useState([]);
@@ -17,6 +18,7 @@ function EmployeePositions() {
   const [page, setPage] = useState(1);
   const [openModal, setOpenModal] = useState(null);
   const [selectedPosition, setSelectedPosition] = useState();
+  const {setNotif} = UserState();
 
   // Loading State
   const [isLoading, setIsLoading] = useState(true);
@@ -50,8 +52,9 @@ function EmployeePositions() {
   const handleDeletePosition = (positionId) => {
     setDeleteIsLoading(true);
     fetchClient.delete(`/api/employee-positions/${positionId}`)
-      .then(() => {
+      .then(res => {
         getEmployeePositions()
+        setNotif(prev => [...prev, {type: 'delete', message: res.data.message}]);
         setOpenModal(null);
       })
       .catch((error) => {

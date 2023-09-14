@@ -3,10 +3,12 @@ import { Button, TextInput } from 'flowbite-react';
 import { Link,useNavigate } from 'react-router-dom';
 import fetchClient from '../../utils/fetchClient';
 import { BeatLoader } from 'react-spinners';
+import { UserState } from '../../context/UserProvider';
 
 const AddEmployeesPositions = () => {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const {setNotif} = UserState();
 
   const navigate = useNavigate();
   
@@ -14,8 +16,9 @@ const AddEmployeesPositions = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await fetchClient.post('/api/employee-positions', { name });
+      const res = await fetchClient.post('/api/employee-positions', { name });
       navigate('/employee-positions');
+     setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
     } catch (err) {
       console.error(err);
     }

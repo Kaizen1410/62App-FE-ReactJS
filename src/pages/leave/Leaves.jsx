@@ -20,7 +20,6 @@ const Leaves = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const [importIsLoading, setImportIsLoading] = useState(false);
-  const [message, setMessage] = useState('');
   const { setNotif } = UserState();
 
   const [sort, setSort] = useState('date_leave')
@@ -69,8 +68,8 @@ const Leaves = () => {
 
     fetchClient.post(`/api/leaves/import`, formData, { headers: { "Content-Type": 'multipart/form-data' } })
       .then(res => {
-        setMessage(res.data.message)
         target.value = null;
+        setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
         getAllLeaves()
       })
       .catch((error) => {
@@ -112,7 +111,6 @@ const Leaves = () => {
             <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-green-400">{message}</span>
             {importIsLoading
               ? <Button disabled className="cursor-pointer h-full">
                 <BeatLoader color="white" size={6} className='my-1 mx-2' />
