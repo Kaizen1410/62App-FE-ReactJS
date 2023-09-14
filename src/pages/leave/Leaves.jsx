@@ -104,7 +104,7 @@ const Leaves = () => {
                 Date Leave
               </Dropdown.Item>
               <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('is_approved')}>
-                {sort==='is_approved' && (isApprovedDirection === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-check text-green-400"></i> : <i className="fa-solid fa-fade fa-2xs fa-xmark text-red-600"></i>)}
+                {sort==='is_approved' && (isApprovedDirection === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-xmark text-red-600"></i> : <i className="fa-solid fa-fade fa-2xs fa-check text-green-400"></i>)}
                 Is Approved
               </Dropdown.Item>
             </Dropdown>

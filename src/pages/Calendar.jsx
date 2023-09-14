@@ -31,7 +31,7 @@ const Calendar = () => {
   }
 
   return (
-    <div className="border overflow-auto py-4 px-4 min-h-96 bg-white dark:bg-gray-800 dark:text-white shadow-md rounded-lg m-2 text-sm ">
+    <div className="border overflow-auto py-4 px-4 min-h-96 bg-white dark:bg-gray-800 dark:text-white shadow-md rounded-lg m-2 text-sm mt-20">
       {isLoading
       ? <div className='h-96'>
         <Loading size='xl' />

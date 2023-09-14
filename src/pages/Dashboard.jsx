@@ -55,10 +55,11 @@ const Dashboard = () => {
                                             {month.monthname}
                                         </Table.Cell>
                                         <Table.Cell>
+                                            {console.log(month.month)}
                                             <Link
                                                 className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 text-center"
                                                 to={`/calendar`}
-                                                state={{date: moment(`${year}-${month.month}`).format('YYYY-MM')}}
+                                                state={{date: new Date(`${year}-${month.month}`)}}
                                             >
                                                 <p>
                                                     {month.data_count}
