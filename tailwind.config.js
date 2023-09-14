@@ -13,7 +13,7 @@ module.exports = {
       },
       spacing: {
         'open': 'calc(100vw - 16rem)',
-        'close': 'calc(100vw)',
+        'close': 'calc(100vw)'
       }
     },
   },
