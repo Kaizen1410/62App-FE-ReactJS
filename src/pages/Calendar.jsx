@@ -22,7 +22,8 @@ const Calendar = () => {
     setIsLoading(true);
     try {
       const res = await fetchClient.get('/api/leaves/calendar');
-      const data = res.data.data.map(d => ({title: d.employee.name, date: d.date_leave}));
+      console.log(res.data.data)
+      const data = (res.data.data).map(d => ({title: d.employee?.name || '(Deleted Employee)', date: d.date_leave}));
       setEvents(data);
     } catch (err) {;
       console.error(err)
