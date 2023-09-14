@@ -14,9 +14,11 @@ function AddEmployees() {
     name: '',
     employee_position_id: ''
   });
-  const {setNotif} = UserState();
+  const { setNotif } = UserState();
+
   const navigate = useNavigate();
 
+  // Get Employee Positions for select option
   useEffect(() => {
     const getEmployeePositions = async () => {
       try {
@@ -30,7 +32,7 @@ function AddEmployees() {
     getEmployeePositions()
   }, [])
 
-
+  // Update value input state
   const handleInput = (e) => {
     e.persist();
     console.log({ [e.target.name]: e.target.value })
@@ -38,6 +40,7 @@ function AddEmployees() {
     setEmployees({ ...employees, [e.target.name]: value });
   }
 
+  // Add Employee
   const saveEmployees = (e) => {
     setAddIsLoading(true);
     e.preventDefault();
@@ -49,8 +52,8 @@ function AddEmployees() {
 
     fetchClient.post('/api/employees', data)
       .then(res => {
-        setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
-        navigate('/employees')
+        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
+        navigate('/employees');
       })
       .catch(err => console.error(err))
       .finally(() => setAddIsLoading(false));
@@ -99,17 +102,17 @@ function AddEmployees() {
               Cancel
             </Button>
             {addIsLoading
-            ? <Button
-            type="submit"
-            disabled
-          >
-            <BeatLoader color="white" size={6} className='my-1 mx-2' />
-          </Button>
-            : <Button
-              type="submit"
-            >
-              Save
-            </Button>}
+              ? <Button
+                type="submit"
+                disabled
+              >
+                <BeatLoader color="white" size={6} className='my-1 mx-2' />
+              </Button>
+              : <Button
+                type="submit"
+              >
+                Save
+              </Button>}
           </div>
         </form>
       </div>}

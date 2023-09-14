@@ -8,15 +8,15 @@ const Notif = () => {
   return (
     <div className="absolute right-10 bottom-10 flex flex-col gap-2">
       {notif.map((n, i) => (
-        n.type==='add'
-        ? <AddNotif key={`${n.type}-${i}`} notif={n} />
-        : <DeleteNotif key={`${n.type}-${i}`} notif={n} />
+        n.type==='success'
+        ? <SuccessNotif key={`${n.type}-${i}`} notif={n} />
+        : <FailureNotif key={`${n.type}-${i}`} notif={n} />
       ))}
     </div>
   )
 }
 
-const AddNotif = ({ notif }) => {
+const SuccessNotif = ({ notif }) => {
   const { setNotif } = UserState();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const AddNotif = ({ notif }) => {
     return () => {
       clearTimeout(removeNotif);
     }
-  }, [setNotif]);
+  }, [setNotif, notif]);
 
   return (
     <Toast>
@@ -44,7 +44,7 @@ const AddNotif = ({ notif }) => {
   )
 }
 
-const DeleteNotif = ({ notif }) => {
+const FailureNotif = ({ notif }) => {
   const { setNotif } = UserState();
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const DeleteNotif = ({ notif }) => {
     return () => {
       clearTimeout(removeNotif);
     }
-  }, [setNotif]);
+  }, [setNotif, notif]);
 
   return (
     <Toast>

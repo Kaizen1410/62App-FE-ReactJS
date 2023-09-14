@@ -10,14 +10,14 @@ import { UserState } from "../../context/UserProvider";
 const EditUserRoles = () => {
   const [userRoles, setUserRoles] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [searchRole, setSearchRole] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
 
   const { id } = useParams();
-  const navigate = useNavigate()
-  const {setNotif} = UserState();
+  const navigate = useNavigate();
+  const { setNotif } = UserState();
 
+  // Retrieve User Roles data
   useEffect(() => {
     const getUserRoles = async () => {
       try {
@@ -30,29 +30,25 @@ const EditUserRoles = () => {
     }
 
     getUserRoles();
-  }, []);
+  }, [id]);
 
-  useEffect(() => {
-    const getRoles = async () => {
-      const res = await fetchClient.get(`/api/roles?search=${searchRole}`);
-      setRoles(res.data.data);
-    }
+  // Search roles
+  const handleSearch = async (search) => {
+    const res = await fetchClient.get(`/api/roles?search=${search}`);
+    setRoles(res.data.data);
+  }
 
-    getRoles();
-  }, [searchRole]);
-
-
-  const updateUserRoles = async (e) => {
-    e.preventDefault();
+  // Update User Role
+  const updateUserRoles = async () => {
     setUpdateIsLoading(true);
 
     const data = {
       role_id: userRoles.roles.map(role => role.id)
     }
-    
+
     try {
       const res = await fetchClient.put(`api/user-roles/${id}`, data);
-      setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
+      setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
       navigate('/user-roles');
     } catch (err) {
       console.error(err);
@@ -60,13 +56,15 @@ const EditUserRoles = () => {
     setUpdateIsLoading(false);
   }
 
-  const addRole = (r) => {
-    const check = userRoles.roles.find(role => role.id === r.id);
+  // Add Role
+  const addRole = (role) => {
+    const check = userRoles.roles.find(r => r.id === role.id);
     if (!check) {
-      setUserRoles(prev => ({ ...prev, roles: [...prev.roles, r] }));
+      setUserRoles(prev => ({ ...prev, roles: [...prev.roles, role] }));
     }
   }
 
+  // Remove Role
   const removeRole = (roleId) => {
     const removed = userRoles.roles.filter(role => role.id !== roleId);
     setUserRoles(prev => ({ ...prev, roles: removed }));
@@ -75,10 +73,7 @@ const EditUserRoles = () => {
   return (
     <div className="min-h-96">
       {isLoading ? <Loading size='xl' /> : <div>
-        <form
-          className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
-          onSubmit={updateUserRoles}
-        >
+        <div className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md">
           <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Edit User Role</h4>
 
           <div className="mb-4 dark:text-gray-50">
@@ -108,7 +103,7 @@ const EditUserRoles = () => {
               type="search"
               icon={SearchIcon}
               placeholder="Search role..."
-              onChange={(e) => setSearchRole(e.target.value)}
+              onChange={(e) => handleSearch(e.target.value)}
             />
           </div>
 
@@ -130,19 +125,14 @@ const EditUserRoles = () => {
               Cancel
             </Button>
             {updateIsLoading
-              ? <Button
-                type="submit"
-                disabled
-              >
+              ? <Button disabled>
                 <BeatLoader color="white" size={6} className='my-1 mx-2' />
               </Button>
-              : <Button
-                type="submit"
-              >
+              : <Button onClick={updateUserRoles}>
                 Save
               </Button>}
           </div>
-        </form>
+        </div>
       </div>}
     </div>
   );

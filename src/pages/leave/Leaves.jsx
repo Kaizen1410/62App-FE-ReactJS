@@ -5,7 +5,7 @@ import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
 import PopUpModal from "../../components/DeleteModal";
 import Pagination from "../../components/Pagination";
-import moment from "moment"
+import moment from "moment";
 import { SearchIcon } from "../../components/Icons";
 import { BeatLoader } from "react-spinners";
 import { UserState } from "../../context/UserProvider";
@@ -22,15 +22,17 @@ const Leaves = () => {
   const [importIsLoading, setImportIsLoading] = useState(false);
   const { setNotif } = UserState();
 
-  const [sort, setSort] = useState('date_leave')
-  const [direction, setDirection] = useState('desc')
-  const [dateLeaveDirection, setDateLeaveDirection] = useState('desc')
-  const [isApprovedDirection, setIsApprovedDirection] = useState('asc')
+  const [sort, setSort] = useState('date_leave');
+  const [direction, setDirection] = useState('desc');
+  const [dateLeaveDirection, setDateLeaveDirection] = useState('desc');
+  const [isApprovedDirection, setIsApprovedDirection] = useState('asc');
 
   useEffect(() => {
     getAllLeaves();
+    // eslint-disable-next-line
   }, [search, page, sort, direction]);
 
+  // Retrieve Leaves data
   const getAllLeaves = async () => {
     setIsLoading(true);
     try {
@@ -44,12 +46,13 @@ const Leaves = () => {
     setIsLoading(false);
   }
 
+  // Delete Leave
   const handleDeleteLeave = (leaveId) => {
     setDeleteIsLoading(true);
     fetchClient.delete(`/api/leaves/${leaveId}`)
       .then(res => {
         setOpenModal(null);
-        setNotif(prev => [...prev, {type: 'delete', message: res.data.message}]);
+        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
         getAllLeaves();
       })
       .catch((error) => {
@@ -58,6 +61,7 @@ const Leaves = () => {
       .finally(() => setDeleteIsLoading(false));
   };
 
+  // Add Leave with CSV file
   const handleImport = (target) => {
     const file = target.files[0];
     if (!file) return;
@@ -69,25 +73,27 @@ const Leaves = () => {
     fetchClient.post(`/api/leaves/import`, formData, { headers: { "Content-Type": 'multipart/form-data' } })
       .then(res => {
         target.value = null;
-        setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
-        getAllLeaves()
+        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
+        getAllLeaves();
       })
       .catch((error) => {
-        console.error('Error Import Leaves', error)
+        console.error('Error Import Leaves', error);
+        setNotif(prev => [...prev, { type: 'failure', message: error.response.data.message }]);
       })
       .finally(() => setImportIsLoading(false));
   }
 
+  // Sort
   const handleSort = (field) => {
     if (field === sort && field === 'date_leave') {
-      setDirection(dateLeaveDirection === 'asc' ? 'desc' : 'asc')
-      setDateLeaveDirection(prev => prev === 'asc' ? 'desc' : 'asc')
+      setDirection(dateLeaveDirection === 'asc' ? 'desc' : 'asc');
+      setDateLeaveDirection(prev => prev === 'asc' ? 'desc' : 'asc');
     } else if (field === sort && field === 'is_approved') {
-      setDirection(isApprovedDirection === 'asc' ? 'desc' : 'asc')
-      setIsApprovedDirection(prev => prev === 'asc' ? 'desc' : 'asc')
+      setDirection(isApprovedDirection === 'asc' ? 'desc' : 'asc');
+      setIsApprovedDirection(prev => prev === 'asc' ? 'desc' : 'asc');
     }
 
-    setSort(field)
+    setSort(field);
   }
 
   return (
@@ -99,11 +105,11 @@ const Leaves = () => {
           <div className="flex gap-2">
             <Dropdown label="sort by">
               <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('date_leave')}>
-                {sort==='date_leave' && (dateLeaveDirection === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                {sort === 'date_leave' && (dateLeaveDirection === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
                 Date Leave
               </Dropdown.Item>
               <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('is_approved')}>
-                {sort==='is_approved' && (isApprovedDirection === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-xmark text-red-600"></i> : <i className="fa-solid fa-fade fa-2xs fa-check text-green-400"></i>)}
+                {sort === 'is_approved' && (isApprovedDirection === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-xmark text-red-600"></i> : <i className="fa-solid fa-fade fa-2xs fa-check text-green-400"></i>)}
                 Is Approved
               </Dropdown.Item>
             </Dropdown>

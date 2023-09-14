@@ -22,12 +22,14 @@ const Employees = () => {
   const [sort, setSort] = useState('name')
   const [direction, setDirection] = useState('desc')
   const [nameDirection, setNameDirection] = useState('desc')
-  const {setNotif} = UserState();
+  const { setNotif } = UserState();
 
   useEffect(() => {
     getAllEmployee();
+    // eslint-disable-next-line
   }, [search, page, sort, direction])
 
+  // Retrieve Employees data
   const getAllEmployee = async () => {
     setIsLoading(true);
     try {
@@ -41,12 +43,13 @@ const Employees = () => {
     setIsLoading(false);
   }
 
+  // Delete Employee
   const handleDeleteEmployee = (employeesId) => {
     setDeleteIsLoading(true);
     fetchClient.delete(`/api/employees/${employeesId}`)
       .then(res => {
         setOpenModal(null);
-        setNotif(prev => [...prev, {type: 'delete', message: res.data.message}]);
+        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
         getAllEmployee()
       })
       .catch((error) => {
@@ -55,6 +58,7 @@ const Employees = () => {
       .finally(() => setDeleteIsLoading(false));
   }
 
+  // Sort
   const handleSort = (field) => {
     if (field === sort && field === 'name') {
       setDirection(nameDirection === 'asc' ? 'desc' : 'asc')
@@ -80,9 +84,9 @@ const Employees = () => {
             <Table.Head className='text-center sticky top-0'>
               <Table.HeadCell className="w-1">No</Table.HeadCell>
               <Table.HeadCell className="cursor-pointer" onClick={() => handleSort('name')}>
-                  {nameDirection === 'asc' ? <i className="fa-solid fa-sort-up mr-2"></i> : <i className="fa-solid fa-sort-down mr-2"></i>}
+                {nameDirection === 'asc' ? <i className="fa-solid fa-sort-up mr-2"></i> : <i className="fa-solid fa-sort-down mr-2"></i>}
                 Name
-                </Table.HeadCell>
+              </Table.HeadCell>
               <Table.HeadCell>Position</Table.HeadCell>
               <Table.HeadCell>Action</Table.HeadCell>
             </Table.Head>

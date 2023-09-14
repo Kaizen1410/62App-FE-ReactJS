@@ -5,8 +5,6 @@ import { Select, Table } from 'flowbite-react';
 import { UserState } from '../context/UserProvider';
 import fetchClient from '../utils/fetchClient';
 import { CalendarIcon } from '../components/Icons';
-import moment from 'moment/moment';
-
 
 const Dashboard = () => {
     const { user } = UserState();
@@ -14,6 +12,7 @@ const Dashboard = () => {
     const [monthData, setMonthData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    // Retrieve Leaves per month in specific year
     useEffect(() => {
         const getMonthData = () => {
             setIsLoading(true);
@@ -22,6 +21,7 @@ const Dashboard = () => {
                 .catch(error => console.error(error))
                 .finally(() => setIsLoading(false));
         }
+
         getMonthData();
     }, [year]);
 
@@ -55,11 +55,10 @@ const Dashboard = () => {
                                             {month.monthname}
                                         </Table.Cell>
                                         <Table.Cell>
-                                            {console.log(month.month)}
                                             <Link
                                                 className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 text-center"
                                                 to={`/calendar`}
-                                                state={{date: new Date(`${year}-${month.month}`)}}
+                                                state={{ date: new Date(`${year}-${month.month}`) }}
                                             >
                                                 <p>
                                                     {month.data_count}

@@ -1,6 +1,6 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import { Button, TextInput } from 'flowbite-react';
-import { Link,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import fetchClient from '../../utils/fetchClient';
 import { BeatLoader } from 'react-spinners';
 import { UserState } from '../../context/UserProvider';
@@ -8,23 +8,24 @@ import { UserState } from '../../context/UserProvider';
 const AddEmployeesPositions = () => {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const {setNotif} = UserState();
+  const { setNotif } = UserState();
 
   const navigate = useNavigate();
-  
+
+  // Add Employee Position
   const AddEmployeesPositions = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
       const res = await fetchClient.post('/api/employee-positions', { name });
       navigate('/employee-positions');
-     setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
+      setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
     } catch (err) {
       console.error(err);
     }
     setIsLoading(false);
   }
-  
+
   return (
     <div className="min-h-96">
       <div>
@@ -54,21 +55,21 @@ const AddEmployeesPositions = () => {
               Cancel
             </Button>
             {isLoading
-            ? <Button
-            type="submit"
-            disabled
-          >
-             <BeatLoader color="white" size={6} className='my-1 mx-2' />
-          </Button>
-            : <Button
-              type="submit"
-            >
-              Save
-            </Button>}
+              ? <Button
+                type="submit"
+                disabled
+              >
+                <BeatLoader color="white" size={6} className='my-1 mx-2' />
+              </Button>
+              : <Button
+                type="submit"
+              >
+                Save
+              </Button>}
           </div>
-          </form>
-          </div>
-          </div>
+        </form>
+      </div>
+    </div>
   )
 }
 

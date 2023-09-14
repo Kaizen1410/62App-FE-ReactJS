@@ -13,16 +13,18 @@ const Calendar = () => {
   const location = useLocation();
 
   useEffect(() => {
-    getLeavesMonth();
+    getLeaves();
   }, []);
 
-  const getLeavesMonth = async () => {
+  // Retrieve Leaves data for calendar event
+  const getLeaves = async () => {
     setIsLoading(true);
     try {
       const res = await fetchClient.get('/api/leaves/calendar');
-      const data = res.data.data.map(d => ({title: d.employee?.name || '(Deleted Employee)', date: d.date_leave}));
+      const data = res.data.data.map(d => ({ title: d.employee?.name || '(Deleted Employee)', date: d.date_leave }));
       setEvents(data);
-    } catch (err) {;
+    } catch (err) {
+      ;
       console.error(err)
     }
     setIsLoading(false);
@@ -31,20 +33,20 @@ const Calendar = () => {
   return (
     <div className="border overflow-auto py-4 px-4 min-h-96 bg-white dark:bg-gray-800 dark:text-white shadow-md rounded-lg m-2 text-sm mt-20">
       {isLoading
-      ? <div className='h-96'>
-        <Loading size='xl' />
-      </div> 
-      : <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
-        initialDate={location.state?.date || undefined}
-        events={events}
-        headerToolbar={{
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay',
-        }}
-      />}
+        ? <div className='h-96'>
+          <Loading size='xl' />
+        </div>
+        : <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          initialView="dayGridMonth"
+          initialDate={location.state?.date || undefined}
+          events={events}
+          headerToolbar={{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay',
+          }}
+        />}
     </div>
   )
 }

@@ -5,20 +5,17 @@ import { Button, Table, TextInput } from 'flowbite-react';
 import Pagination from '../../components/Pagination';
 import PopUpModal from '../../components/DeleteModal';
 import { SearchIcon } from '../../components/Icons';
-import { BeatLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
 import { UserState } from '../../context/UserProvider';
 
 function EmployeePositions() {
   const [positions, setPositions] = useState([]);
-  const [newPosition, setNewPosition] = useState('');
-  const [editingPosition, setEditingPosition] = useState(null);
   const [pagination, setPagination] = useState();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [openModal, setOpenModal] = useState(null);
   const [selectedPosition, setSelectedPosition] = useState();
-  const {setNotif} = UserState();
+  const { setNotif } = UserState();
 
   // Loading State
   const [isLoading, setIsLoading] = useState(true);
@@ -31,6 +28,7 @@ function EmployeePositions() {
 
   useEffect(() => {
     getEmployeePositions();
+    // eslint-disable-next-line
   }, [search, page, sort, direction]);
 
   // Retrive Employee Positions data
@@ -54,7 +52,7 @@ function EmployeePositions() {
     fetchClient.delete(`/api/employee-positions/${positionId}`)
       .then(res => {
         getEmployeePositions()
-        setNotif(prev => [...prev, {type: 'delete', message: res.data.message}]);
+        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
         setOpenModal(null);
       })
       .catch((error) => {
@@ -63,6 +61,7 @@ function EmployeePositions() {
       .finally(() => setDeleteIsLoading(false));
   };
 
+  // Sort
   const handleSort = (field) => {
     if (field === sort && field === 'name') {
       setDirection(nameDirection === 'asc' ? 'desc' : 'asc')
@@ -91,7 +90,7 @@ function EmployeePositions() {
                 <Table.HeadCell className='w-1'>No</Table.HeadCell>
                 <Table.HeadCell className="cursor-pointer" onClick={() => handleSort('name')}>
                   {nameDirection === 'asc' ? <i className="fa-solid fa-sort-up mr-2"></i> : <i className="fa-solid fa-sort-down mr-2"></i>}
-                Name
+                  Name
                 </Table.HeadCell>
                 <Table.HeadCell>Action</Table.HeadCell>
               </Table.Head>
@@ -102,32 +101,21 @@ function EmployeePositions() {
                       {(i + 1) + pagination?.per_page * (page - 1)}
                     </Table.Cell>
                     <Table.Cell>
-                      {editingPosition?.id === position.id ? (
-                        <input
-                          type="text"
-                          value={editingPosition?.name}
-                          onChange={(e) => {
-                            setEditingPosition({ ...editingPosition, name: e.target.value });
-                          }}
-                          className="border rounded-md py-1 px-2 text-gray-700 focus:outline-none focus:ring focus:border-blue-300 w-full"
-                        />
-                      ) : (
-                        position.name
-                      )}
+                      {position.name}
                     </Table.Cell>
                     <Table.Cell className='text-center'>
-                          <Link     
-                            to={`/employee-positions/${position.id}/edit`}
-                            className="font-medium text-cyan-600 hover:underline dark:text-cyan-600 mr-5"
-                          >
-                            Edit
-                          </Link>
-                          <button
-                            onClick={() => { setSelectedPosition(position.id); setOpenModal('pop-up') }}
-                            className="font-medium text-red-600 hover:underline dark:text-red-600"
-                          >
-                            Delete
-                          </button>
+                      <Link
+                        to={`/employee-positions/${position.id}/edit`}
+                        className="font-medium text-cyan-600 hover:underline dark:text-cyan-600 mr-5"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        onClick={() => { setSelectedPosition(position.id); setOpenModal('pop-up') }}
+                        className="font-medium text-red-600 hover:underline dark:text-red-600"
+                      >
+                        Delete
+                      </button>
                     </Table.Cell>
                   </Table.Row>
                 ))}

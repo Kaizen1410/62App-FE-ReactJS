@@ -8,11 +8,11 @@ import moment from "moment"
 import { BeatLoader } from "react-spinners";
 
 function AddLeave() {
-
   const [isLoading, setIsLoading] = useState(false);
   const { user, setNotif } = UserState();
   const navigate = useNavigate();
 
+  // Add Leave
   const saveLeave = () => {
     setIsLoading(true);
     const inputEl = document.querySelector('input');
@@ -25,7 +25,7 @@ function AddLeave() {
 
     fetchClient.post('/api/leaves', data)
       .then(res => {
-        setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
+        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
         navigate('/leaves');
       })
       .catch(err => console.error(err))
@@ -33,7 +33,6 @@ function AddLeave() {
   }
 
   return (
-
     <div className="min-h-96">
       <div
         className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"

@@ -8,17 +8,18 @@ import { UserState } from "../../context/UserProvider";
 const AddRoles = () => {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const {setNotif} = UserState();
+  const { setNotif } = UserState();
 
   const navigate = useNavigate();
 
+  // Add Role
   const addRole = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
       const res = await fetchClient.post('/api/roles', { name });
       navigate('/roles');
-      setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
+      setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
     } catch (err) {
       console.error(err);
     }
@@ -54,17 +55,17 @@ const AddRoles = () => {
               Cancel
             </Button>
             {isLoading
-            ? <Button
-            type="submit"
-            disabled
-          >
-            <BeatLoader color="white" size={6} className='my-1 mx-2' />
-          </Button>
-            : <Button
-              type="submit"
-            >
-              Save
-            </Button>}
+              ? <Button
+                type="submit"
+                disabled
+              >
+                <BeatLoader color="white" size={6} className='my-1 mx-2' />
+              </Button>
+              : <Button
+                type="submit"
+              >
+                Save
+              </Button>}
           </div>
         </form>
       </div>

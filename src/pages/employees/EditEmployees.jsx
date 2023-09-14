@@ -14,10 +14,12 @@ function EditEmployees() {
     name: '',
     employee_position_id: ''
   });
-  const {setNotif} = UserState();
+  const { setNotif } = UserState();
+
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // Get Employee Positions for select option
   useEffect(() => {
     const getEmployeePositions = async () => {
       try {
@@ -28,8 +30,9 @@ function EditEmployees() {
       }
     }
     getEmployeePositions()
-  }, [])
+  }, []);
 
+  // Retrieve selected employee data
   useEffect(() => {
     const getEmployees = async () => {
       try {
@@ -43,18 +46,20 @@ function EditEmployees() {
     getEmployees()
   }, [id]);
 
+  // Update value input state
   const handleInput = (e) => {
     e.persist();
     let value = e.target.value;
     setEmployees({ ...employees, [e.target.name]: value });
   }
 
+  // Update Employee
   const updateEmployee = async (e) => {
     e.preventDefault();
     setUpdateIsLoading(true);
     try {
-     const res = await fetchClient.put(`api/employees/${id}`, employees);
-     setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
+      const res = await fetchClient.put(`api/employees/${id}`, employees);
+      setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
       navigate('/employees');
     } catch (err) {
       console.error(err);
@@ -100,17 +105,17 @@ function EditEmployees() {
               Cancel
             </Button>
             {updateIsLoading
-            ? <Button
-            type="submit"
-            disabled
-          >
-            <BeatLoader color="white" size={6} className='my-1 mx-2' />
-          </Button>
-            : <Button
-              type="submit"
-            >
-              Save
-            </Button>}
+              ? <Button
+                type="submit"
+                disabled
+              >
+                <BeatLoader color="white" size={6} className='my-1 mx-2' />
+              </Button>
+              : <Button
+                type="submit"
+              >
+                Save
+              </Button>}
           </div>
         </form>
       </div>}

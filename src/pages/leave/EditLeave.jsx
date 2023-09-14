@@ -10,12 +10,13 @@ import { BeatLoader } from "react-spinners";
 function EditLeave() {
   const [isLoading, setIsLoading] = useState(true);
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
-  const { id } = useParams()
-  const { user } = UserState()
-  const navigate = useNavigate()
-  const [leave, setLeave] = useState()
-  const {setNotif} = UserState()
+  const { user, setNotif } = UserState();
+  const [leave, setLeave] = useState();
 
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  // Retrieve selected leave data
   useEffect(() => {
     const getLeave = async () => {
       try {
@@ -30,19 +31,19 @@ function EditLeave() {
     getLeave();
   }, [id]);
 
+  // Update Leave
   const updateLeave = async (e) => {
     setUpdateIsLoading(true);
-    const data = {...leave, is_approved : true, approved_by : user?.employee.id}
+    const data = { ...leave, is_approved: true, approved_by: user?.employee.id }
     try {
       const res = await fetchClient.put(`api/leaves/${id}`, data);
-      setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
+      setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
       navigate('/leaves');
     } catch (err) {
       console.error(err);
     }
     setUpdateIsLoading(false);
   }
-
 
   return (
     <div className="min-h-96">
@@ -71,12 +72,12 @@ function EditLeave() {
               Cancel
             </Button>
             {updateIsLoading
-            ? <Button type="button" disabled>
+              ? <Button type="button" disabled>
                 <BeatLoader color="white" size={6} className='my-1 mx-2' />
               </Button>
-            : <Button type="button" onClick={updateLeave}>
-              Approve
-            </Button>}
+              : <Button type="button" onClick={updateLeave}>
+                Approve
+              </Button>}
           </div>
         </div>
       </div>}

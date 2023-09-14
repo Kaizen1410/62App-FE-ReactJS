@@ -18,17 +18,18 @@ const Roles = () => {
   const [pagination, setPagination] = useState(null);
   const [selectedRoles, setSelectedRoles] = useState();
 
-  const [sort, setSort] = useState('name')
-  const [direction, setDirection] = useState('desc')
-  const [nameDirection, setNameDirection] = useState('desc')
-  const {setNotif} = UserState();
+  const [sort, setSort] = useState('name');
+  const [direction, setDirection] = useState('desc');
+  const [nameDirection, setNameDirection] = useState('desc');
+  const { setNotif } = UserState();
 
   useEffect(() => {
-    getAllRoles();
+    getRoles();
+    // eslint-disable-next-line
   }, [search, page, sort, direction])
 
-
-  const getAllRoles = async () => {
+  // Retrieve roles data
+  const getRoles = async () => {
     setIsLoading(true);
     try {
       const res = await fetchClient.get(`/api/roles?search=${search}&page=${page}&direction=${direction}`);
@@ -41,19 +42,21 @@ const Roles = () => {
     setIsLoading(false);
   }
 
+  // Delete Role
   const deleteRole = async (id) => {
     setDeleteIsLoading(true);
     try {
-      const res = await fetchClient.delete(`api/roles/${id}`)
+      const res = await fetchClient.delete(`api/roles/${id}`);
       setOpenModal(null);
-      setNotif(prev => [...prev, {type: 'delete', message: res.data.message}]);
-      getAllRoles()
+      setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
+      getRoles();
     } catch (err) {
       console.error(err);
     }
     setDeleteIsLoading(false);
   }
 
+  // Sort
   const handleSort = (field) => {
     if (field === sort && field === 'name') {
       setDirection(nameDirection === 'asc' ? 'desc' : 'asc')

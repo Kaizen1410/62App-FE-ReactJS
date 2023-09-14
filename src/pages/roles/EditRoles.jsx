@@ -12,9 +12,10 @@ const EditRoles = () => {
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
 
   const { id } = useParams();
-  const navigate = useNavigate()
-  const { setNotif} = UserState();
+  const navigate = useNavigate();
+  const { setNotif } = UserState();
 
+  // Retrieve selected role data
   useEffect(() => {
     const getRole = async () => {
       try {
@@ -27,16 +28,17 @@ const EditRoles = () => {
     }
 
     getRole();
-  }, []);
+  }, [id]);
 
+  // Update Role
   const updateRole = async (e) => {
     e.preventDefault();
     setUpdateIsLoading(true);
     try {
-     const res = await fetchClient.put(`api/roles/${id}`, role);
-      setNotif(prev => [...prev, {type: 'add', message: res.data.message}]);
+      const res = await fetchClient.put(`api/roles/${id}`, role);
+      setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
       navigate('/roles');
-      
+
     } catch (err) {
       console.error(err);
     }
@@ -72,17 +74,17 @@ const EditRoles = () => {
               Cancel
             </Button>
             {updateIsLoading
-            ? <Button
-            type="submit"
-            disabled
-          >
-            <BeatLoader color="white" size={6} className='my-1 mx-2' />
-          </Button>
-            : <Button
-              type="submit"
-            >
-              Save
-            </Button>}
+              ? <Button
+                type="submit"
+                disabled
+              >
+                <BeatLoader color="white" size={6} className='my-1 mx-2' />
+              </Button>
+              : <Button
+                type="submit"
+              >
+                Save
+              </Button>}
           </div>
         </form>
       </div>}
