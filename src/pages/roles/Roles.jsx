@@ -17,15 +17,20 @@ const Roles = () => {
   const [pagination, setPagination] = useState(null);
   const [selectedRoles, setSelectedRoles] = useState();
 
+  const [sort, setSort] = useState('name')
+  const [direction, setDirection] = useState('desc')
+  const [nameDirection, setNameDirection] = useState('desc')
+
+
   useEffect(() => {
     getAllRoles();
-  }, [search, page])
+  }, [search, page, sort, direction])
 
 
   const getAllRoles = async () => {
     setIsLoading(true);
     try {
-      const res = await fetchClient.get(`/api/roles?search=${search}&page=${page}`);
+      const res = await fetchClient.get(`/api/roles?search=${search}&page=${page}&direction=${direction}`);
       setRoles(res.data.data);
       delete res.data.data;
       setPagination(res.data);
@@ -47,6 +52,15 @@ const Roles = () => {
     setDeleteIsLoading(false);
   }
 
+  const handleSort = (field) => {
+    if (field === sort && field === 'name') {
+      setDirection(nameDirection === 'asc' ? 'desc' : 'asc')
+      setNameDirection(prev => prev === 'asc' ? 'desc' : 'asc')
+    }
+
+    setSort(field)
+  }
+
   return (
     <>
       <div className="bg-white rounded-md p-4 dark:bg-gray-800">
@@ -58,14 +72,19 @@ const Roles = () => {
             Add Role
           </Button>
         </div>
-        
+
         <div className="h-96 overflow-y-auto">
           {isLoading ? <Loading size='xl' /> : (
             <Table striped>
               <Table.Head className="text-center sticky top-0">
                 <Table.HeadCell className="w-1">No</Table.HeadCell>
-                <Table.HeadCell>Roles</Table.HeadCell>
-                <Table.HeadCell>Members</Table.HeadCell>
+                <Table.HeadCell className="cursor-pointer" onClick={() => handleSort('name')}>
+                  {nameDirection === 'asc' ? <i className="fa-solid fa-sort-up mr-2"></i> : <i className="fa-solid fa-sort-down mr-2"></i>}
+                  Roles
+                </Table.HeadCell>
+                <Table.HeadCell>
+                  Members
+                </Table.HeadCell>
                 <Table.HeadCell>Action</Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">

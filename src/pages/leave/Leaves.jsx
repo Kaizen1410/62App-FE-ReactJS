@@ -1,4 +1,4 @@
-import { Table, Button, TextInput } from "flowbite-react"
+import { Table, Button, TextInput, Dropdown } from "flowbite-react"
 import fetchClient from "../../utils/fetchClient"
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
@@ -21,14 +21,19 @@ const Leaves = () => {
   const [importIsLoading, setImportIsLoading] = useState(false);
   const [message, setMessage] = useState('');
 
+  const [sort, setSort] = useState('date_leave')
+  const [direction, setDirection] = useState('desc')
+  const [dateLeaveDirection, setDateLeaveDirection] = useState('desc')
+  const [isApprovedDirection, setIsApprovedDirection] = useState('asc')
+
   useEffect(() => {
     getAllLeaves();
-  }, [search, page]);
+  }, [search, page, sort, direction]);
 
   const getAllLeaves = async () => {
     setIsLoading(true);
     try {
-      const res = await fetchClient.get(`/api/leaves?search=${search}&page=${page}`);
+      const res = await fetchClient.get(`/api/leaves?search=${search}&page=${page}&sort=${sort}&direction=${direction}`);
       setLeaves(res.data.data);
       delete res.data.data;
       setPagination(res.data);
@@ -63,11 +68,24 @@ const Leaves = () => {
       .then(res => {
         setMessage(res.data.message)
         target.value = null;
+        getAllLeaves()
       })
       .catch((error) => {
         console.error('Error Import Leaves', error)
       })
       .finally(() => setImportIsLoading(false));
+  }
+
+  const handleSort = (field) => {
+    if (field === sort && field === 'date_leave') {
+      setDirection(dateLeaveDirection === 'asc' ? 'desc' : 'asc')
+      setDateLeaveDirection(prev => prev === 'asc' ? 'desc' : 'asc')
+    } else if (field === sort && field === 'is_approved') {
+      setDirection(isApprovedDirection === 'asc' ? 'desc' : 'asc')
+      setIsApprovedDirection(prev => prev === 'asc' ? 'desc' : 'asc')
+    }
+
+    setSort(field)
   }
 
   return (
@@ -76,8 +94,20 @@ const Leaves = () => {
         <h1 className="font-bold dark:text-white text-2xl mb-8">Leaves List</h1>
 
         <div className="flex justify-between mb-4">
-          <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+          <div className="flex gap-2">
+            <Dropdown label="sort by">
+              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('date_leave')}>
+                {sort==='date_leave' && (dateLeaveDirection === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                Date Leave
+              </Dropdown.Item>
+              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('is_approved')}>
+                {sort==='is_approved' && (isApprovedDirection === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-check text-green-400"></i> : <i className="fa-solid fa-fade fa-2xs fa-xmark text-red-600"></i>)}
+                Is Approved
+              </Dropdown.Item>
+            </Dropdown>
 
+            <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+          </div>
           <div className="flex items-center gap-2">
             <span className="text-green-400">{message}</span>
             {importIsLoading

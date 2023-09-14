@@ -13,15 +13,19 @@ const UserRoles = () => {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [sort, setSort] = useState('name')
+  const [direction, setDirection] = useState('desc')
+  const [emailDirection, setEmailDirection] = useState('desc')
+
   useEffect(() => {
     getAllUserRoles();
-  }, [search, page])
+  }, [search, page, sort, direction])
 
 
   const getAllUserRoles = async () => {
     setIsLoading(true);
     try {
-      const res = await fetchClient.get(`/api/user-roles?search=${search}&page=${page}`);
+      const res = await fetchClient.get(`/api/user-roles?search=${search}&page=${page}&direction=${direction}`);
       setUserRoles(res.data.data);
       delete res.data.data;
       setPagination(res.data);
@@ -29,6 +33,15 @@ const UserRoles = () => {
       console.error(err);
     }
     setIsLoading(false);
+  }
+
+  const handleSort = (field) => {
+    if (field === sort && field === 'name') {
+      setDirection(emailDirection === 'asc' ? 'desc' : 'asc')
+      setEmailDirection(prev => prev === 'asc' ? 'desc' : 'asc')
+    }
+
+    setSort(field)
   }
 
   return (
@@ -46,7 +59,8 @@ const UserRoles = () => {
           <Table.HeadCell className="w-1">
             No
           </Table.HeadCell>
-          <Table.HeadCell>
+          <Table.HeadCell className="cursor-pointer" onClick={() => handleSort('name')}>
+                  {emailDirection === 'asc' ? <i className="fa-solid fa-sort-up mr-2"></i> : <i className="fa-solid fa-sort-down mr-2"></i>}
             Email
           </Table.HeadCell>
           <Table.HeadCell>
