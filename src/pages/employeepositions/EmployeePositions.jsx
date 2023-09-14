@@ -6,6 +6,7 @@ import Pagination from '../../components/Pagination';
 import PopUpModal from '../../components/DeleteModal';
 import { SearchIcon } from '../../components/Icons';
 import { BeatLoader } from 'react-spinners';
+import { Link } from 'react-router-dom';
 
 function EmployeePositions() {
   const [positions, setPositions] = useState([]);
@@ -95,22 +96,12 @@ function EmployeePositions() {
     <>
       <div className="bg-white rounded-md p-4 dark:bg-gray-800">
         <h1 className="text-2xl font-bold mb-8 dark:text-white">Employee Positions List</h1>
+        <div className="flex justify-between mb-4">
+          <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
 
-        <form onSubmit={handleAddPosition} className="mb-4 flex">
-          <TextInput value={newPosition} onChange={(e) => setNewPosition(e.target.value)} className="w-full"
-            placeholder="Add New Position"
-          />
-          {addIsLoading
-            ? <Button className='ml-3' type='submit' disabled>
-              <BeatLoader color="white" size={6} className='my-1 mx-2' />
-            </Button>
-            : <Button className='ml-3' type='submit'>
-              Add
-            </Button>}
-        </form>
-
-        <div className="mb-4">
-          <TextInput className="w-full" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+          <Button as={Link} to="/employee-positions/add">
+            Add Position
+          </Button>
         </div>
 
         <div className="h-96 overflow-y-auto">
@@ -142,44 +133,18 @@ function EmployeePositions() {
                       )}
                     </Table.Cell>
                     <Table.Cell className='text-center'>
-                      {editingPosition?.id === position.id ? (
-                        <>
-                          {updateIsLoading
-                            ? <button
-                              className="font-medium text-green-600 cursor-not-allowed dark:text-green-600 mr-5"
-                              disabled
-                            >
-                              Saving...
-                            </button>
-                            : <button
-                              onClick={() => handleSavePosition()}
-                              className="font-medium text-green-600 hover:underline dark:text-green-600 mr-5"
-                            >
-                              Save
-                            </button>}
-                          <button
-                            onClick={() => setEditingPosition(null)}
-                            className="font-medium text-red-600 hover:underline dark:text-red-600"
-                          >
-                            Cancel
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <button
-                            onClick={() => setEditingPosition(position)}
+                          <Link     
+                            to={`/employee-positions/${position.id}/edit`}
                             className="font-medium text-cyan-600 hover:underline dark:text-cyan-600 mr-5"
                           >
                             Edit
-                          </button>
+                          </Link>
                           <button
                             onClick={() => { setSelectedPosition(position.id); setOpenModal('pop-up') }}
                             className="font-medium text-red-600 hover:underline dark:text-red-600"
                           >
                             Delete
                           </button>
-                        </>
-                      )}
                     </Table.Cell>
                   </Table.Row>
                 ))}
