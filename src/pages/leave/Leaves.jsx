@@ -167,7 +167,7 @@ const Leaves = () => {
                     {(i + 1) + pagination?.per_page * (page - 1)}
                   </Table.Cell>
                   <Table.Cell className="text-start">
-                    {leave.employee_name}
+                    {leave.employee_name || '(Deleted Employee)'}
                   </Table.Cell>
                   <Table.Cell>
                     {moment(leave.date_leave).format('DD MMMM YYYY')}
