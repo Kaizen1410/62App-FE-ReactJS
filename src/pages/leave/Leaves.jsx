@@ -24,16 +24,14 @@ const Leaves = () => {
 
   const [sort, setSort] = useState('date_leave');
   const [direction, setDirection] = useState('desc');
-  const [dateLeaveDirection, setDateLeaveDirection] = useState('desc');
-  const [isApprovedDirection, setIsApprovedDirection] = useState('asc');
 
   useEffect(() => {
-    getAllLeaves();
+    getLeaves();
     // eslint-disable-next-line
   }, [search, page, sort, direction]);
 
   // Retrieve Leaves data
-  const getAllLeaves = async () => {
+  const getLeaves = async () => {
     setIsLoading(true);
     try {
       const res = await fetchClient.get(`/api/leaves?search=${search}&page=${page}&sort=${sort}&direction=${direction}`);
@@ -53,7 +51,7 @@ const Leaves = () => {
       .then(res => {
         setOpenModal(null);
         setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-        getAllLeaves();
+        getLeaves();
       })
       .catch((error) => {
         console.error('Error deleting leaves:', error);
@@ -74,7 +72,7 @@ const Leaves = () => {
       .then(res => {
         target.value = null;
         setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-        getAllLeaves();
+        getLeaves();
       })
       .catch((error) => {
         console.error('Error Import Leaves', error);
@@ -85,15 +83,13 @@ const Leaves = () => {
 
   // Sort
   const handleSort = (field) => {
-    if (field === sort && field === 'date_leave') {
-      setDirection(dateLeaveDirection === 'asc' ? 'desc' : 'asc');
-      setDateLeaveDirection(prev => prev === 'asc' ? 'desc' : 'asc');
-    } else if (field === sort && field === 'is_approved') {
-      setDirection(isApprovedDirection === 'asc' ? 'desc' : 'asc');
-      setIsApprovedDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+    if (field === sort) {
+      setDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+      return;
     }
 
     setSort(field);
+    setDirection('asc');
   }
 
   return (
@@ -103,14 +99,22 @@ const Leaves = () => {
 
         <div className="flex justify-between mb-4">
           <div className="flex gap-2">
-            <Dropdown label="sort by">
+            <Dropdown label="Sort By">
+              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('employee_name')}>
+                {sort === 'employee_name' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                Name
+              </Dropdown.Item>
               <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('date_leave')}>
-                {sort === 'date_leave' && (dateLeaveDirection === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                {sort === 'date_leave' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
                 Date Leave
               </Dropdown.Item>
               <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('is_approved')}>
-                {sort === 'is_approved' && (isApprovedDirection === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-xmark text-red-600"></i> : <i className="fa-solid fa-fade fa-2xs fa-check text-green-400"></i>)}
+                {sort === 'is_approved' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-xmark text-red-600"></i> : <i className="fa-solid fa-fade fa-2xs fa-check text-green-400"></i>)}
                 Is Approved
+              </Dropdown.Item>
+              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('approved_by')}>
+                {sort === 'approved_by' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                Approved By
               </Dropdown.Item>
             </Dropdown>
 
@@ -163,7 +167,7 @@ const Leaves = () => {
                     {(i + 1) + pagination?.per_page * (page - 1)}
                   </Table.Cell>
                   <Table.Cell className="text-start">
-                    {leave.employee.name}
+                    {leave.employee_name}
                   </Table.Cell>
                   <Table.Cell>
                     {moment(leave.date_leave).format('DD MMMM YYYY')}
@@ -173,7 +177,7 @@ const Leaves = () => {
                     }
                   </Table.Cell>
                   <Table.Cell>
-                    {leave.approved_by?.name || '-'}
+                    {leave.approved_by || '-'}
                   </Table.Cell>
                   <Table.Cell className="text-center">
                     <Link

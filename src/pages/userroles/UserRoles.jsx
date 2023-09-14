@@ -1,4 +1,4 @@
-import { Table, TextInput } from "flowbite-react"
+import { Dropdown, Table, TextInput } from "flowbite-react"
 import fetchClient from "../../utils/fetchClient"
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
@@ -13,9 +13,8 @@ const UserRoles = () => {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [sort, setSort] = useState('name')
-  const [direction, setDirection] = useState('desc')
-  const [emailDirection, setEmailDirection] = useState('desc')
+  const [sort, setSort] = useState('email');
+  const [direction, setDirection] = useState('asc');
 
   useEffect(() => {
     const getUserRoles = async () => {
@@ -36,12 +35,13 @@ const UserRoles = () => {
 
   // Sort
   const handleSort = (field) => {
-    if (field === sort && field === 'name') {
-      setDirection(emailDirection === 'asc' ? 'desc' : 'asc')
-      setEmailDirection(prev => prev === 'asc' ? 'desc' : 'asc')
+    if (field === sort) {
+      setDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+      return;
     }
 
-    setSort(field)
+    setSort(field);
+    setDirection('asc');
   }
 
   return (
@@ -49,7 +49,17 @@ const UserRoles = () => {
       <div className="bg-white rounded-md p-4 dark:bg-gray-800">
         <h1 className="font-bold dark:text-white text-2xl mb-8">User Roles List</h1>
 
-        <div className="mb-4">
+        <div className="mb-4 flex gap-2">
+          <Dropdown label="Sort By">
+            <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('email')}>
+              {sort === 'email' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+              Email
+            </Dropdown.Item>
+            <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('name')}>
+              {sort === 'name' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+              Name
+            </Dropdown.Item>
+          </Dropdown>
           <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
         </div>
 
@@ -59,8 +69,7 @@ const UserRoles = () => {
               <Table.HeadCell className="w-1">
                 No
               </Table.HeadCell>
-              <Table.HeadCell className="cursor-pointer" onClick={() => handleSort('name')}>
-                {emailDirection === 'asc' ? <i className="fa-solid fa-sort-up mr-2"></i> : <i className="fa-solid fa-sort-down mr-2"></i>}
+              <Table.HeadCell>
                 Email
               </Table.HeadCell>
               <Table.HeadCell>
@@ -83,7 +92,7 @@ const UserRoles = () => {
                     {userRole.email}
                   </Table.Cell>
                   <Table.Cell>
-                    {userRole.employee.name}
+                    {userRole.name}
                   </Table.Cell>
                   <Table.Cell>
                     <div className="flex flex-wrap gap-1">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import fetchClient from '../../utils/fetchClient';
-import { Table, Button, TextInput } from "flowbite-react";
+import { Table, Button, TextInput, Dropdown } from "flowbite-react";
 import PopUpModal from "../../components/DeleteModal";
 import Loading from '../../components/Loading';
 import Pagination from '../../components/Pagination';
@@ -19,9 +19,8 @@ const Employees = () => {
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(1);
 
-  const [sort, setSort] = useState('name')
-  const [direction, setDirection] = useState('desc')
-  const [nameDirection, setNameDirection] = useState('desc')
+  const [sort, setSort] = useState('name');
+  const [direction, setDirection] = useState('asc');
   const { setNotif } = UserState();
 
   useEffect(() => {
@@ -33,7 +32,7 @@ const Employees = () => {
   const getAllEmployee = async () => {
     setIsLoading(true);
     try {
-      const res = await fetchClient.get(`/api/employees?search=${search}&page=${page}&direction=${direction}`);
+      const res = await fetchClient.get(`/api/employees?search=${search}&page=${page}&sort=${sort}&direction=${direction}`);
       setEmployees(res.data.data);
       delete res.data.data;
       setPagination(res.data);
@@ -60,12 +59,13 @@ const Employees = () => {
 
   // Sort
   const handleSort = (field) => {
-    if (field === sort && field === 'name') {
-      setDirection(nameDirection === 'asc' ? 'desc' : 'asc')
-      setNameDirection(prev => prev === 'asc' ? 'desc' : 'asc')
+    if (field === sort) {
+      setDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+      return;
     }
 
-    setSort(field)
+    setSort(field);
+    setDirection('asc');
   }
 
   return (
@@ -73,7 +73,19 @@ const Employees = () => {
       <div className="bg-white rounded-md p-4 dark:bg-gray-800">
         <h1 className="font-bold dark:text-white text-2xl mb-8"> Employees List</h1>
         <div className="flex justify-between mb-4">
-          <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+          <div className="flex gap-2">
+            <Dropdown label="Sort By">
+              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('name')}>
+                {sort === 'name' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                Name
+              </Dropdown.Item>
+              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('employee_position')}>
+                {sort === 'employee_position' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                Position
+              </Dropdown.Item>
+            </Dropdown>
+            <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+          </div>
           <Button as={Link} to="/employees/add">
             Add Employee
           </Button>
@@ -83,8 +95,7 @@ const Employees = () => {
           {isLoading ? <Loading size='xl' /> : <Table striped>
             <Table.Head className='text-center sticky top-0'>
               <Table.HeadCell className="w-1">No</Table.HeadCell>
-              <Table.HeadCell className="cursor-pointer" onClick={() => handleSort('name')}>
-                {nameDirection === 'asc' ? <i className="fa-solid fa-sort-up mr-2"></i> : <i className="fa-solid fa-sort-down mr-2"></i>}
+              <Table.HeadCell>
                 Name
               </Table.HeadCell>
               <Table.HeadCell>Position</Table.HeadCell>
@@ -97,7 +108,7 @@ const Employees = () => {
                     {(i + 1) + pagination?.per_page * (page - 1)}
                   </Table.Cell>
                   <Table.Cell>{employee.name}</Table.Cell>
-                  <Table.Cell>{employee.employee_position?.name}</Table.Cell>
+                  <Table.Cell>{employee.employee_position}</Table.Cell>
                   <Table.Cell className='text-center'>
                     <Link
                       to={`/employees/${employee.id}/edit`}

@@ -14,7 +14,6 @@ const UserProvider = ({children}) => {
     useEffect(() => {
         // Get user login info
         const fetchUser = async () => {
-            console.log('get user data');
             try {
                 const res = await fetchClient.get('/api/auth/user');
                 setUser(res.data.data);

@@ -1,4 +1,4 @@
-import { Table, Button, TextInput } from "flowbite-react"
+import { Table, Button, TextInput, Dropdown } from "flowbite-react"
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Loading from "../../components/Loading";
@@ -19,8 +19,7 @@ const Roles = () => {
   const [selectedRoles, setSelectedRoles] = useState();
 
   const [sort, setSort] = useState('name');
-  const [direction, setDirection] = useState('desc');
-  const [nameDirection, setNameDirection] = useState('desc');
+  const [direction, setDirection] = useState('asc');
   const { setNotif } = UserState();
 
   useEffect(() => {
@@ -32,7 +31,7 @@ const Roles = () => {
   const getRoles = async () => {
     setIsLoading(true);
     try {
-      const res = await fetchClient.get(`/api/roles?search=${search}&page=${page}&direction=${direction}`);
+      const res = await fetchClient.get(`/api/roles?search=${search}&page=${page}&sort=${sort}&direction=${direction}`);
       setRoles(res.data.data);
       delete res.data.data;
       setPagination(res.data);
@@ -58,12 +57,13 @@ const Roles = () => {
 
   // Sort
   const handleSort = (field) => {
-    if (field === sort && field === 'name') {
-      setDirection(nameDirection === 'asc' ? 'desc' : 'asc')
-      setNameDirection(prev => prev === 'asc' ? 'desc' : 'asc')
+    if (field === sort) {
+      setDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+      return;
     }
 
-    setSort(field)
+    setSort(field);
+    setDirection('asc');
   }
 
   return (
@@ -71,7 +71,19 @@ const Roles = () => {
       <div className="bg-white rounded-md p-4 dark:bg-gray-800">
         <h1 className="font-bold text-2xl mb-8 dark:text-white">Roles List</h1>
         <div className="flex justify-between mb-4">
-          <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+          <div className="flex gap-2">
+            <Dropdown label="Sort By">
+              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('name')}>
+                {sort === 'name' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                Roles
+              </Dropdown.Item>
+              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('users_count')}>
+                {sort === 'users_count' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                Members
+              </Dropdown.Item>
+            </Dropdown>
+            <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+          </div>
 
           <Button as={Link} to="/roles/add">
             Add Role
@@ -83,8 +95,7 @@ const Roles = () => {
             <Table striped>
               <Table.Head className="text-center sticky top-0">
                 <Table.HeadCell className="w-1">No</Table.HeadCell>
-                <Table.HeadCell className="cursor-pointer" onClick={() => handleSort('name')}>
-                  {nameDirection === 'asc' ? <i className="fa-solid fa-sort-up mr-2"></i> : <i className="fa-solid fa-sort-down mr-2"></i>}
+                <Table.HeadCell>
                   Roles
                 </Table.HeadCell>
                 <Table.HeadCell>
