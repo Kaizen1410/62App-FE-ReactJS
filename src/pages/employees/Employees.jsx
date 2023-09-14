@@ -18,14 +18,18 @@ const Employees = () => {
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(1);
 
+  const [sort, setSort] = useState('name')
+  const [direction, setDirection] = useState('desc')
+  const [nameDirection, setNameDirection] = useState('desc')
+
   useEffect(() => {
     getAllEmployee();
-  }, [search, page])
+  }, [search, page, sort, direction])
 
   const getAllEmployee = async () => {
     setIsLoading(true);
     try {
-      const res = await fetchClient.get(`/api/employees?search=${search}&page=${page}`);
+      const res = await fetchClient.get(`/api/employees?search=${search}&page=${page}&direction=${direction}`);
       setEmployees(res.data.data);
       delete res.data.data;
       setPagination(res.data);
@@ -46,7 +50,16 @@ const Employees = () => {
         console.error('Error deleting employee position:', error);
       })
       .finally(() => setDeleteIsLoading(false));
-  };
+  }
+
+  const handleSort = (field) => {
+    if (field === sort && field === 'name') {
+      setDirection(nameDirection === 'asc' ? 'desc' : 'asc')
+      setNameDirection(prev => prev === 'asc' ? 'desc' : 'asc')
+    }
+
+    setSort(field)
+  }
 
   return (
     <>
@@ -63,7 +76,10 @@ const Employees = () => {
           {isLoading ? <Loading size='xl' /> : <Table striped>
             <Table.Head className='text-center sticky top-0'>
               <Table.HeadCell className="w-1">No</Table.HeadCell>
-              <Table.HeadCell>Name</Table.HeadCell>
+              <Table.HeadCell className="cursor-pointer" onClick={() => handleSort('name')}>
+                  {nameDirection === 'asc' ? <i className="fa-solid fa-sort-up mr-2"></i> : <i className="fa-solid fa-sort-down mr-2"></i>}
+                Name
+                </Table.HeadCell>
               <Table.HeadCell>Position</Table.HeadCell>
               <Table.HeadCell>Action</Table.HeadCell>
             </Table.Head>
