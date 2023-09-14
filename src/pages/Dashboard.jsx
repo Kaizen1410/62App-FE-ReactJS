@@ -57,7 +57,7 @@ const Dashboard = () => {
                                         <Table.Cell>
                                             <Link
                                                 className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 text-center"
-                                                to={`/calendar/${year}-${month}`}
+                                                to={`/calendar/${year}-${month.month}`}
                                             >
                                                 <p>
                                                     {month.data_count}
