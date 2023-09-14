@@ -7,6 +7,8 @@ import Roles from './pages/roles/Roles';
 import UserRoles from './pages/userroles/UserRoles';
 import Employees from './pages/employees/Employees';
 import EmployeePositions from './pages/employeepositions/EmployeePositions';
+import EditEmployeesPositions from './pages/employeepositions/EditEmployeesPositions';
+import AddEmployeesPositions from './pages/employeepositions/AddEmployeesPositions';
 import AddLeave from './pages/leave/AddLeave';
 import EditLeave from './pages/leave/EditLeave';
 import AddRoles from './pages/roles/AddRoles';
@@ -44,6 +46,8 @@ function App() {
             <Route path='/employees/:id/edit' element={<EditEmployees />} />
 
             <Route path='/employee-positions' element={<EmployeePositions />} />
+            <Route path='/employee-positions/add' element={<AddEmployeesPositions />} />
+            <Route path='/employee-positions/:id/edit' element={<EditEmployeesPositions />} />
             <Route path='/calendar' element={<Calendar />} />
           </Route>
         </Routes>
