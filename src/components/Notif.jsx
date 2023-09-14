@@ -24,7 +24,7 @@ const SuccessNotif = ({ notif }) => {
       setNotif(prev => prev.filter(p => p !== notif));
     }
 
-    setTimeout(removeNotif, 2000);
+    setTimeout(removeNotif, 4000);
 
     return () => {
       clearTimeout(removeNotif);
@@ -52,7 +52,7 @@ const FailureNotif = ({ notif }) => {
       setNotif(prev => prev.filter(p => p !== notif));
     }
 
-    setTimeout(removeNotif, 2000);
+    setTimeout(removeNotif, 4000);
 
     return () => {
       clearTimeout(removeNotif);
