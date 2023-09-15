@@ -24,4 +24,6 @@ body {
   background: #cbcbcb;
 }
 
-td.fc-day-sat, td.fc-day-sun { background-color: #ff9f89; }
+td.fc-day-sat, td.fc-day-sun {
+  background-color: rgba(255, 137, 137, .6);
+}
