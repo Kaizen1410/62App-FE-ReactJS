@@ -23,3 +23,5 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #cbcbcb;
 }
+
+td.fc-day-sat, td.fc-day-sun { background-color: #ff9f89; }
