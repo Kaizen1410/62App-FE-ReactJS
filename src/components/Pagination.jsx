@@ -8,8 +8,8 @@ const Pagination = ({ pagination, page, setPage }) => {
     }
 
     return (
-        pagination?.links.length > 0 && (
-            <div className="flex justify-center items-center gap-1 mt-12">
+        pagination?.links.length > 3 && (
+            <div className="flex justify-center items-center gap-1 mt-3 mb-2">
                 {pagination?.links.map((l, i) => (
                     <button
                         key={i}

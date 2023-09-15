@@ -7,32 +7,36 @@ import Loading from '../../components/Loading';
 import Pagination from '../../components/Pagination';
 import { SearchIcon } from '../../components/Icons';
 import { UserState } from '../../context/UserProvider';
+import PerPage from '../../components/PerPage';
 
 const Employees = () => {
 
   const [openModal, setOpenModal] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [pagination, setPagination] = useState();
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(1);
 
+  // Query Params
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
   const [sort, setSort] = useState('name');
   const [direction, setDirection] = useState('asc');
+  const [perPage, setPerPage] = useState(10);
+
   const { setNotif } = UserState();
 
   useEffect(() => {
     getAllEmployee();
     // eslint-disable-next-line
-  }, [search, page, sort, direction])
+  }, [search, page, sort, direction, perPage])
 
   // Retrieve Employees data
   const getAllEmployee = async () => {
     setIsLoading(true);
     try {
-      const res = await fetchClient.get(`/api/employees?search=${search}&page=${page}&sort=${sort}&direction=${direction}`);
+      const res = await fetchClient.get(`/api/employees?search=${search}&page=${page}&sort=${sort}&direction=${direction}&per_page=${perPage}`);
       setEmployees(res.data.data);
       delete res.data.data;
       setPagination(res.data);
@@ -132,6 +136,8 @@ const Employees = () => {
             </Table.Body>
           </Table>}
         </div>
+
+        <PerPage setPerPage={setPerPage} />
 
         <Pagination pagination={pagination} page={page} setPage={setPage} />
       </div>

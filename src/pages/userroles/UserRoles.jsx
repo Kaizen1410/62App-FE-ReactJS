@@ -5,22 +5,25 @@ import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
 import Pagination from "../../components/Pagination";
 import { SearchIcon } from "../../components/Icons";
+import PerPage from "../../components/PerPage";
 
 const UserRoles = () => {
   const [userRoles, setUserRoles] = useState([]);
   const [pagination, setPagination] = useState();
-  const [search, setSearch] = useState('');
-  const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Query Params
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
   const [sort, setSort] = useState('email');
   const [direction, setDirection] = useState('asc');
+  const [perPage, setPerPage] = useState(10);
 
   useEffect(() => {
     const getUserRoles = async () => {
       setIsLoading(true);
       try {
-        const res = await fetchClient.get(`/api/user-roles?search=${search}&page=${page}&direction=${direction}`);
+        const res = await fetchClient.get(`/api/user-roles?search=${search}&page=${page}&direction=${direction}&per_page=${perPage}`);
         setUserRoles(res.data.data);
         delete res.data.data;
         setPagination(res.data);
@@ -31,7 +34,7 @@ const UserRoles = () => {
     }
 
     getUserRoles();
-  }, [search, page, sort, direction]);
+  }, [search, page, sort, direction, perPage]);
 
   // Sort
   const handleSort = (field) => {
@@ -116,6 +119,8 @@ const UserRoles = () => {
             </Table.Body>
           </Table>}
         </div>
+
+        <PerPage setPerPage={setPerPage} />
 
         <Pagination pagination={pagination} page={page} setPage={setPage} />
       </div>

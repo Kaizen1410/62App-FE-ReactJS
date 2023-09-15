@@ -7,31 +7,35 @@ import fetchClient from "../../utils/fetchClient";
 import Pagination from "../../components/Pagination";
 import { SearchIcon } from "../../components/Icons";
 import { UserState } from "../../context/UserProvider";
+import PerPage from "../../components/PerPage";
 
 const Roles = () => {
   const [roles, setRoles] = useState([]);
+  const [pagination, setPagination] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
-  const [search, setSearch] = useState('');
   const [openModal, setOpenModal] = useState(null);
-  const [page, setPage] = useState(1);
-  const [pagination, setPagination] = useState(null);
   const [selectedRoles, setSelectedRoles] = useState();
 
+  // Query Params
   const [sort, setSort] = useState('name');
   const [direction, setDirection] = useState('asc');
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+
   const { setNotif } = UserState();
 
   useEffect(() => {
     getRoles();
     // eslint-disable-next-line
-  }, [search, page, sort, direction])
+  }, [search, page, sort, direction, perPage])
 
   // Retrieve roles data
   const getRoles = async () => {
     setIsLoading(true);
     try {
-      const res = await fetchClient.get(`/api/roles?search=${search}&page=${page}&sort=${sort}&direction=${direction}`);
+      const res = await fetchClient.get(`/api/roles?search=${search}&page=${page}&sort=${sort}&direction=${direction}&per_page=${perPage}`);
       setRoles(res.data.data);
       delete res.data.data;
       setPagination(res.data);
@@ -135,6 +139,8 @@ const Roles = () => {
               </Table.Body>
             </Table>)}
         </div>
+
+        <PerPage setPerPage={setPerPage} />
 
         <Pagination pagination={pagination} page={page} setPage={setPage} />
       </div>

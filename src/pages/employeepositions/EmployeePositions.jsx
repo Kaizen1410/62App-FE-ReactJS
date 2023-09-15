@@ -7,12 +7,11 @@ import PopUpModal from '../../components/DeleteModal';
 import { SearchIcon } from '../../components/Icons';
 import { Link } from 'react-router-dom';
 import { UserState } from '../../context/UserProvider';
+import PerPage from '../../components/PerPage';
 
 function EmployeePositions() {
   const [positions, setPositions] = useState([]);
   const [pagination, setPagination] = useState();
-  const [search, setSearch] = useState('');
-  const [page, setPage] = useState(1);
   const [openModal, setOpenModal] = useState(null);
   const [selectedPosition, setSelectedPosition] = useState();
   const { setNotif } = UserState();
@@ -21,19 +20,22 @@ function EmployeePositions() {
   const [isLoading, setIsLoading] = useState(true);
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
 
-  // Sort State
+  // Query Params
   const [sort, setSort] = useState('name');
   const [direction, setDirection] = useState('desc');
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
 
   useEffect(() => {
     getEmployeePositions();
     // eslint-disable-next-line
-  }, [search, page, sort, direction]);
+  }, [search, page, sort, direction, perPage]);
 
   // Retrive Employee Positions data
   const getEmployeePositions = () => {
     setIsLoading(true);
-    fetchClient.get(`/api/employee-positions?search=${search}&page=${page}&sort=${sort}&direction=${direction}`)
+    fetchClient.get(`/api/employee-positions?search=${search}&page=${page}&sort=${sort}&direction=${direction}&per_page=${perPage}`)
       .then(res => {
         setPositions(res.data.data);
         delete res.data.data
@@ -131,6 +133,8 @@ function EmployeePositions() {
             </Table>
           )}
         </div>
+
+        <PerPage setPerPage={setPerPage} />
 
         <Pagination pagination={pagination} page={page} setPage={setPage} />
       </div>

@@ -9,12 +9,11 @@ import moment from "moment";
 import { SearchIcon } from "../../components/Icons";
 import { BeatLoader } from "react-spinners";
 import { UserState } from "../../context/UserProvider";
+import PerPage from "../../components/PerPage";
 
 const Leaves = () => {
   const [leaves, setLeaves] = useState([]);
   const [pagination, setPagination] = useState();
-  const [search, setSearch] = useState('');
-  const [page, setPage] = useState(1);
   const [openModal, setOpenModal] = useState();
   const [selectedLeave, setSelectedLeave] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -22,19 +21,23 @@ const Leaves = () => {
   const [importIsLoading, setImportIsLoading] = useState(false);
   const { setNotif } = UserState();
 
+  // Query params
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
   const [sort, setSort] = useState('date_leave');
   const [direction, setDirection] = useState('desc');
+  const [perPage, setPerPage] = useState(10);
 
   useEffect(() => {
     getLeaves();
     // eslint-disable-next-line
-  }, [search, page, sort, direction]);
+  }, [search, page, sort, direction, perPage]);
 
   // Retrieve Leaves data
   const getLeaves = async () => {
     setIsLoading(true);
     try {
-      const res = await fetchClient.get(`/api/leaves?search=${search}&page=${page}&sort=${sort}&direction=${direction}`);
+      const res = await fetchClient.get(`/api/leaves?search=${search}&page=${page}&sort=${sort}&direction=${direction}&per_page=${perPage}`);
       setLeaves(res.data.data);
       delete res.data.data;
       setPagination(res.data);
@@ -204,6 +207,8 @@ const Leaves = () => {
             </Table.Body>
           </Table>}
         </div>
+
+        <PerPage setPerPage={setPerPage} />
 
         <Pagination pagination={pagination} page={page} setPage={setPage} />
       </div>
