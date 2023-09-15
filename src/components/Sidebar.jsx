@@ -42,14 +42,14 @@ const SidebarReact = () => {
 
             <Sidebar className={`h-screen fixed z-50 ${!isOpenOnSmallScreen && 'w-0'} overflow-x-hidden md:w-64 transition-all`}>
                 <Link to='/' className='block text-black text-center font-bold text-2xl mb-4 dark:text-white'>
-                    Employee Absent
+                    Employee Leave
                 </Link>
                 <Sidebar.Items>
                     <Sidebar.ItemGroup>
                         <Sidebar.Item as={Link} to='/leaves' className="group"
                             icon={LeaveIcon}
                         >
-                            Leave
+                            Leaves
                         </Sidebar.Item>
                         <Sidebar.Collapse
                             icon={MasterIcon}
