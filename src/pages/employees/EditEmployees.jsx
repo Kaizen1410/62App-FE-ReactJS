@@ -63,6 +63,7 @@ function EditEmployees() {
       navigate('/employees');
     } catch (err) {
       console.error(err);
+      setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
     }
     setUpdateIsLoading(false);
   }

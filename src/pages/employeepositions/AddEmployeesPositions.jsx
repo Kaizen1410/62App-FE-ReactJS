@@ -22,6 +22,7 @@ const AddEmployeesPositions = () => {
       setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
     } catch (err) {
       console.error(err);
+      setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
     }
     setIsLoading(false);
   }

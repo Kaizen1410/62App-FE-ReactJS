@@ -55,7 +55,10 @@ function AddEmployees() {
         setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
         navigate('/employees');
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        console.error(err);
+        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
+      })
       .finally(() => setAddIsLoading(false));
   }
 

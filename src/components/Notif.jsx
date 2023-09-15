@@ -65,7 +65,7 @@ const FailureNotif = ({ notif }) => {
         <i className="fa-solid fa-x text-red-700 dark:text-red-500"></i>
       </div>
       <div className="ml-3 text-sm font-normal">
-        {notif.message}
+        {notif.message || 'Something went wrong'}
       </div>
       <Toast.Toggle />
     </Toast>

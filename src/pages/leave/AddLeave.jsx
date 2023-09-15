@@ -28,7 +28,10 @@ function AddLeave() {
         setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
         navigate('/leaves');
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        console.error(err);
+        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
+      })
       .finally(() => setIsLoading(false));
   }
 

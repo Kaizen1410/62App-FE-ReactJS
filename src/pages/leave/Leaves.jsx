@@ -53,8 +53,9 @@ const Leaves = () => {
         setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
         getLeaves();
       })
-      .catch((error) => {
-        console.error('Error deleting leaves:', error);
+      .catch((err) => {
+        console.error('Error deleting leaves:', err);
+        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
       })
       .finally(() => setDeleteIsLoading(false));
   };
@@ -74,9 +75,9 @@ const Leaves = () => {
         setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
         getLeaves();
       })
-      .catch((error) => {
-        console.error('Error Import Leaves', error);
-        setNotif(prev => [...prev, { type: 'failure', message: error.response.data.message }]);
+      .catch((err) => {
+        console.error('Error Import Leaves', err);
+        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
       })
       .finally(() => setImportIsLoading(false));
   }

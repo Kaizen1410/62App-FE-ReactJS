@@ -54,8 +54,9 @@ function EmployeePositions() {
         setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
         setOpenModal(null);
       })
-      .catch((error) => {
-        console.error('Error deleting employee position:', error);
+      .catch((err) => {
+        console.error('Error deleting employee position:', err);
+        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
       })
       .finally(() => setDeleteIsLoading(false));
   };
