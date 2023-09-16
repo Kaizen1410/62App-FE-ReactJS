@@ -22,7 +22,7 @@ function EmployeePositions() {
 
   // Query Params
   const [sort, setSort] = useState('name');
-  const [direction, setDirection] = useState('desc');
+  const [direction, setDirection] = useState('asc');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);

@@ -1,15 +1,14 @@
-import { Button, DarkThemeToggle, Sidebar } from 'flowbite-react';
+import { Sidebar } from 'flowbite-react';
 import { Link, useNavigate } from "react-router-dom";
 import fetchClient from "../utils/fetchClient";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { BeatLoader } from 'react-spinners';
 import { MasterIcon, LeaveIcon } from './Icons';
 
 
-const SidebarReact = () => {
+const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const [isOpenOnSmallScreen, setIsOpenOnSmallScreen] = useState(false);
 
     const handleLogout = async () => {
         setIsLoading(true);
@@ -23,27 +22,18 @@ const SidebarReact = () => {
         setIsLoading(false);
     }
 
-    useEffect(() => {
-        setIsOpenOnSmallScreen(false);
-    }, [navigate]);
-
+    const sidebarTheme = {
+        "root": {
+            "inner": "h-full overflow-y-auto overflow-x-hidden bg-gray-50 pt-20 pb-4 px-3 dark:bg-gray-800"
+        }
+    }
 
     return (
         <>
-            <Button className='absolute top-5 left-5' color='rgba(0, 0, 0, 0)' onClick={() => setIsOpenOnSmallScreen(true)}>
-                <svg className="w-6 h-6 text-white" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path clipRule="evenodd" fillRule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-                </svg>
-            </Button>
-
-            <DarkThemeToggle className='absolute top-5 right-5' />
 
             {isOpenOnSmallScreen && <div className='bg-backdrop z-40 absolute w-screen h-screen md:hidden' onClick={() => setIsOpenOnSmallScreen(false)}></div>}
 
-            <Sidebar className={`h-screen fixed z-50 ${!isOpenOnSmallScreen && 'w-0'} overflow-x-hidden md:w-64 transition-all`}>
-                <Link to='/' className='block text-black text-center font-bold text-2xl mb-4 dark:text-white'>
-                    Employee Leave
-                </Link>
+            <Sidebar theme={sidebarTheme} className={`fixed z-40 ${!isOpenOnSmallScreen && 'w-0'} overflow-x-hidden md:w-64 transition-all`}>
                 <Sidebar.Items>
                     <Sidebar.ItemGroup>
                         <Sidebar.Item as={Link} to='/leaves' className="group"

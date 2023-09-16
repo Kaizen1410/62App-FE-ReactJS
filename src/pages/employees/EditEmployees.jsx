@@ -23,7 +23,7 @@ function EditEmployees() {
   useEffect(() => {
     const getEmployeePositions = async () => {
       try {
-        const res = await fetchClient.get('/api/employee-positions')
+        const res = await fetchClient.get('/api/employee-positions?per_page=999')
         setEmployeePositions(res.data.data)
       } catch (err) {
         console.error(err);
