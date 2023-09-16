@@ -7,15 +7,15 @@ import Roles from './pages/roles/Roles';
 import UserRoles from './pages/userroles/UserRoles';
 import Employees from './pages/employees/Employees';
 import EmployeePositions from './pages/employeepositions/EmployeePositions';
-import EditEmployeesPositions from './pages/employeepositions/EditEmployeesPositions';
-import AddEmployeesPositions from './pages/employeepositions/AddEmployeesPositions';
+import EditEmployeesPosition from './pages/employeepositions/EditEmployeesPosition';
+import AddEmployeesPosition from './pages/employeepositions/AddEmployeesPosition';
 import AddLeave from './pages/leave/AddLeave';
 import EditLeave from './pages/leave/EditLeave';
-import AddRoles from './pages/roles/AddRoles';
-import EditRoles from './pages/roles/EditRoles';
+import AddRole from './pages/roles/AddRole';
+import EditRole from './pages/roles/EditRole';
 import EditUserRoles from './pages/userroles/EditUserRoles';
-import AddEmployees from './pages/employees/AddEmployees';
-import EditEmployees from './pages/employees/EditEmployees';
+import AddEmployee from './pages/employees/AddEmployee';
+import EditEmployee from './pages/employees/EditEmployee';
 import UserProvider from './context/UserProvider';
 import Layout from './components/Layout';
 import Calendar from './pages/Calendar';
@@ -35,19 +35,19 @@ function App() {
             <Route path='/leaves/:id/edit' element={<EditLeave />} />
 
             <Route path='/roles' element={<Roles />} />
-            <Route path='/roles/add' element={<AddRoles />} />
-            <Route path='/roles/:id/edit' element={<EditRoles />} />
+            <Route path='/roles/add' element={<AddRole />} />
+            <Route path='/roles/:id/edit' element={<EditRole />} />
 
             <Route path='/user-roles' element={<UserRoles />} />
             <Route path='/user-roles/:id/edit' element={<EditUserRoles />} />
 
             <Route path='/employees' element={<Employees />} />
-            <Route path='/employees/add' element={<AddEmployees />} />
-            <Route path='/employees/:id/edit' element={<EditEmployees />} />
+            <Route path='/employees/add' element={<AddEmployee />} />
+            <Route path='/employees/:id/edit' element={<EditEmployee />} />
 
             <Route path='/employee-positions' element={<EmployeePositions />} />
-            <Route path='/employee-positions/add' element={<AddEmployeesPositions />} />
-            <Route path='/employee-positions/:id/edit' element={<EditEmployeesPositions />} />
+            <Route path='/employee-positions/add' element={<AddEmployeesPosition />} />
+            <Route path='/employee-positions/:id/edit' element={<EditEmployeesPosition />} />
             <Route path='/calendar' element={<Calendar />} />
           </Route>
         </Routes>

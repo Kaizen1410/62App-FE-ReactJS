@@ -5,7 +5,7 @@ import fetchClient from '../../utils/fetchClient';
 import { BeatLoader } from 'react-spinners';
 import { UserState } from '../../context/UserProvider';
 
-const AddEmployeesPositions = () => {
+const AddEmployeesPosition = () => {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { setNotif } = UserState();
@@ -74,4 +74,4 @@ const AddEmployeesPositions = () => {
   )
 }
 
-export default AddEmployeesPositions
+export default AddEmployeesPosition
