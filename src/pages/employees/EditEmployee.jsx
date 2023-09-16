@@ -69,58 +69,55 @@ function EditEmployee() {
   }
 
   return (
-    <div className="min-h-96">
-      {isLoading ? <Loading size='xl' /> : <div>
-        <form
-          className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
-          onSubmit={updateEmployee}
-        >
-          <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Edit Employee</h4>
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
-              Name
-            </label>
-            <TextInput
-              value={employee?.name}
-              id="name"
-              name="name"
-              className="w-full"
-              onChange={(e) => setEmployee({ ...employee, name: e.target.value })}
-            />
-            <label htmlFor="position" className="block text-gray-700 dark:text-gray-50 font-bold mb-2 mt-5">
-              Positions
-            </label>
-            <Select name="employee_position_id" id="position" className='w-full' value={employee.employee_position_id} onChange={handleInput}>
-              {employeePositions.map(p => (
-                <option key={p.id} value={p.id}>{p.name}</option>
-              ))}
-            </Select>
-          </div>
-          <div className="flex justify-end">
-            <Button
-              as={Link}
-              color="failure"
-              to='/employees'
-              className="mr-2"
+    isLoading ? <Loading size='xl' /> :
+      <form
+        className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
+        onSubmit={updateEmployee}
+      >
+        <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Edit Employee</h4>
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
+            Name
+          </label>
+          <TextInput
+            value={employee?.name}
+            id="name"
+            name="name"
+            className="w-full"
+            onChange={(e) => setEmployee({ ...employee, name: e.target.value })}
+          />
+          <label htmlFor="position" className="block text-gray-700 dark:text-gray-50 font-bold mb-2 mt-5">
+            Positions
+          </label>
+          <Select name="employee_position_id" id="position" className='w-full' value={employee.employee_position_id} onChange={handleInput}>
+            {employeePositions.map(p => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          </Select>
+        </div>
+        <div className="flex justify-end">
+          <Button
+            as={Link}
+            color="failure"
+            to='/employees'
+            className="mr-2"
+          >
+            Cancel
+          </Button>
+          {updateIsLoading
+            ? <Button
+              type="submit"
+              disabled
             >
-              Cancel
+              <BeatLoader color="white" size={6} className='my-1 mx-2' />
             </Button>
-            {updateIsLoading
-              ? <Button
-                type="submit"
-                disabled
-              >
-                <BeatLoader color="white" size={6} className='my-1 mx-2' />
-              </Button>
-              : <Button
-                type="submit"
-              >
-                Save
-              </Button>}
-          </div>
-        </form>
-      </div>}
-    </div>
+            : <Button
+              type="submit"
+            >
+              Save
+            </Button>}
+        </div>
+      </form>
   )
 }
 

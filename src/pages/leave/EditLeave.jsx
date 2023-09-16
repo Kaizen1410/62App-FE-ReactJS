@@ -47,42 +47,39 @@ function EditLeave() {
   }
 
   return (
-    <div className="min-h-96">
-      {isLoading ? <Loading size='xl' /> : <div>
-        <div
-          className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
-        >
-          <h4 className="text-xl font-semibold text-center mb-5 dark:text-gray-50">Edit Leave</h4>
-          <div className="mb-4 dark:text-gray-50">
-            <div>
-              <span className="text-gray-700 font-bold dark:text-gray-50">Name: </span>
-              {leave?.employee.name}
-            </div>
-            <div>
-              <span className="text-gray-700 font-bold dark:text-gray-50">Date Leave: </span>
-              {moment(leave?.date_leave).format('DD MMMM YYYY')}
-            </div>
+    isLoading ? <Loading size='xl' /> :
+      <div
+        className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
+      >
+        <h4 className="text-xl font-semibold text-center mb-5 dark:text-gray-50">Edit Leave</h4>
+        <div className="mb-4 dark:text-gray-50">
+          <div>
+            <span className="text-gray-700 font-bold dark:text-gray-50">Name: </span>
+            {leave?.employee.name}
           </div>
-          <div className="flex justify-end">
-            <Button
-              color="failure"
-              as={Link}
-              to='/leaves'
-              className="mr-2"
-            >
-              Cancel
-            </Button>
-            {updateIsLoading
-              ? <Button type="button" disabled>
-                <BeatLoader color="white" size={6} className='my-1 mx-2' />
-              </Button>
-              : <Button type="button" onClick={updateLeave}>
-                Approve
-              </Button>}
+          <div>
+            <span className="text-gray-700 font-bold dark:text-gray-50">Date Leave: </span>
+            {moment(leave?.date_leave).format('DD MMMM YYYY')}
           </div>
         </div>
-      </div>}
-    </div>
+        <div className="flex justify-end">
+          <Button
+            color="failure"
+            as={Link}
+            to='/leaves'
+            className="mr-2"
+          >
+            Cancel
+          </Button>
+          {updateIsLoading
+            ? <Button type="button" disabled>
+              <BeatLoader color="white" size={6} className='my-1 mx-2' />
+            </Button>
+            : <Button type="button" onClick={updateLeave}>
+              Approve
+            </Button>}
+        </div>
+      </div>
   )
 }
 

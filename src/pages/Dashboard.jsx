@@ -2,12 +2,9 @@ import { useState, useEffect } from 'react';
 import Loading from '../components/Loading';
 import { Link } from 'react-router-dom';
 import { Select, Table } from 'flowbite-react';
-import { UserState } from '../context/UserProvider';
 import fetchClient from '../utils/fetchClient';
-import { CalendarIcon } from '../components/Icons';
 
 const Dashboard = () => {
-    const { user } = UserState();
     const [year, setYear] = useState(new Date().getFullYear());
     const [monthData, setMonthData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -28,14 +25,17 @@ const Dashboard = () => {
     return (
         <>
             <div className='mb-10'>
-                <h1 className='text-4xl font-bold text-white'>Dashboard</h1>
-                <h3 className='text-white font-semibold text-xl'>Welcome {user?.email}</h3>
+                <h1 className='text-4xl font-bold text-black dark:text-white'>Dashboard</h1>
             </div>
             <div className="bg-white rounded-md p-4 dark:bg-gray-800">
                 <h1 className="font-bold dark:text-white text-2xl mb-8">Leaves Summary</h1>
 
                 <div className="mb-4">
-                    <Select className="w-56" icon={CalendarIcon} onChange={(e) => setYear(e.target.value)}>
+                    <Select
+                        className="w-56"
+                        icon={() => <i className="fa-solid fa-calendar absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>}
+                        onChange={(e) => setYear(e.target.value)}
+                    >
                         <option value={new Date().getFullYear()}>{new Date().getFullYear()}</option>
                         <option value={new Date().getFullYear() - 1}>{new Date().getFullYear() - 1}</option>
                     </Select>

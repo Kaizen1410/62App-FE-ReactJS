@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import fetchClient from '../../utils/fetchClient';
-import { Table, Button, TextInput, Dropdown } from "flowbite-react";
+import { Table, Button, Dropdown } from "flowbite-react";
 import PopUpModal from "../../components/DeleteModal";
 import Loading from '../../components/Loading';
 import Pagination from '../../components/Pagination';
-import { SearchIcon } from '../../components/Icons';
 import { UserState } from '../../context/UserProvider';
 import PerPage from '../../components/PerPage';
+import SearchInput from '../../components/SearchInput';
 
 const Employees = () => {
 
@@ -89,7 +89,7 @@ const Employees = () => {
                 Position
               </Dropdown.Item>
             </Dropdown>
-            <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+            <SearchInput setSearch={setSearch} />
           </div>
           <Button as={Link} to="/employees/add">
             Add Employee

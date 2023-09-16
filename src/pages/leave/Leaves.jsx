@@ -1,4 +1,4 @@
-import { Table, Button, TextInput, Dropdown, Tooltip } from "flowbite-react"
+import { Table, Button, Dropdown, Tooltip } from "flowbite-react"
 import fetchClient from "../../utils/fetchClient"
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 import PopUpModal from "../../components/DeleteModal";
 import Pagination from "../../components/Pagination";
 import moment from "moment";
-import { SearchIcon } from "../../components/Icons";
 import { BeatLoader } from "react-spinners";
 import { UserState } from "../../context/UserProvider";
 import PerPage from "../../components/PerPage";
+import SearchInput from "../../components/SearchInput";
 
 const Leaves = () => {
   const [leaves, setLeaves] = useState([]);
@@ -122,14 +122,14 @@ const Leaves = () => {
               </Dropdown.Item>
             </Dropdown>
 
-            <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+            <SearchInput setSearch={setSearch} />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-stretch gap-2">
             {importIsLoading
               ? <Button disabled className="cursor-pointer h-full">
                 <BeatLoader color="white" size={6} className='my-1 mx-2' />
               </Button>
-              : <Tooltip content='Import CSV file'>
+              : <Tooltip content='Import CSV file' className="">
                 <Button as='label' className="cursor-pointer h-full">
                   <i className="fa-solid fa-file-import"></i>
                   <input

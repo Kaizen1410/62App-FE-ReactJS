@@ -1,13 +1,13 @@
-import { Table, Button, TextInput, Dropdown } from "flowbite-react"
+import { Table, Button, Dropdown } from "flowbite-react"
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Loading from "../../components/Loading";
 import PopUpModal from "../../components/DeleteModal";
 import fetchClient from "../../utils/fetchClient";
 import Pagination from "../../components/Pagination";
-import { SearchIcon } from "../../components/Icons";
 import { UserState } from "../../context/UserProvider";
 import PerPage from "../../components/PerPage";
+import SearchInput from "../../components/SearchInput";
 
 const Roles = () => {
   const [roles, setRoles] = useState([]);
@@ -87,7 +87,7 @@ const Roles = () => {
                 Members
               </Dropdown.Item>
             </Dropdown>
-            <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+            <SearchInput setSearch={setSearch} />
           </div>
 
           <Button as={Link} to="/roles/add">

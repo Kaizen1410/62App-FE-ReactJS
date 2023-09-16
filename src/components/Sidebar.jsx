@@ -1,14 +1,14 @@
-import { Sidebar } from 'flowbite-react';
+import { Avatar, Dropdown, Sidebar } from 'flowbite-react';
 import { Link, useNavigate } from "react-router-dom";
 import fetchClient from "../utils/fetchClient";
 import { useState } from 'react';
+import { UserState } from '../context/UserProvider';
 import { BeatLoader } from 'react-spinners';
-import { MasterIcon, LeaveIcon } from './Icons';
-
 
 const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+    const { user } = UserState();
 
     const handleLogout = async () => {
         setIsLoading(true);
@@ -22,6 +22,16 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
         setIsLoading(false);
     }
 
+    const initialName = () => {
+        const name = user?.employee.name;
+        let rgx = new RegExp(/(\p{L}{1})\p{L}+/, 'gu');
+
+        let initials = [...name.matchAll(rgx)] || [];
+
+        initials = ((initials.shift()?.[1] || '') + (initials.pop()?.[1] || '')).toUpperCase();
+        return initials;
+    }
+
     const sidebarTheme = {
         "root": {
             "inner": "h-full overflow-y-auto overflow-x-hidden bg-gray-50 pt-20 pb-4 px-3 dark:bg-gray-800"
@@ -30,19 +40,18 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
 
     return (
         <>
-
-            {isOpenOnSmallScreen && <div className='bg-backdrop z-40 absolute w-screen h-screen md:hidden' onClick={() => setIsOpenOnSmallScreen(false)}></div>}
+            {isOpenOnSmallScreen && <div className='bg-backdrop z-30 w-screen h-screen fixed md:hidden' onClick={() => setIsOpenOnSmallScreen(false)}></div>}
 
             <Sidebar theme={sidebarTheme} className={`fixed z-40 ${!isOpenOnSmallScreen && 'w-0'} overflow-x-hidden md:w-64 transition-all`}>
                 <Sidebar.Items>
                     <Sidebar.ItemGroup>
                         <Sidebar.Item as={Link} to='/leaves' className="group"
-                            icon={LeaveIcon}
+                            icon={() => <i className="fa-solid fa-plane text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>}
                         >
                             Leaves
                         </Sidebar.Item>
                         <Sidebar.Collapse
-                            icon={MasterIcon}
+                            icon={() => <i className="fa-solid fa-folder-closed text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>}
                             label="Master"
                         >
                             <Sidebar.Item as={Link} to='/roles'>
@@ -64,18 +73,32 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
                                 <span>Employee Positions</span>
                             </Sidebar.Item>
                         </Sidebar.Collapse>
-
-                        <div className='absolute bottom-5 left-5 right-5'>
-                            <button className="flex items-center justify-center w-full p-2 border border-black dark:border-white text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" onClick={handleLogout}>
-                                {isLoading
-                                    ? <BeatLoader color="white" size={10} className='my-1' />
-                                    : <>
-                                        <i className="fa-solid fa-right-from-bracket -scale-x-100 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
-                                        <span className="ml-2 font-semibold">Logout</span>
-                                    </>}
-                            </button>
-                        </div>
                     </Sidebar.ItemGroup>
+
+                    <div className='absolute bottom-5 left-4 right-4'>
+                        <Dropdown placement='top' className='' renderTrigger={() =>
+                            <button className='w-full flex pr-2 items-center justify-between gap-2 z-50 text-left rounded-lg p-1 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700'>
+                                <div className='flex gap-2 overflow-hidden'>
+                                    <Avatar rounded placeholderInitials={initialName()} />
+                                    {isLoading
+                                        ? <div className='flex justify-center items-center w-96'>
+                                            <BeatLoader color='white' size={10} />
+
+                                        </div>
+                                        : <div className='overflow-hidden'>
+                                            <h5 className='overflow-ellipsis overflow-hidden whitespace-nowrap text-black dark:text-white'>{user?.employee.name}</h5>
+                                            <p className='overflow-ellipsis overflow-hidden whitespace-nowrap text-sm text-gray-500 dark:text-gray-400'>{user?.email}</p>
+                                        </div>}
+                                </div>
+                                <i className="fa-solid fa-chevron-up"></i>
+                            </button>}
+                        >
+                            <Dropdown.Item onClick={handleLogout}>
+                                Logout
+                            </Dropdown.Item>
+                        </Dropdown>
+                    </div>
+
                 </Sidebar.Items>
             </Sidebar>
         </>

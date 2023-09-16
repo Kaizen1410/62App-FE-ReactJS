@@ -1,11 +1,11 @@
-import { Dropdown, Table, TextInput } from "flowbite-react"
+import { Dropdown, Table } from "flowbite-react"
 import fetchClient from "../../utils/fetchClient"
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
 import Pagination from "../../components/Pagination";
-import { SearchIcon } from "../../components/Icons";
 import PerPage from "../../components/PerPage";
+import SearchInput from "../../components/SearchInput";
 
 const UserRoles = () => {
   const [userRoles, setUserRoles] = useState([]);
@@ -63,7 +63,7 @@ const UserRoles = () => {
               Name
             </Dropdown.Item>
           </Dropdown>
-          <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+          <SearchInput setSearch={setSearch} />
         </div>
 
         <div className="h-96 overflow-y-auto">

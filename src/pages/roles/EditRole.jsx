@@ -47,49 +47,46 @@ const EditRole = () => {
   }
 
   return (
-    <div className="min-h-96">
-      {isLoading ? <Loading size='xl' /> : <div>
-        <form
-          className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
-          onSubmit={updateRole}
-        >
-          <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Edit Role</h4>
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
-              Role
-            </label>
-            <TextInput
-              value={role?.name}
-              id="name"
-              className="w-full"
-              onChange={(e) => setRole({ ...role, name: e.target.value })}
-            />
-          </div>
-          <div className="flex justify-end">
-            <Button
-              as={Link}
-              color="failure"
-              to='/roles'
-              className="mr-2"
+    isLoading ? <Loading size='xl' /> :
+      <form
+        className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
+        onSubmit={updateRole}
+      >
+        <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Edit Role</h4>
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
+            Role
+          </label>
+          <TextInput
+            value={role?.name}
+            id="name"
+            className="w-full"
+            onChange={(e) => setRole({ ...role, name: e.target.value })}
+          />
+        </div>
+        <div className="flex justify-end">
+          <Button
+            as={Link}
+            color="failure"
+            to='/roles'
+            className="mr-2"
+          >
+            Cancel
+          </Button>
+          {updateIsLoading
+            ? <Button
+              type="submit"
+              disabled
             >
-              Cancel
+              <BeatLoader color="white" size={6} className='my-1 mx-2' />
             </Button>
-            {updateIsLoading
-              ? <Button
-                type="submit"
-                disabled
-              >
-                <BeatLoader color="white" size={6} className='my-1 mx-2' />
-              </Button>
-              : <Button
-                type="submit"
-              >
-                Save
-              </Button>}
-          </div>
-        </form>
-      </div>}
-    </div>
+            : <Button
+              type="submit"
+            >
+              Save
+            </Button>}
+        </div>
+      </form>
   );
 }
 

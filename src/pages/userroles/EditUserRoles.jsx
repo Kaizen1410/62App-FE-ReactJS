@@ -1,11 +1,11 @@
-import { Button, TextInput } from "flowbite-react"
+import { Button } from "flowbite-react"
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import fetchClient from "../../utils/fetchClient";
 import Loading from "../../components/Loading";
-import { SearchIcon } from "../../components/Icons";
 import { BeatLoader } from "react-spinners";
 import { UserState } from "../../context/UserProvider";
+import SearchInput from "../../components/SearchInput";
 
 const EditUserRoles = () => {
   const [userRoles, setUserRoles] = useState([]);
@@ -72,70 +72,62 @@ const EditUserRoles = () => {
   }
 
   return (
-    <div className="min-h-96">
-      {isLoading ? <Loading size='xl' /> : <div>
-        <div className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md">
-          <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Edit User Role</h4>
+    isLoading ? <Loading size='xl' /> :
+      <div className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md">
+        <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Edit User Role</h4>
 
-          <div className="mb-4 dark:text-gray-50">
-            <div>
-              <span className="text-gray-700 font-bold dark:text-gray-50">Email: </span>
-              {userRoles?.email}
-            </div>
-            <div>
-              <span className="text-gray-700 font-bold dark:text-gray-50">Name: </span>
-              {userRoles?.employee.name}
-            </div>
-
-            <label htmlFor="roles" className="block text-gray-700 font-bold mb-2 dark:text-gray-50">
-              Roles:
-            </label>
-
-            <div className="flex flex-wrap gap-1 mb-4">
-              {userRoles.roles.map(role => (
-                <div className="border px-3 py-2 rounded-md dark:text-gray-50" key={role.id}>
-                  <span>{role.name}</span>
-                  <i className="fa-solid fa-xmark ml-2 cursor-pointer" onClick={() => removeRole(role.id)}></i>
-                </div>
-              ))}
-            </div>
-
-            <TextInput
-              type="search"
-              icon={SearchIcon}
-              placeholder="Search role..."
-              onChange={(e) => handleSearch(e.target.value)}
-            />
+        <div className="mb-4 dark:text-gray-50">
+          <div>
+            <span className="text-gray-700 font-bold dark:text-gray-50">Email: </span>
+            {userRoles?.email}
+          </div>
+          <div>
+            <span className="text-gray-700 font-bold dark:text-gray-50">Name: </span>
+            {userRoles?.employee.name}
           </div>
 
-          <div className="mb-4 max-h-56 overflow-y-auto">
-            {roles.map(r => (
-              <div key={r.id} className="border px-3 py-2 mb-1 dark:text-gray-50 rounded-md cursor-pointer" onClick={() => addRole(r)}>
-                {r.name}
+          <label htmlFor="roles" className="block text-gray-700 font-bold mb-2 dark:text-gray-50">
+            Roles:
+          </label>
+
+          <div className="flex flex-wrap gap-1 mb-4">
+            {userRoles.roles.map(role => (
+              <div className="border px-3 py-2 rounded-md dark:text-gray-50" key={role.id}>
+                <span>{role.name}</span>
+                <i className="fa-solid fa-xmark ml-2 cursor-pointer" onClick={() => removeRole(role.id)}></i>
               </div>
             ))}
           </div>
 
-          <div className="flex justify-end">
-            <Button
-              as={Link}
-              color="failure"
-              to='/user-roles'
-              className="mr-2"
-            >
-              Cancel
-            </Button>
-            {updateIsLoading
-              ? <Button disabled>
-                <BeatLoader color="white" size={6} className='my-1 mx-2' />
-              </Button>
-              : <Button onClick={updateUserRoles}>
-                Save
-              </Button>}
-          </div>
+          <SearchInput className='w-full' placeholder='Search Role...' setSearch={handleSearch} />
         </div>
-      </div>}
-    </div>
+
+        <div className="mb-4 max-h-56 overflow-y-auto">
+          {roles.map(r => (
+            <div key={r.id} className="border px-3 py-2 mb-1 dark:text-gray-50 rounded-md cursor-pointer" onClick={() => addRole(r)}>
+              {r.name}
+            </div>
+          ))}
+        </div>
+
+        <div className="flex justify-end">
+          <Button
+            as={Link}
+            color="failure"
+            to='/user-roles'
+            className="mr-2"
+          >
+            Cancel
+          </Button>
+          {updateIsLoading
+            ? <Button disabled>
+              <BeatLoader color="white" size={6} className='my-1 mx-2' />
+            </Button>
+            : <Button onClick={updateUserRoles}>
+              Save
+            </Button>}
+        </div>
+      </div>
   );
 }
 

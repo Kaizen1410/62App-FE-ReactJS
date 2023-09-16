@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import Loading from '../../components/Loading';
 import fetchClient from '../../utils/fetchClient';
-import { Button, Dropdown, Table, TextInput } from 'flowbite-react';
+import { Button, Dropdown, Table } from 'flowbite-react';
 import Pagination from '../../components/Pagination';
 import PopUpModal from '../../components/DeleteModal';
-import { SearchIcon } from '../../components/Icons';
 import { Link } from 'react-router-dom';
 import { UserState } from '../../context/UserProvider';
 import PerPage from '../../components/PerPage';
+import SearchInput from '../../components/SearchInput';
 
 function EmployeePositions() {
   const [positions, setPositions] = useState([]);
@@ -86,7 +86,7 @@ function EmployeePositions() {
                 Name
               </Dropdown.Item>
             </Dropdown>
-            <TextInput className="w-56" icon={SearchIcon} type="search" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+            <SearchInput setSearch={setSearch} />
           </div>
 
           <Button as={Link} to="/employee-positions/add">
