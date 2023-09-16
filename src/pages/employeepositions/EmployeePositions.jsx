@@ -83,7 +83,7 @@ function EmployeePositions() {
             <Dropdown label="Sort By">
               <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('name')}>
                 {sort === 'name' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Name
+                Position
               </Dropdown.Item>
             </Dropdown>
             <SearchInput setSearch={setSearch} />
@@ -100,7 +100,7 @@ function EmployeePositions() {
               <Table.Head className='text-center sticky top-0'>
                 <Table.HeadCell className='w-1'>No</Table.HeadCell>
                 <Table.HeadCell>
-                  Name
+                  Positions
                 </Table.HeadCell>
                 <Table.HeadCell>Action</Table.HeadCell>
               </Table.Head>

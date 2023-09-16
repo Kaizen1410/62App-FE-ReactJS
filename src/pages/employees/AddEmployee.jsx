@@ -79,6 +79,7 @@ function AddEmployee() {
             name="name"
             className="w-full"
             onChange={(e) => setEmployee({ ...employee, name: e.target.value })}
+            placeholder="Enter Name"
           />
 
           <label htmlFor="position" className="block text-gray-700 dark:text-gray-50 font-bold mb-2 mt-5">

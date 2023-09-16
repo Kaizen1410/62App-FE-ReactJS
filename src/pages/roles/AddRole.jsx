@@ -42,6 +42,7 @@ const AddRole = () => {
           id="name"
           className="w-full"
           onChange={(e) => setName(e.target.value)}
+          placeholder="Enter Role"
         />
       </div>
       <div className="flex justify-end">

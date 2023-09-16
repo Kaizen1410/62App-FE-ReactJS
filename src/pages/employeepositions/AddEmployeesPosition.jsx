@@ -42,6 +42,7 @@ const AddEmployeesPosition = () => {
           id="name"
           className="w-full"
           onChange={(e) => setName(e.target.value)}
+          placeholder='Enter Position'
         />
       </div>
       <div className="flex justify-end">
