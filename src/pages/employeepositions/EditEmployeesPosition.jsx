@@ -6,7 +6,7 @@ import { BeatLoader } from 'react-spinners';
 import Loading from "../../components/Loading";
 import { UserState } from '../../context/UserProvider';
 
-const EditEmployeesPositions = () => {
+const EditEmployeesPosition = () => {
   const [position, setPosition] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
@@ -90,4 +90,4 @@ const EditEmployeesPositions = () => {
     </div>
   )
 }
-export default EditEmployeesPositions
+export default EditEmployeesPosition

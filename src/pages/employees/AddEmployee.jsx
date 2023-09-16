@@ -6,11 +6,11 @@ import Loading from "../../components/Loading";
 import { BeatLoader } from 'react-spinners';
 import { UserState } from "../../context/UserProvider";
 
-function AddEmployees() {
+function AddEmployee() {
   const [isLoading, setIsLoading] = useState(true);
   const [addIsLoading, setAddIsLoading] = useState(false);
   const [employeePositions, setEmployeePositions] = useState([]);
-  const [employees, setEmployees] = useState({
+  const [employee, setEmployee] = useState({
     name: '',
     employee_position_id: ''
   });
@@ -22,7 +22,7 @@ function AddEmployees() {
   useEffect(() => {
     const getEmployeePositions = async () => {
       try {
-        const res = await fetchClient.get('/api/employee-positions')
+        const res = await fetchClient.get('/api/employee-positions?per_page=999')
         setEmployeePositions(res.data.data)
       } catch (err) {
         console.error(err);
@@ -35,19 +35,18 @@ function AddEmployees() {
   // Update value input state
   const handleInput = (e) => {
     e.persist();
-    console.log({ [e.target.name]: e.target.value })
     let value = e.target.value;
-    setEmployees({ ...employees, [e.target.name]: value });
+    setEmployee({ ...employee, [e.target.name]: value });
   }
 
   // Add Employee
-  const saveEmployees = (e) => {
+  const saveEmployee = (e) => {
     setAddIsLoading(true);
     e.preventDefault();
 
     const data = {
-      name: employees.name,
-      employee_position_id: employees.employee_position_id
+      name: employee.name,
+      employee_position_id: employee.employee_position_id
     }
 
     fetchClient.post('/api/employees', data)
@@ -69,7 +68,7 @@ function AddEmployees() {
       {isLoading ? <Loading size='xl' /> : <div>
         <form
           className="max-w-md mx-auto p-4 bg-white dark:bg-gray-800 shadow-md rounded-md"
-          onSubmit={saveEmployees}
+          onSubmit={saveEmployee}
         >
           <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Add Employee</h4>
           <div className="mb-4">
@@ -77,20 +76,20 @@ function AddEmployees() {
               Name
             </label>
             <TextInput
-              value={employees?.name}
+              value={employee?.name}
               id="name"
               name="name"
               className="w-full"
-              onChange={(e) => setEmployees({ ...employees, name: e.target.value })}
+              onChange={(e) => setEmployee({ ...employee, name: e.target.value })}
             />
 
             <label htmlFor="position" className="block text-gray-700 dark:text-gray-50 font-bold mb-2 mt-5">
               Positions
             </label>
-            <Select name="employee_position_id" id="position" className='w-full' onChange={handleInput}>
-              <option value='' selected>---Select Position---</option>
+            <Select name="employee_position_id" id="position" value={employee.employee_position_id} className='w-full' onChange={handleInput}>
+              <option value=''>---Select Position---</option>
               {employeePositions.map(p => (
-                <option value={p.id}>{p.name}</option>
+                <option key={p.id} value={p.id}>{p.name}</option>
               ))}
             </Select>
 
@@ -123,4 +122,4 @@ function AddEmployees() {
   )
 }
 
-export default AddEmployees;
+export default AddEmployee;

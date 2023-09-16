@@ -6,11 +6,11 @@ import Loading from "../../components/Loading";
 import { BeatLoader } from 'react-spinners';
 import { UserState } from "../../context/UserProvider";
 
-function EditEmployees() {
+function EditEmployee() {
   const [employeePositions, setEmployeePositions] = useState([])
   const [isLoading, setIsLoading] = useState(true);
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
-  const [employees, setEmployees] = useState({
+  const [employee, setEmployee] = useState({
     name: '',
     employee_position_id: ''
   });
@@ -23,7 +23,7 @@ function EditEmployees() {
   useEffect(() => {
     const getEmployeePositions = async () => {
       try {
-        const res = await fetchClient.get('/api/employee-positions')
+        const res = await fetchClient.get('/api/employee-positions?per_page=999')
         setEmployeePositions(res.data.data)
       } catch (err) {
         console.error(err);
@@ -34,23 +34,23 @@ function EditEmployees() {
 
   // Retrieve selected employee data
   useEffect(() => {
-    const getEmployees = async () => {
+    const getEmployee = async () => {
       try {
         const res = await fetchClient.get(`/api/employees/${id}`)
-        setEmployees(res.data.data)
+        setEmployee(res.data.data)
       } catch (err) {
         console.error(err);
       }
       setIsLoading(false)
     }
-    getEmployees()
+    getEmployee()
   }, [id]);
 
   // Update value input state
   const handleInput = (e) => {
     e.persist();
     let value = e.target.value;
-    setEmployees({ ...employees, [e.target.name]: value });
+    setEmployee({ ...employee, [e.target.name]: value });
   }
 
   // Update Employee
@@ -58,7 +58,7 @@ function EditEmployees() {
     e.preventDefault();
     setUpdateIsLoading(true);
     try {
-      const res = await fetchClient.put(`api/employees/${id}`, employees);
+      const res = await fetchClient.put(`api/employees/${id}`, employee);
       setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
       navigate('/employees');
     } catch (err) {
@@ -81,18 +81,18 @@ function EditEmployees() {
               Name
             </label>
             <TextInput
-              value={employees?.name}
+              value={employee?.name}
               id="name"
               name="name"
               className="w-full"
-              onChange={(e) => setEmployees({ ...employees, name: e.target.value })}
+              onChange={(e) => setEmployee({ ...employee, name: e.target.value })}
             />
             <label htmlFor="position" className="block text-gray-700 dark:text-gray-50 font-bold mb-2 mt-5">
               Positions
             </label>
-            <Select name="employee_position_id" id="position" className='w-full' onChange={handleInput}>
+            <Select name="employee_position_id" id="position" className='w-full' value={employee.employee_position_id} onChange={handleInput}>
               {employeePositions.map(p => (
-                <option value={p.id} selected={employees.employee_position_id === p.id && 'selected'}>{p.name}</option>
+                <option key={p.id} value={p.id}>{p.name}</option>
               ))}
             </Select>
           </div>
@@ -124,4 +124,4 @@ function EditEmployees() {
   )
 }
 
-export default EditEmployees;
+export default EditEmployee;

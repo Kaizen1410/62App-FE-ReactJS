@@ -1,49 +1,68 @@
 import { Button, TextInput } from "flowbite-react"
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import fetchClient from "../../utils/fetchClient";
-import { BeatLoader } from 'react-spinners';
+import Loading from "../../components/Loading";
+import { BeatLoader } from "react-spinners";
 import { UserState } from "../../context/UserProvider";
 
-const AddRoles = () => {
-  const [name, setName] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+const EditRole = () => {
+  const [role, setRole] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [updateIsLoading, setUpdateIsLoading] = useState(false);
+
+  const { id } = useParams();
+  const navigate = useNavigate();
   const { setNotif } = UserState();
 
-  const navigate = useNavigate();
+  // Retrieve selected role data
+  useEffect(() => {
+    const getRole = async () => {
+      try {
+        const res = await fetchClient.get(`/api/roles/${id}`);
+        setRole(res.data.data);
+      } catch (err) {
+        console.error(err);
+      }
+      setIsLoading(false);
+    }
 
-  // Add Role
-  const addRole = async (e) => {
+    getRole();
+  }, [id]);
+
+  // Update Role
+  const updateRole = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setUpdateIsLoading(true);
     try {
-      const res = await fetchClient.post('/api/roles', { name });
-      navigate('/roles');
+      const res = await fetchClient.put(`api/roles/${id}`, role);
       setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
+      navigate('/roles');
+
     } catch (err) {
       console.error(err);
       setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
     }
-    setIsLoading(false);
+    setUpdateIsLoading(false);
   }
 
   return (
     <div className="min-h-96">
-      <div>
+      {isLoading ? <Loading size='xl' /> : <div>
         <form
           className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
-          onSubmit={addRole}
+          onSubmit={updateRole}
         >
-          <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Add Role</h4>
+          <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Edit Role</h4>
           <div className="mb-4">
             <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
               Role
             </label>
             <TextInput
-              value={name}
+              value={role?.name}
               id="name"
               className="w-full"
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setRole({ ...role, name: e.target.value })}
             />
           </div>
           <div className="flex justify-end">
@@ -55,7 +74,7 @@ const AddRoles = () => {
             >
               Cancel
             </Button>
-            {isLoading
+            {updateIsLoading
               ? <Button
                 type="submit"
                 disabled
@@ -69,9 +88,9 @@ const AddRoles = () => {
               </Button>}
           </div>
         </form>
-      </div>
+      </div>}
     </div>
   );
 }
 
-export default AddRoles
+export default EditRole;
