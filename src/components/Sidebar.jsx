@@ -82,7 +82,7 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
                                     <Avatar rounded placeholderInitials={initialName()} />
                                     {isLoading
                                         ? <div className='flex justify-center items-center w-96'>
-                                            <BeatLoader color='white' size={10} />
+                                            <BeatLoader color='rgb(8 145 178)' size={12} />
 
                                         </div>
                                         : <div className='overflow-hidden'>

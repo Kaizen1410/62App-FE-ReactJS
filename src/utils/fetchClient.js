@@ -6,6 +6,7 @@ const fetchClient = () => {
         method: 'get',
         headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json'
         },
     };
 

@@ -75,8 +75,8 @@ function Login() {
                   placeholder="Masukkan kata sandi Anda"
                 />
                 {showPw
-                ? <i class="fa-solid fa-eye absolute top-1/2 -translate-y-1/2 right-3 dark:text-white" onClick={() => setShowPw(prev => !prev)}></i>
-                : <i class="fa-solid fa-eye-slash absolute top-1/2 -translate-y-1/2 right-3 dark:text-white" onClick={() => setShowPw(prev => !prev)}></i>}
+                ? <i class="fa-solid fa-eye absolute top-1/2 -translate-y-1/2 right-3 cursor-pointer dark:text-white" onClick={() => setShowPw(prev => !prev)}></i>
+                : <i class="fa-solid fa-eye-slash absolute top-1/2 -translate-y-1/2 right-3 cursor-pointer dark:text-white" onClick={() => setShowPw(prev => !prev)}></i>}
               </div>
 
             </div>
