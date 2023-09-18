@@ -1,4 +1,4 @@
-import { Button, TextInput } from 'flowbite-react'
+import { Button, Label, Select, TextInput } from 'flowbite-react'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
@@ -44,15 +44,27 @@ import { Link } from 'react-router-dom'
             name="end_date"
           />
         </div>
-        <div>
-          <label className="text-gray-700 font-bold dark:text-gray-50" htmlFor="status">Status:</label>
-          <select
-            id="status"
-            name="status"
-          >
-            <option value={1}>Planning</option>
-            <option value={2}>Join</option>
-          </select>
+        <div
+      className="max-w-md"
+      id="select"
+    >
+      <div className="mb-2 block">
+        <Label
+          htmlFor="status"
+          value="Status"
+        />
+      </div>
+      <Select
+        id="Status"
+        required
+      >
+        <option>
+          Planning
+        </option>
+        <option>
+            Join
+        </option>
+        </Select>
         </div>
 
         </div>
