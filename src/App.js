@@ -22,6 +22,9 @@ import Calendar from './pages/Calendar';
 import Projects from './pages/projects/Projects';
 import AddProject from './pages/projects/AddProject';
 
+import ProjectEmployees from './pages/projectemployees/ProjectEmployees';
+import EditProjectEmployees from './pages/projectemployees/EditProjectEmployees';
+import AddProjectEmployees from './pages/projectemployees/AddProjectEmployees';
 
 function App() {
   return (
@@ -59,6 +62,11 @@ function App() {
 
             {/* <Route path='/projects-employee' element={<ProjectEmployee />} /> */}
 
+
+            <Route path='/projectemployees' element={<ProjectEmployees />} />
+            <Route path='/projectemployees/:id/edit' element={<EditProjectEmployees />} />
+            <Route path='/projectemployees/add' element={<AddProjectEmployees />} />
+            
           </Route>
         </Routes>
       </UserProvider>
