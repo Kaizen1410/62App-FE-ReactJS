@@ -19,6 +19,7 @@ import EditEmployee from './pages/employees/EditEmployee';
 import UserProvider from './context/UserProvider';
 import Layout from './components/Layout';
 import Calendar from './pages/Calendar';
+import ProjectEmployees from './pages/ProjectEmployees';
 
 function App() {
   return (
@@ -49,6 +50,9 @@ function App() {
             <Route path='/employee-positions/add' element={<AddEmployeesPosition />} />
             <Route path='/employee-positions/:id/edit' element={<EditEmployeesPosition />} />
             <Route path='/calendar' element={<Calendar />} />
+
+            <Route path='/projectemployees' element={<ProjectEmployees />} />
+            
           </Route>
         </Routes>
       </UserProvider>
