@@ -1,15 +1,49 @@
 import { Table,Dropdown, Button } from 'flowbite-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Loading from '../../components/Loading'
 import { Link } from 'react-router-dom';
 import SearchInput from '../../components/SearchInput';
+import fetchClient from '../../utils/fetchClient';
+import { UserState } from '../../context/UserProvider';
+import moment from 'moment';
 
  const ProjectEmployees = () => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [ProjectEmployees, setProjectEmpolyees] = useState([]);
-    const [search, setSearch] = useState('');
-    const [selectedProject, setSelectedProject] = useState();
-    const [openModal, setOpenModal] = useState(null);
+  const [ProjectEmployees, setProjectEmpolyees] = useState([]);
+  const [pagination, setPagination] = useState();
+  const [openModal, setOpenModal] = useState();
+  const [selectedProjectEmployee, setSelectedProjectEmployee] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [deleteIsLoading, setDeleteIsLoading] = useState(false);
+  const { setNotif } = UserState();
+    
+  
+     // Query params
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [sort, setSort] = useState('employee_name');
+  const [direction, setDirection] = useState('asc');
+  const [perPage, setPerPage] = useState(10);
+
+
+  useEffect(() => {
+    getProjectEmployees();
+    // eslint-disable-next-line
+  }, [search, page, sort, direction, perPage]);
+
+  // Retrieve Leaves data
+  const getProjectEmployees = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetchClient.get(`/api/project-employees?search=${search}&page=${page}&sort=${sort}&direction=${direction}&per_page=${perPage}`);
+      setProjectEmpolyees(res.data.data);
+      delete res.data.data;
+      setPagination(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+    setIsLoading(false);
+  }
+
     
     return (
         <>
@@ -54,24 +88,26 @@ import SearchInput from '../../components/SearchInput';
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
+              {ProjectEmployees.map((projectEmployee, i) => (
+
                 <Table.Row className="text-center" key={ProjectEmployees.id}>
                   <Table.Cell>
-                     1
+                  {(i + 1) + pagination?.per_page * (page - 1)}
                   </Table.Cell>
                   <Table.Cell className="text-start">
-                     test
+                     {projectEmployee.employee_name}
                   </Table.Cell>
                   <Table.Cell>
-                    test
+                  {projectEmployee.project_name}
                   </Table.Cell>
                   <Table.Cell>
-                   test
+                   {projectEmployee.start_date ? moment(projectEmployee.start_date).format("DD MMMM YYYY") : "-"}
                   </Table.Cell>
                   <Table.Cell>
-                    test
+                  {projectEmployee.start_date ? moment(projectEmployee.end_date).format("DD MMMM YYYY") : "-"}
                   </Table.Cell>
                   <Table.Cell>
-                      1
+                  {projectEmployee.status}
                   </Table.Cell>
                   <Table.Cell className="text-center">
                   <Link to={`/projectemployees/${ProjectEmployees.id}/edit`}
@@ -80,13 +116,14 @@ import SearchInput from '../../components/SearchInput';
                       Edit
                     </Link>
                     <button
-                      onClick={() => { setSelectedProject(ProjectEmployees.id); setOpenModal('pop-up') }}
+                      onClick={() => { setSelectedProjectEmployee(ProjectEmployees.id); setOpenModal('pop-up') }}
                         className="font-medium text-red-600 hover:underline dark:text-red-500"
                       >
                         Delete
                       </button>
                   </Table.Cell>
                 </Table.Row>
+              ))}
            
             </Table.Body>
           </Table>}
