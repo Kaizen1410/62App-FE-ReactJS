@@ -10,6 +10,7 @@ import PerPage from "../../components/PerPage";
 import SearchInput from "../../components/SearchInput";
 import { TableCell } from "flowbite-react/lib/esm/components/Table/TableCell";
 import moment from "moment";
+import NoData from "../../components/NoData";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -84,7 +85,7 @@ const Projects = () => {
             <Dropdown label="Sort By">
               <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('name')}>
                 {sort === 'name' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Project Name
+                Name
               </Dropdown.Item>
               <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('start_date')}>
                 {sort === 'start_date' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
@@ -121,7 +122,7 @@ const Projects = () => {
                 No
               </Table.HeadCell>
               <Table.HeadCell>
-                Project Name
+                Name
               </Table.HeadCell>
               <Table.HeadCell>
                 Description
@@ -133,7 +134,7 @@ const Projects = () => {
                 End Date
               </Table.HeadCell>
               <Table.HeadCell>
-                Project Image
+                Image
               </Table.HeadCell>
               <Table.HeadCell>
                 Total Story Point
@@ -148,8 +149,8 @@ const Projects = () => {
                 Action
               </Table.HeadCell>
             </Table.Head>
-            <Table.Body className="divide-y">
-              {projects.map((project, i) => (
+            <Table.Body className={`divide-y relative ${projects.length===0 && 'h-96'}`}>
+              {projects.length > 0 ? projects.map((project, i) => (
                 <Table.Row className="text-center" key={i}>
                   <Table.Cell>
                     {(i + 1) + pagination?.per_page * (page - 1)}
@@ -200,7 +201,7 @@ const Projects = () => {
                     </button>
                   </Table.Cell>
                 </Table.Row>
-              ))}
+              )) : <NoData />}
             </Table.Body>
           </Table>}
         </div>
