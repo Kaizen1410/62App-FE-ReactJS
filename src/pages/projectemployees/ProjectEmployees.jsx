@@ -1,18 +1,16 @@
-import { Table,Dropdown } from 'flowbite-react'
+import { Table,Dropdown, Button } from 'flowbite-react'
 import React, { useState } from 'react'
-import Loading from '../components/Loading'
-import { TableHead } from 'flowbite-react/lib/esm/components/Table/TableHead';
-import { TableHeadCell } from 'flowbite-react/lib/esm/components/Table/TableHeadCell';
-import { TableBody } from 'flowbite-react/lib/esm/components/Table/TableBody';
-import { TableCell } from 'flowbite-react/lib/esm/components/Table/TableCell';
+import Loading from '../../components/Loading'
 import { Link } from 'react-router-dom';
-import { TableRow } from 'flowbite-react/lib/esm/components/Table/TableRow';
-import SearchInput from '../components/SearchInput';
+import SearchInput from '../../components/SearchInput';
 
  const ProjectEmployees = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const [projectEmployees, setProjectEmpolyees] = useState([]);
+    const [ProjectEmployees, setProjectEmpolyees] = useState([]);
     const [search, setSearch] = useState('');
+    const [selectedProject, setSelectedProject] = useState();
+    const [openModal, setOpenModal] = useState(null);
+    
     return (
         <>
       <div className="bg-white rounded-md p-4 dark:bg-gray-800">
@@ -25,6 +23,9 @@ import SearchInput from '../components/SearchInput';
             </Dropdown>
           <SearchInput setSearch={setSearch} />
           </div>
+          <Button as={Link} to="/projectemployees/add">
+            Add Project Employee
+          </Button>
         </div>
 
         <div className="overflow-x-auto">
@@ -53,42 +54,40 @@ import SearchInput from '../components/SearchInput';
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {projectEmployees.map((employee, i) => (
-                <Table.Row className="text-center" key={employee.id}>
+                <Table.Row className="text-center" key={ProjectEmployees.id}>
                   <Table.Cell>
-                    {(i + 1)}
+                     1
                   </Table.Cell>
                   <Table.Cell className="text-start">
-                    {employee.employee_id}
+                     test
                   </Table.Cell>
                   <Table.Cell>
-                    {employee.projects_id}
+                    test
                   </Table.Cell>
                   <Table.Cell>
-                    {employee.start_date}
+                   test
                   </Table.Cell>
                   <Table.Cell>
-                    {employee.end_date}
+                    test
                   </Table.Cell>
                   <Table.Cell>
-                    {employee.status === 1 ? 'Planning' : 'Join'}
+                      1
                   </Table.Cell>
                   <Table.Cell className="text-center">
-                  <Link
+                  <Link to={`/projectemployees/${ProjectEmployees.id}/edit`}
                       className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 mr-5"
                     >
                       Edit
                     </Link>
                     <button
-                      onClick={() => {
-                      }}
-                      className="font-medium text-red-600 hover:underline dark:text-red-500"
-                    >
-                      Delete
-                    </button>
+                      onClick={() => { setSelectedProject(ProjectEmployees.id); setOpenModal('pop-up') }}
+                        className="font-medium text-red-600 hover:underline dark:text-red-500"
+                      >
+                        Delete
+                      </button>
                   </Table.Cell>
                 </Table.Row>
-              ))}
+           
             </Table.Body>
           </Table>}
         </div>

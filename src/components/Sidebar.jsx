@@ -55,6 +55,11 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
                         >
                             Leaves
                         </Sidebar.Item>
+                        <Sidebar.Item as={Link} to='/ProjectEmployees' className="group"
+                            icon={() => <i className="fa-solid fa-list check text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>}
+                        >
+                            Project Employees
+                        </Sidebar.Item>
                         <Sidebar.Collapse
                             icon={() => <i className="fa-solid fa-folder-closed text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>}
                             label="Master"
