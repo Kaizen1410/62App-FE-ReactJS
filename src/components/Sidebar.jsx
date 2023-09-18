@@ -45,6 +45,11 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
             <Sidebar theme={sidebarTheme} className={`fixed z-40 ${!isOpenOnSmallScreen && 'w-0'} overflow-x-hidden md:w-64 transition-all`}>
                 <Sidebar.Items>
                     <Sidebar.ItemGroup>
+                    <Sidebar.Item as={Link} to='/' className="group"
+                            icon={() => <i className="fa-solid fa-house text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>}
+                        >
+                            Dashboard
+                        </Sidebar.Item>
                         <Sidebar.Item as={Link} to='/leaves' className="group"
                             icon={() => <i className="fa-solid fa-plane text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>}
                         >

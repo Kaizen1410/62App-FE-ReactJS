@@ -144,7 +144,7 @@ const Leaves = () => {
           </div>
         </div>
 
-        <div className="h-96 overflow-y-auto">
+        <div className="overflow-x-auto">
           {isLoading ? <Loading size='xl' /> : <Table striped>
             <Table.Head className="text-center sticky top-0">
               <Table.HeadCell className="w-1">

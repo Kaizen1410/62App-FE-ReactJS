@@ -96,7 +96,7 @@ const Employees = () => {
           </Button>
         </div>
 
-        <div className="h-96 overflow-y-auto">
+        <div>
           {isLoading ? <Loading size='xl' /> : <Table striped>
             <Table.Head className='text-center sticky top-0'>
               <Table.HeadCell className="w-1">No</Table.HeadCell>

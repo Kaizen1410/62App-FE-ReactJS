@@ -94,7 +94,7 @@ function EmployeePositions() {
           </Button>
         </div>
 
-        <div className="h-96 overflow-y-auto">
+        <div>
           {isLoading ? <Loading size='xl' /> : (
             <Table striped>
               <Table.Head className='text-center sticky top-0'>
