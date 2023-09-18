@@ -4,6 +4,7 @@ import fetchClient from "../utils/fetchClient";
 import { useState } from 'react';
 import { UserState } from '../context/UserProvider';
 import { BeatLoader } from 'react-spinners';
+import initialName from '../utils/initialName';
 
 const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
     const navigate = useNavigate();
@@ -20,16 +21,6 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
             console.error(err);
         }
         setIsLoading(false);
-    }
-
-    const initialName = () => {
-        const name = user?.employee.name;
-        let rgx = new RegExp(/(\p{L}{1})\p{L}+/, 'gu');
-
-        let initials = [...name.matchAll(rgx)] || [];
-
-        initials = ((initials.shift()?.[1] || '') + (initials.pop()?.[1] || '')).toUpperCase();
-        return initials;
     }
 
     const sidebarTheme = {
@@ -54,6 +45,16 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
                             icon={() => <i className="fa-solid fa-plane text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>}
                         >
                             Leaves
+                        </Sidebar.Item>
+                        <Sidebar.Item as={Link} to='/projects' className="group"
+                            icon={() => <i className="fa-solid fa-tarp-droplet text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>}
+                        >
+                            Projects
+                        </Sidebar.Item>
+                        <Sidebar.Item as={Link} to='/projects-employee' className="group"
+                            icon={() => <i className="fa-solid fa-bars-progress text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>}
+                        >
+                            Projects Employee
                         </Sidebar.Item>
                         <Sidebar.Collapse
                             icon={() => <i className="fa-solid fa-folder-closed text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>}
@@ -84,7 +85,7 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
                         <Dropdown placement='top' className='' renderTrigger={() =>
                             <button className='w-full flex pr-2 items-center justify-between gap-2 z-50 text-left rounded-lg p-1 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700'>
                                 <div className='flex gap-2 overflow-hidden'>
-                                    <Avatar rounded placeholderInitials={initialName()} />
+                                    <Avatar rounded placeholderInitials={initialName(user?.employee.name)} />
                                     {isLoading
                                         ? <div className='flex justify-center items-center w-96'>
                                             <BeatLoader color='rgb(8 145 178)' size={12} />

@@ -19,6 +19,9 @@ import EditEmployee from './pages/employees/EditEmployee';
 import UserProvider from './context/UserProvider';
 import Layout from './components/Layout';
 import Calendar from './pages/Calendar';
+import Projects from './pages/projects/Projects';
+import AddProject from './pages/projects/AddProject';
+
 
 function App() {
   return (
@@ -48,7 +51,14 @@ function App() {
             <Route path='/employee-positions' element={<EmployeePositions />} />
             <Route path='/employee-positions/add' element={<AddEmployeesPosition />} />
             <Route path='/employee-positions/:id/edit' element={<EditEmployeesPosition />} />
+
             <Route path='/calendar' element={<Calendar />} />
+            
+            <Route path='/projects' element={<Projects />} />
+            <Route path='/projects/add' element={<AddProject />} />
+
+            {/* <Route path='/projects-employee' element={<ProjectEmployee />} /> */}
+
           </Route>
         </Routes>
       </UserProvider>

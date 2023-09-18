@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import fetchClient from '../../utils/fetchClient';
-import { Table, Button, Dropdown } from "flowbite-react";
+import { Table, Button, Dropdown, Avatar } from "flowbite-react";
 import PopUpModal from "../../components/DeleteModal";
 import Loading from '../../components/Loading';
 import Pagination from '../../components/Pagination';
 import { UserState } from '../../context/UserProvider';
 import PerPage from '../../components/PerPage';
 import SearchInput from '../../components/SearchInput';
+import initialName from '../../utils/initialName';
 
 const Employees = () => {
 
@@ -96,13 +97,12 @@ const Employees = () => {
           </Button>
         </div>
 
-        <div>
+        <div className='overflow-x-auto'>
           {isLoading ? <Loading size='xl' /> : <Table striped>
             <Table.Head className='text-center sticky top-0'>
               <Table.HeadCell className="w-1">No</Table.HeadCell>
-              <Table.HeadCell>
-                Name
-              </Table.HeadCell>
+              <Table.HeadCell>Name</Table.HeadCell>
+              <Table.HeadCell>Profile Image</Table.HeadCell>
               <Table.HeadCell>Position</Table.HeadCell>
               <Table.HeadCell>Action</Table.HeadCell>
             </Table.Head>
@@ -113,7 +113,12 @@ const Employees = () => {
                     {(i + 1) + pagination?.per_page * (page - 1)}
                   </Table.Cell>
                   <Table.Cell>{employee.name}</Table.Cell>
-                  <Table.Cell>{employee.employee_position}</Table.Cell>
+                  <Table.Cell className='text-center'>
+                    {employee.profile_url
+                    ? <img src={employee.profile_url} className='mx-auto h-20 aspect-square object-cover' alt="" />
+                    : <Avatar className='mx-auto object-cover' size="lg" placeholderInitials={initialName(employee.name)} />}
+                  </Table.Cell>
+                  <Table.Cell className='text-center'>{employee.employee_position}</Table.Cell>
                   <Table.Cell className='text-center'>
                     <Link
                       to={`/employees/${employee.id}/edit`}

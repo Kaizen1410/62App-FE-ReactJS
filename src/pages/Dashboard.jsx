@@ -41,7 +41,7 @@ const Dashboard = () => {
                     </Select>
                 </div>
 
-                <div>
+                <div className='overflow-x-auto'>
                     {isLoading ? <Loading size='xl' /> : (
                         <Table striped>
                             <Table.Head className="text-center sticky top-0">
