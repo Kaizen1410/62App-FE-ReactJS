@@ -21,7 +21,6 @@ import Layout from './components/Layout';
 import Calendar from './pages/Calendar';
 import Projects from './pages/projects/Projects';
 import AddProject from './pages/projects/AddProject';
-
 import ProjectEmployees from './pages/projectemployees/ProjectEmployees';
 import EditProjectEmployees from './pages/projectemployees/EditProjectEmployees';
 import AddProjectEmployees from './pages/projectemployees/AddProjectEmployees';
@@ -59,9 +58,6 @@ function App() {
             
             <Route path='/projects' element={<Projects />} />
             <Route path='/projects/add' element={<AddProject />} />
-
-            {/* <Route path='/projects-employee' element={<ProjectEmployee />} /> */}
-
 
             <Route path='/projectemployees' element={<ProjectEmployees />} />
             <Route path='/projectemployees/:id/edit' element={<EditProjectEmployees />} />
