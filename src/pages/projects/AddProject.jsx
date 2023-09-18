@@ -30,7 +30,7 @@ function AddProject() {
     setProject({ ...project, [e.target.name]: value });
   }
 
-  // Add Employee
+  // Add Project
   const saveProject = (e) => {
     setAddIsLoading(true);
     e.preventDefault();

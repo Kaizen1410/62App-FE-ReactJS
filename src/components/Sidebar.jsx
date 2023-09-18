@@ -51,10 +51,10 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
                         >
                             Projects
                         </Sidebar.Item>
-                        <Sidebar.Item as={Link} to='/projects-employee' className="group"
+                        <Sidebar.Item as={Link} to='/project-employees' className="group"
                             icon={() => <i className="fa-solid fa-bars-progress text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>}
                         >
-                            Projects Employee
+                            Project Employees
                         </Sidebar.Item>
                         <Sidebar.Collapse
                             icon={() => <i className="fa-solid fa-folder-closed text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>}

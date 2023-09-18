@@ -82,21 +82,28 @@ const Projects = () => {
         <div className="flex justify-between mb-4">
           <div className="flex gap-2">
             <Dropdown label="Sort By">
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('employee_name')}>
-                {sort === 'employee_name' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Name
+              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('name')}>
+                {sort === 'name' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                Project Name
               </Dropdown.Item>
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('date_leave')}>
-                {sort === 'date_leave' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Date Leave
+              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('start_date')}>
+                {sort === 'start_date' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                Start Date
               </Dropdown.Item>
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('is_approved')}>
-                {sort === 'is_approved' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-xmark text-red-600"></i> : <i className="fa-solid fa-fade fa-2xs fa-check text-green-400"></i>)}
-                Is Approved
+              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('end_date')}>
+                {sort === 'end_date' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                End Date
               </Dropdown.Item>
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('approved_by')}>
-                {sort === 'approved_by' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Approved By
+              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('total_story_point')}>
+                {sort === 'total_story_point' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                Total Story Point
+              </Dropdown.Item>
+              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('done_story_point')}>
+                {sort === 'done_story_point' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                Done Story Point
+              </Dropdown.Item><Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('status')}>
+                {sort === 'status' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
+                Status
               </Dropdown.Item>
             </Dropdown>
 
@@ -151,13 +158,15 @@ const Projects = () => {
                     {project.name}
                   </Table.Cell>
                   <TableCell>
+                    <div className="w-96" style={{wordWrap:"break-word"}}>
                     {project.description}
+                    </div>
                   </TableCell>
-                  <Table.Cell>
-                  {moment(project.start_date).format('DD MMMM YYYY')}
+                  <Table.Cell className="whitespace-nowrap">
+                  {project.start_date ? moment(project.start_date).format("DD MMMM YYYY") : "-"}
                   </Table.Cell>
-                  <Table.Cell>
-                  {moment(project.end_date).format('DD MMMM YYYY')}
+                  <Table.Cell className="whitespace-nowrap">
+                  {project.end_date ? moment(project.end_date).format("DD MMMM YYYY") : "-"}
                   </Table.Cell>
                   <Table.Cell>
                   {project.image_url
@@ -171,7 +180,7 @@ const Projects = () => {
                   {project.done_story_point}
                   </Table.Cell>
                   <Table.Cell>
-                  {project.status}
+                  {project.status === 1? 'Proposal' : project.status === 2? 'On Going' : 'Done'}
                   </Table.Cell>
                   <Table.Cell className="text-center">
                     <Link

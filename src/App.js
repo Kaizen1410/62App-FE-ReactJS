@@ -21,6 +21,7 @@ import Layout from './components/Layout';
 import Calendar from './pages/Calendar';
 import Projects from './pages/projects/Projects';
 import AddProject from './pages/projects/AddProject';
+import EditProject from './pages/projects/EditProject';
 import ProjectEmployees from './pages/projectemployees/ProjectEmployees';
 import EditProjectEmployees from './pages/projectemployees/EditProjectEmployees';
 import AddProjectEmployees from './pages/projectemployees/AddProjectEmployees';
@@ -58,10 +59,11 @@ function App() {
             
             <Route path='/projects' element={<Projects />} />
             <Route path='/projects/add' element={<AddProject />} />
+            <Route path='/projects/:id/edit' element={<EditProject />} />
 
             <Route path='/project-employees' element={<ProjectEmployees />} />
-            <Route path='/project-employees/:id/edit' element={<EditProjectEmployees />} />
             <Route path='/project-employees/add' element={<AddProjectEmployees />} />
+            <Route path='/project-employees/:id/edit' element={<EditProjectEmployees />} />
             
           </Route>
         </Routes>

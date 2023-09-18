@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import fetchClient from '../../utils/fetchClient';
 import { UserState } from '../../context/UserProvider';
 import moment from 'moment';
+import Loading from '../../components/Loading';
+import { BeatLoader } from 'react-spinners';
 
  const AddProjectEmployees = () => {
     const [employees, setEmployees] = useState([])
@@ -15,6 +17,7 @@ import moment from 'moment';
     const [enddate,setEndDate] = useState('')
     const [status, setStatus] = useState(1)
     const [isLoading, setIsLoading] = useState(true);
+    const [addIsLoading, setAddIsLoading] = useState()
 
     const { setNotif } = UserState();
     const navigate = useNavigate();
@@ -25,6 +28,7 @@ import moment from 'moment';
     }, [])
     
     const getEmployees = () => {
+      setIsLoading(true)
         fetchClient.get('/api/employees?per_page=999')
             .then(res => setEmployees(res.data.data))
             .catch(err => console.error(err))
@@ -34,10 +38,11 @@ import moment from 'moment';
         fetchClient.get('/api/projects?per_page=999')
             .then(res => setProjects(res.data.data))
             .catch(err => console.error(err))
+            .finally(() => setIsLoading(false))
     }
     
     const saveProjectEmployees = () => {
-        setIsLoading(true)
+        setAddIsLoading(true)
         const startEl = document.querySelector('#start_date');
         const endEl = document.querySelector('#end_date');
 
@@ -58,17 +63,18 @@ import moment from 'moment';
                 console.error(err);
                 setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
             })
-            .finally(() => setIsLoading(false))
+            .finally(() => setAddIsLoading(false))
     }
 
   return (
+    isLoading ? <Loading size='xl' /> :
     <div className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md">
       <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Add Project Employee</h4>
 
       <div className="mb-4 dark:text-gray-50">
         <div>
         <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
-            Name
+            Employee Name
           </label>
           <Select
           value={employeeId}
@@ -83,7 +89,7 @@ import moment from 'moment';
         </div>
         <div>
         <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
-            Project
+            Project Name
           </label>
           <Select
           value={projectId}
@@ -138,14 +144,18 @@ import moment from 'moment';
         <Button
             as={Link}
             color="failure"
-            to='/projectemployees'
+            to='/project-employees'
             className="mr-2"
           >
             Cancel
           </Button>
-          <Button type="button" onClick={saveProjectEmployees}>
-            Save
+          {addIsLoading
+          ? <Button type="button" disabled>
+            <BeatLoader color="white" size={6} className='my-1 mx-2' />
           </Button>
+          : <Button type="button" onClick={saveProjectEmployees}>
+            Save
+          </Button>}
         </div>
         </div>
   )
