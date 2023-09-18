@@ -16,6 +16,8 @@ function AddLeave() {
   const saveLeave = () => {
     setIsLoading(true);
     const inputEl = document.querySelector('input');
+    console.log(inputEl.value)
+
 
     const data = {
       employee_id: user.employee.id,

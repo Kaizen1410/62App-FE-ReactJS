@@ -1,4 +1,4 @@
-import { Button, Select, TextInput } from "flowbite-react"
+import { Avatar, Button, Select, TextInput } from "flowbite-react"
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import fetchClient from "../../utils/fetchClient";
@@ -12,6 +12,7 @@ function EditEmployee() {
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
   const [employee, setEmployee] = useState({
     name: '',
+    profile_url: '',
     employee_position_id: ''
   });
   const { setNotif } = UserState();
@@ -57,15 +58,26 @@ function EditEmployee() {
   const updateEmployee = async (e) => {
     e.preventDefault();
     setUpdateIsLoading(true);
-    try {
-      const res = await fetchClient.put(`api/employees/${id}`, employee);
-      setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-      navigate('/employees');
-    } catch (err) {
-      console.error(err);
-      setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
+
+    const formData = new FormData();
+    formData.append('_method', 'PUT');
+    formData.append('name', employee.name);
+    formData.append('employee_position_id', employee.employee_position_id);
+
+    if (employee.profile_url) {
+      formData.append('profile_url', employee.profile_url);
     }
-    setUpdateIsLoading(false);
+
+    fetchClient.post(`/api/employees/${id}`, formData, { headers: { "Content-Type": 'multipart/form-data' } })
+      .then(res => {
+        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
+        navigate('/employees');
+      })
+      .catch(err => {
+        console.error(err);
+        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
+      })
+      .finally(() => setUpdateIsLoading(false));
   }
 
   return (
@@ -76,6 +88,15 @@ function EditEmployee() {
       >
         <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Edit Employee</h4>
         <div className="mb-4">
+        <label htmlFor="image" className="block text-gray-700 dark:text-gray-50 font-bold mb-2 mt-5">
+            Profile Image
+          </label>
+          <label className="cursor-pointer">
+            {employee.profile_url
+              ? <img src={employee?.profile_url && URL.createObjectURL(employee?.profile_url)} className='rounded-full mx-auto h-20 aspect-square object-cover' alt="" />
+              : <Avatar className='mx-auto object-cover' size="lg" rounded/>}
+            <input type="file" hidden onChange={(e) => setEmployee({ ...employee, profile_url: e.target.files[0] })} />
+          </label>
           <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
             Name
           </label>

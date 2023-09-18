@@ -19,6 +19,12 @@ import EditEmployee from './pages/employees/EditEmployee';
 import UserProvider from './context/UserProvider';
 import Layout from './components/Layout';
 import Calendar from './pages/Calendar';
+import Projects from './pages/projects/Projects';
+import AddProject from './pages/projects/AddProject';
+
+import ProjectEmployees from './pages/projectemployees/ProjectEmployees';
+import EditProjectEmployees from './pages/projectemployees/EditProjectEmployees';
+import AddProjectEmployees from './pages/projectemployees/AddProjectEmployees';
 
 function App() {
   return (
@@ -48,7 +54,16 @@ function App() {
             <Route path='/employee-positions' element={<EmployeePositions />} />
             <Route path='/employee-positions/add' element={<AddEmployeesPosition />} />
             <Route path='/employee-positions/:id/edit' element={<EditEmployeesPosition />} />
+
             <Route path='/calendar' element={<Calendar />} />
+            
+            <Route path='/projects' element={<Projects />} />
+            <Route path='/projects/add' element={<AddProject />} />
+
+            <Route path='/project-employees' element={<ProjectEmployees />} />
+            <Route path='/project-employees/:id/edit' element={<EditProjectEmployees />} />
+            <Route path='/project-employees/add' element={<AddProjectEmployees />} />
+            
           </Route>
         </Routes>
       </UserProvider>

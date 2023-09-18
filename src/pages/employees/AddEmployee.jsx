@@ -1,4 +1,4 @@
-import { Button, Select, TextInput } from "flowbite-react"
+import { Avatar, Button, Select, TextInput } from "flowbite-react"
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import fetchClient from "../../utils/fetchClient";
@@ -12,6 +12,7 @@ function AddEmployee() {
   const [employeePositions, setEmployeePositions] = useState([]);
   const [employee, setEmployee] = useState({
     name: '',
+    profile_url: '',
     employee_position_id: ''
   });
   const { setNotif } = UserState();
@@ -44,12 +45,15 @@ function AddEmployee() {
     setAddIsLoading(true);
     e.preventDefault();
 
-    const data = {
-      name: employee.name,
-      employee_position_id: employee.employee_position_id
+    const formData = new FormData();
+    formData.append('name', employee.name);
+    formData.append('employee_position_id', employee.employee_position_id);
+
+    if (employee.profile_url) {
+      formData.append('profile_url', employee.profile_url);
     }
 
-    fetchClient.post('/api/employees', data)
+    fetchClient.post('/api/employees', formData, { headers: { "Content-Type": 'multipart/form-data' } })
       .then(res => {
         setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
         navigate('/employees');
@@ -70,6 +74,16 @@ function AddEmployee() {
       >
         <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Add Employee</h4>
         <div className="mb-4">
+          <label htmlFor="image" className="block text-gray-700 dark:text-gray-50 font-bold mb-2 mt-5">
+            Profile Image
+          </label>
+          <label className="cursor-pointer">
+            {employee.profile_url
+              ? <img src={employee?.profile_url && URL.createObjectURL(employee?.profile_url)} className='rounded-full mx-auto h-20 aspect-square object-cover' alt="" />
+              : <Avatar className='mx-auto object-cover' size="lg" rounded/>}
+            <input type="file" hidden onChange={(e) => setEmployee({ ...employee, profile_url: e.target.files[0] })} />
+          </label>
+
           <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
             Name
           </label>
