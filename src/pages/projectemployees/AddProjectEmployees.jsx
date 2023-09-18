@@ -1,4 +1,4 @@
-import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react'
+import { Button, Datepicker, Select } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import fetchClient from '../../utils/fetchClient';
@@ -10,11 +10,8 @@ import { BeatLoader } from 'react-spinners';
  const AddProjectEmployees = () => {
     const [employees, setEmployees] = useState([])
     const [projects, setProjects] = useState([])
-    const [ProjectEmployees, setProjectEmpolyees] = useState([]);
     const [employeeId, setEmployeeId] = useState(1)
     const [projectId, setProjectId] = useState(1)
-    const [startdate,setStartDate] = useState('')
-    const [enddate,setEndDate] = useState('')
     const [status, setStatus] = useState(1)
     const [isLoading, setIsLoading] = useState(true);
     const [addIsLoading, setAddIsLoading] = useState()
