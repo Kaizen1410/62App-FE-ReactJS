@@ -1,5 +1,3 @@
-import React from 'react'
-
 const NoData = () => {
     return (
         <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2">

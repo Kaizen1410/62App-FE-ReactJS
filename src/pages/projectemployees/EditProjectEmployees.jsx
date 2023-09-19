@@ -1,4 +1,4 @@
-import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react'
+import { Button, Datepicker, Select } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { BeatLoader } from 'react-spinners'
@@ -11,11 +11,7 @@ const EditProjectEmployees = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
-  const [projectEmployee, setProjectEmployee] = useState({
-    start_date: '',
-    end_date: '',
-    status: '',
-  });
+  const [status, setStatus] = useState('');
   const { setNotif } = UserState();
 
   const { id } = useParams();
@@ -26,7 +22,7 @@ const EditProjectEmployees = () => {
     const getProjectEmployee = async () => {
       try {
         const res = await fetchClient.get(`/api/project-employees/${id}`)
-        setProjectEmployee(res.data.data)
+        setStatus(res.data.data.status);
       } catch (err) {
         console.error(err);
       }
@@ -34,13 +30,6 @@ const EditProjectEmployees = () => {
     }
     getProjectEmployee()
   }, [id]);
-
-  // Update value input state
-  const handleInput = (e) => {
-    e.persist();
-    let value = e.target.value;
-    setProjectEmployee({ ...projectEmployee, [e.target.name]: value });
-  }
 
   // Update Project
   const updateProject = async (e) => {
@@ -50,7 +39,11 @@ const EditProjectEmployees = () => {
     const startEl = document.querySelector('#start_date');
     const endEl = document.querySelector('#end_date');
 
-    const data = { start_date: moment(startEl.value).format('YYYY-MM-DD'), end_date: moment(endEl.value).format('YYYY-MM-DD'), status: projectEmployee?.status }
+    const data = {
+      start_date: moment(startEl.value).format('YYYY-MM-DD'),
+      end_date: moment(endEl.value).format('YYYY-MM-DD'),
+      status
+    }
 
     fetchClient.put(`/api/project-employees/${id}`, data)
       .then(res => {
@@ -96,7 +89,7 @@ const EditProjectEmployees = () => {
               id="status"
               name="status"
               required
-              value={projectEmployee?.status} className='w-full' onChange={handleInput}
+              value={status} className='w-full' onChange={(e) => setStatus(e.target.value)}
             >
               <option value={1} >
                 Planning

@@ -172,7 +172,7 @@ const Projects = () => {
                   <Table.Cell>
                   {project.image_url
                     ? <img src={project.image_url} className='mx-auto h-20 aspect-square object-cover' alt="" />
-                    : <Avatar className='mx-auto object-cover' size="lg" />}
+                    : <Avatar className='mx-auto' size="lg" />}
                   </Table.Cell>
                   <Table.Cell>
                   {project.total_story_point}

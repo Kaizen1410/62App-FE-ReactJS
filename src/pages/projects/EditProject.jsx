@@ -1,4 +1,4 @@
-import { Avatar, Button, Datepicker, Select, TextInput, Textarea } from "flowbite-react"
+import { Button, Datepicker, Select, TextInput, Textarea } from "flowbite-react"
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import fetchClient from "../../utils/fetchClient";
