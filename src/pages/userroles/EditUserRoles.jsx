@@ -51,7 +51,7 @@ const EditUserRoles = () => {
 
     const { error, message } = await updateUserRole(id, data);
     if(error) {
-      console.error(err);
+      console.error(error);
       setNotif(prev => [...prev, { type: 'failure', message: error }]);
     } else {
       setNotif(prev => [...prev, { type: 'success', message }]);
