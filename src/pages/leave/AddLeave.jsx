@@ -1,7 +1,6 @@
 import { Button, Select, ToggleSwitch } from "flowbite-react"
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Datepicker } from 'flowbite-react';
 import { UserState } from "../../context/UserProvider";
 import moment from "moment"
 import { BeatLoader } from "react-spinners";
@@ -14,10 +13,10 @@ function AddLeave() {
   const [addIsLoading, setAddIsLoading] = useState(false);
   const [employees, setEmployees] = useState([]);
   const { setNotif } = UserState();
-  const [leave, setLeave] = useState();
 
   // form
   const [employeeId, setEmployeeId] = useState(1);
+  const [dateLeave, setDateLeave] = useState(moment(new Date()).format('YYYY-MM-DD'));
   const [isApproved, setIsApproved] = useState(false);
   const [approvedBy, setApprovedBy] = useState(1);
 
@@ -43,11 +42,10 @@ function AddLeave() {
   // Add Leave
   const saveLeave = async () => {
     setAddIsLoading(true);
-    const inputEl = document.querySelector('input');
 
     const body = {
       employee_id: employeeId,
-      date_leave: moment(inputEl.value).format('YYYY-MM-DD'),
+      date_leave: moment(dateLeave).format('YYYY-MM-DD'),
       is_approved: isApproved,
     }
 
@@ -58,7 +56,7 @@ function AddLeave() {
     const { message, error } = await addLeave(body);
     if(error) {
       console.error(error);
-      setNotif(prev => [...prev, { type: 'failure', message: error.response?.data.message }]);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
     } else {
       setNotif(prev => [...prev, { type: 'success', message }]);
       navigate('/leaves');
@@ -82,12 +80,16 @@ function AddLeave() {
         <label htmlFor="date_leave" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
           Date Leave
         </label>
-        <input type="date" id="date_leave" className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg" value={leave?.date_leave} onChange={e => setLeave(prev => ({...prev, date_leave: e.target.value}))} />
+        <input type="date" id="date_leave"
+          className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
+          value={dateLeave}
+          onChange={e => setDateLeave(e.target.value)} />
 
         <label htmlFor="isApproved" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
           Is Approved
         </label>
         <ToggleSwitch
+          id="isApproved"
           checked={isApproved}
           onChange={() => setIsApproved(prev => !prev)}
         />

@@ -1,5 +1,4 @@
-import { Table, Button, Dropdown, Avatar } from "flowbite-react"
-import fetchClient from "../../utils/fetchClient"
+import { Table, Button, Dropdown } from "flowbite-react"
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
@@ -11,6 +10,7 @@ import SearchInput from "../../components/SearchInput";
 import { TableCell } from "flowbite-react/lib/esm/components/Table/TableCell";
 import moment from "moment";
 import NoData from "../../components/NoData";
+import { deleteProject, getProjects } from "../../api/ApiProject";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -29,39 +29,40 @@ const Projects = () => {
   const [perPage, setPerPage] = useState(10);
 
   useEffect(() => {
-    getProjects();
+    _getProjects();
     // eslint-disable-next-line
   }, [search, page, sort, direction, perPage]);
 
   // Retrieve Leaves data
-  const getProjects = async () => {
+  const _getProjects = async () => {
     setIsLoading(true);
-    try {
-      const res = await fetchClient.get(`/api/projects?search=${search}&page=${page}&sort=${sort}&direction=${direction}&per_page=${perPage}`);
-      setProjects(res.data.data);
-      console.log(res.data.data)
-      delete res.data.data;
-      setPagination(res.data);
-    } catch (err) {
-      console.error(err);
+
+    const { data, pagination, error } = await getProjects(search, page, sort, direction, perPage);
+    if(error) {
+      console.error(error);
+    } else {
+      setProjects(data);
+      setPagination(pagination);
     }
+
     setIsLoading(false);
   }
 
   // Delete Leave
-  const handleDeleteProject = (projectId) => {
+  const handleDeleteProject = async (projectId) => {
     setDeleteIsLoading(true);
-    fetchClient.delete(`/api/projects/${projectId}`)
-      .then(res => {
-        setOpenModal(null);
-        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-        getProjects();
-      })
-      .catch((err) => {
-        console.error('Error deleting project:', err);
-        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
-      })
-      .finally(() => setDeleteIsLoading(false));
+
+    const { error, message } = await deleteProject(projectId);
+    if(error) {
+        console.error('Error deleting project:', error);
+        setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      setOpenModal(null);
+      setNotif(prev => [...prev, { type: 'success', message }]);
+      _getProjects();
+    }
+
+    setDeleteIsLoading(false);
   };
 
   // Sort

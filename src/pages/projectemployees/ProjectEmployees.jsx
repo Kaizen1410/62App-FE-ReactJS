@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react'
 import Loading from '../../components/Loading'
 import { Link } from 'react-router-dom';
 import SearchInput from '../../components/SearchInput';
-import fetchClient from '../../utils/fetchClient';
 import { UserState } from '../../context/UserProvider';
 import moment from 'moment';
 import PopUpModal from '../../components/DeleteModal';
 import PerPage from '../../components/PerPage';
 import Pagination from '../../components/Pagination';
 import NoData from '../../components/NoData';
+import { deleteProjectEmployee, getProjectEmployees } from '../../api/ApiProjectEmployee';
 
 const ProjectEmployees = () => {
   const [projectEmployees, setProjectEmpolyees] = useState([]);
@@ -20,7 +20,6 @@ const ProjectEmployees = () => {
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const { setNotif } = UserState();
 
-
   // Query params
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
@@ -30,37 +29,39 @@ const ProjectEmployees = () => {
 
 
   useEffect(() => {
-    getProjectEmployees();
+    _getProjectEmployees();
     // eslint-disable-next-line
   }, [search, page, sort, direction, perPage]);
 
   // Retrieve Leaves data
-  const getProjectEmployees = async () => {
+  const _getProjectEmployees = async () => {
     setIsLoading(true);
-    try {
-      const res = await fetchClient.get(`/api/project-employees?search=${search}&page=${page}&sort=${sort}&direction=${direction}&per_page=${perPage}`);
-      setProjectEmpolyees(res.data.data);
-      delete res.data.data;
-      setPagination(res.data);
-    } catch (err) {
-      console.error(err);
+
+    const { data, pagination, error } = await getProjectEmployees(search, page, sort, direction, perPage);
+    if(error) {
+      console.error(error);
+    } else {
+      setProjectEmpolyees(data);
+      setPagination(pagination);
     }
+
     setIsLoading(false);
   }
 
-  const handleDeleteProject = (projectEmployeeId) => {
+  const handleDeleteProject = async (projectEmployeeId) => {
     setDeleteIsLoading(true);
-    fetchClient.delete(`/api/project-employees/${projectEmployeeId}`)
-      .then(res => {
-        setOpenModal(null);
-        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-        getProjectEmployees();
-      })
-      .catch((err) => {
-        console.error('Error deleting project:', err);
-        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
-      })
-      .finally(() => setDeleteIsLoading(false));
+
+    const { error, message } = await deleteProjectEmployee(projectEmployeeId);
+    if(error) {
+      console.error('Error deleting project:', error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      setOpenModal(null);
+      setNotif(prev => [...prev, { type: 'success', message }]);
+      _getProjectEmployees();
+    }
+
+    setDeleteIsLoading(false);
   };
 
   // Sort

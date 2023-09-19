@@ -92,6 +92,7 @@ function EditLeave() {
             Is Approved
           </label>
           <ToggleSwitch
+            id="isApproved"
             checked={leave?.is_approved}
             onChange={() => setLeave(prev => ({...prev, is_approved: !prev.is_approved}))}
           />

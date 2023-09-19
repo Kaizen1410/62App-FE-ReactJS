@@ -1,14 +1,12 @@
-import { Button, Datepicker, Select } from 'flowbite-react'
+import { Button, Select } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { BeatLoader } from 'react-spinners'
 import Loading from '../../components/Loading'
 import { UserState } from '../../context/UserProvider'
-import fetchClient from '../../utils/fetchClient'
-import moment from 'moment'
+import { oneProjectEmployee, updateProjectEmployee } from '../../api/ApiProjectEmployee'
 
 const EditProjectEmployees = () => {
-
   const [isLoading, setIsLoading] = useState(true);
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
   const { setNotif } = UserState();
@@ -20,38 +18,41 @@ const EditProjectEmployees = () => {
   // Retrieve selected Project data
   useEffect(() => {
     const getProjectEmployee = async () => {
-      try {
-        const res = await fetchClient.get(`/api/project-employees/${id}`);
-        setProjectEmployee(res.data.data);
-      } catch (err) {
-        console.error(err);
+      setIsLoading(true);
+
+      const { data, error } = await oneProjectEmployee(id);
+      if (error) {
+        console.error(error);
+      } else {
+        setProjectEmployee(data);
       }
+
       setIsLoading(false)
     }
     getProjectEmployee()
   }, [id]);
 
   // Update Project
-  const updateProject = async (e) => {
+  const _updateProjectEmployee = async (e) => {
     e.preventDefault();
     setUpdateIsLoading(true);
 
-    const data = {
-      start_date: moment(projectEmployee.start_date).format('YYYY-MM-DD'),
-      end_date: moment(projectEmployee.end_date).format('YYYY-MM-DD'),
+    const body = {
+      start_date: projectEmployee.start_date,
+      end_date: projectEmployee.end_date,
       status: projectEmployee.status
     }
 
-    fetchClient.put(`/api/project-employees/${id}`, data)
-      .then(res => {
-        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-        navigate('/project-employees');
-      })
-      .catch(err => {
-        console.error(err);
-        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
-      })
-      .finally(() => setUpdateIsLoading(false));
+    const { error, message } = await updateProjectEmployee(id, body);
+    if (error) {
+      console.error(error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      setNotif(prev => [...prev, { type: 'success', message }]);
+      navigate('/project-employees');
+    }
+
+    setUpdateIsLoading(false);
   }
 
 
@@ -65,10 +66,10 @@ const EditProjectEmployees = () => {
             <label htmlFor="start_date" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
               Start Date
             </label>
-            <input type="date" id="date_leave"
+            <input type="date" id="start_date"
               className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
               value={projectEmployee?.start_date}
-              onChange={e => setProjectEmployee(prev => ({...prev, start_date: e.target.value}))} />
+              onChange={e => setProjectEmployee(prev => ({ ...prev, start_date: e.target.value }))} />
           </div>
           <div>
             <label htmlFor="end_date" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
@@ -77,11 +78,10 @@ const EditProjectEmployees = () => {
             <input type="date" id="end_date"
               className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
               value={projectEmployee?.end_date}
-              onChange={e => setProjectEmployee(prev => ({...prev, end_date: e.target.value}))} />
+              onChange={e => setProjectEmployee(prev => ({ ...prev, end_date: e.target.value }))} />
           </div>
           <div
             className="max-w-md"
-            id="select"
           >
             <div className="mb-2 block">
               <label htmlFor="status" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
@@ -92,7 +92,7 @@ const EditProjectEmployees = () => {
               id="status"
               name="status"
               required
-              value={projectEmployee?.status} className='w-full' onChange={(e) => setProjectEmployee(prev => ({...prev, status: e.target.value}))}
+              value={projectEmployee?.status} className='w-full' onChange={(e) => setProjectEmployee(prev => ({ ...prev, status: e.target.value }))}
             >
               <option value={1} >
                 Planning
@@ -119,7 +119,7 @@ const EditProjectEmployees = () => {
             ? <Button type="button" disabled>
               <BeatLoader color="white" size={6} className='my-1 mx-2' />
             </Button>
-            : <Button type="button" onClick={updateProject}>
+            : <Button type="button" onClick={_updateProjectEmployee}>
               Save
             </Button>}
         </div>

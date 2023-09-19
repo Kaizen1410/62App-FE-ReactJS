@@ -1,18 +1,19 @@
-import { Avatar, Button, Datepicker, Select, TextInput, Textarea } from "flowbite-react"
+import { Avatar, Button, Select, TextInput, Textarea } from "flowbite-react"
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import fetchClient from "../../utils/fetchClient";
 import { BeatLoader } from 'react-spinners';
 import { UserState } from "../../context/UserProvider";
 import moment from "moment";
+import { addProject } from "../../api/ApiProject";
 
 function AddProject() {
   const [addIsLoading, setAddIsLoading] = useState(false);
   const [project, setProject] = useState({
     name: '',
     description: '',
-    start_date: '',
-    end_date: '',
+    start_date: moment(new Date()).format('YYYY-MM-DD'),
+    end_date: moment(new Date()).format('YYYY-MM-DD'),
     image_url: '',
     total_story_point: 0,
     done_story_point: 0,
@@ -25,23 +26,19 @@ function AddProject() {
   // Update value input state
   const handleInput = (e) => {
     e.persist();
-    let value = e.target.value;
-    setProject({ ...project, [e.target.name]: value });
+    setProject({ ...project, [e.target.name]: e.target.value });
   }
 
   // Add Project
-  const saveProject = (e) => {
+  const saveProject = async (e) => {
     setAddIsLoading(true);
     e.preventDefault();
-
-    const startEl = document.querySelector('#start_date');
-    const endEl = document.querySelector('#end_date');
 
     const formData = new FormData();
     formData.append('name', project.name);
     formData.append('description', project.description);
-    formData.append('start_date', moment(startEl.value).format('YYYY-MM-DD'));
-    formData.append('end_date', moment(endEl.value).format('YYYY-MM-DD'));
+    formData.append('start_date',project.start_date);
+    formData.append('end_date',project.end_date);
     formData.append('total_story_point', project.total_story_point);
     formData.append('done_story_point', project.done_story_point);
     formData.append('status', project.status);
@@ -49,16 +46,16 @@ function AddProject() {
       formData.append('image_url', project.image_url);
     }
 
-    fetchClient.post('/api/projects', formData, { headers: { "Content-Type": 'multipart/form-data' } })
-      .then(res => {
-        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-        navigate('/projects');
-      })
-      .catch(err => {
-        console.error(err);
-        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
-      })
-      .finally(() => setAddIsLoading(false));
+    const { error, message } = await addProject(formData);
+    if(error) {
+      console.error(error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      setNotif(prev => [...prev, { type: 'success', message }]);
+      navigate('/projects');
+    }
+
+    setAddIsLoading(false);
   }
 
 
@@ -71,11 +68,11 @@ function AddProject() {
         <label htmlFor="image" className="block text-gray-700 dark:text-gray-50 font-bold mb-2 mt-5">
           Project Image
         </label>
-        <label className="cursor-pointer">
+        <label className="cursor-pointer" htmlFor="image">
           {project.image_url
             ? <img src={project?.image_url && URL.createObjectURL(project?.image_url)} className='rounded-full mx-auto h-20 aspect-square object-cover' alt="" />
             : <Avatar className='mx-auto object-cover' size="lg" rounded />}
-          <input type="file" hidden onChange={(e) => setProject({ ...project, image_url: e.target.files[0] })} />
+          <input type="file" id="image" hidden onChange={(e) => setProject({ ...project, image_url: e.target.files[0] })} />
         </label>
 
         <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
@@ -104,23 +101,29 @@ function AddProject() {
         <label htmlFor="start_date" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
           Start Date
         </label>
-        <input type="date" id="start_date" className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg" value={project?.start_date} onChange={e => setProject(prev => ({...prev, start_date: e.target.value}))} />
+        <input type="date" id="start_date"
+          className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
+          value={project?.start_date}
+          onChange={e => setProject(prev => ({...prev, start_date: e.target.value}))} />
         <label htmlFor="end_date" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
           End Date
         </label>
-        <input type="date" id="end_date" className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg" value={project?.end_date} onChange={e => setProject(prev => ({...prev, end_date: e.target.value}))} />
+        <input type="date" id="end_date"
+          className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
+          value={project?.end_date}
+          onChange={e => setProject(prev => ({...prev, end_date: e.target.value}))} />
         <div className="flex gap-5">
           <div className="w-full">
             <label htmlFor="total_story_point" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
               Total Story Point
             </label>
-            <TextInput type="number" className="w-full" value={project.total_story_point} onChange={(e) => setProject({...project, total_story_point: e.target.value})} />
+            <TextInput type="number" id="total_story_point" className="w-full" value={project.total_story_point} onChange={(e) => setProject({...project, total_story_point: e.target.value})} />
           </div>
           <div className="w-full">
             <label htmlFor="done_story_point" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
               Done Story Point
             </label>
-            <TextInput type="number" className="w-full" value={project.done_story_point} onChange={(e) => setProject({...project, done_story_point: e.target.value})}/>
+            <TextInput type="number" id="done_story_point" className="w-full" value={project.done_story_point} onChange={(e) => setProject({...project, done_story_point: e.target.value})}/>
           </div>
         </div>
         <label htmlFor="status" className="block text-gray-700 dark:text-gray-50 font-bold mb-2 mt-5">

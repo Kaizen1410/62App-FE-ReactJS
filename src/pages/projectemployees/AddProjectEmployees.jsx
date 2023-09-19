@@ -1,68 +1,68 @@
-import { Button, Datepicker, Select } from 'flowbite-react'
-import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import fetchClient from '../../utils/fetchClient';
+import { Button, Select } from 'flowbite-react';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserState } from '../../context/UserProvider';
 import moment from 'moment';
 import Loading from '../../components/Loading';
 import { BeatLoader } from 'react-spinners';
+import { getEmployees } from '../../api/ApiEmployee';
+import { getProjects } from '../../api/ApiProject';
+import { addProjectEmployee } from '../../api/ApiProjectEmployee';
 
 const AddProjectEmployees = () => {
   const [employees, setEmployees] = useState([])
   const [projects, setProjects] = useState([])
   const [employeeId, setEmployeeId] = useState(1)
   const [projectId, setProjectId] = useState(1)
+  const [startDate, setStartDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
+  const [endDate, setEndDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
   const [status, setStatus] = useState(1)
   const [isLoading, setIsLoading] = useState(true);
   const [addIsLoading, setAddIsLoading] = useState(false);
-  const [projectemployees, setProjectEmployees] = useState()
 
   const { setNotif } = UserState();
   const navigate = useNavigate();
 
   useEffect(() => {
-    getEmployees()
-    getProjects()
-  }, [])
+    getRequiredData();
+  }, []);
 
-  const getEmployees = () => {
+  const getRequiredData = async () => {
     setIsLoading(true);
-    fetchClient.get('/api/employees?per_page=999')
-      .then(res => setEmployees(res.data.data))
-      .catch(err => { console.error(err); setIsLoading(false) })
+    const employeesData = getEmployees();
+    const projectsData = getProjects();
+
+    const [employees, projects] = await Promise.all([employeesData, projectsData]);
+    if(employees.data) {
+      setEmployees(employees.data);
+    }
+    if(projects.data) {
+      setProjects(projects.data);
+    }
+    setIsLoading(false);
   }
 
-  const getProjects = () => {
-    setIsLoading(true);
-    fetchClient.get('/api/projects?per_page=999')
-      .then(res => setProjects(res.data.data))
-      .catch(err => console.error(err))
-      .finally(() => setIsLoading(false))
-  }
-
-  const saveProjectEmployees = () => {
+  const saveProjectEmployees = async () => {
     setAddIsLoading(true)
-    const startEl = document.querySelector('#start_date');
-    const endEl = document.querySelector('#end_date');
 
-    const data = {
+    const body = {
       employee_id: employeeId,
       project_id: projectId,
-      start_date: moment(startEl.value).format('YYYY-MM-DD'),
-      end_date: moment(endEl.value).format('YYYY-MM-DD'),
+      start_date: startDate,
+      end_date: endDate,
       status: status,
     }
 
-    fetchClient.post('/api/project-employees', data)
-      .then(res => {
-        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-        navigate('/project-employees');
-      })
-      .catch(err => {
-        console.error(err);
-        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
-      })
-      .finally(() => setAddIsLoading(false))
+    const { error, message } = await addProjectEmployee(body);
+    if(error) {
+      console.error(error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      setNotif(prev => [...prev, { type: 'success', message }]);
+      navigate('/project-employees');
+    }
+
+    setAddIsLoading(false);
   }
 
   return (
@@ -87,7 +87,7 @@ const AddProjectEmployees = () => {
             </Select>
           </div>
           <div>
-            <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
+            <label htmlFor="project" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
               Project Name
             </label>
             <Select
@@ -102,16 +102,21 @@ const AddProjectEmployees = () => {
             </Select>
           </div>
           <div>
-            <label className="text-gray-700 font-bold dark:text-gray-50" htmlFor="start_date ">Start Date</label>
-            <input type="date" id="start_date" className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg" value={projectemployees?.start_date} onChange={e => setProjectEmployees(prev => ({...prev, start_date: e.target.value}))} />
+            <label className="text-gray-700 font-bold dark:text-gray-50" htmlFor="start_date">Start Date</label>
+            <input type="date" id="start_date"
+              className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
+              value={startDate}
+              onChange={e => setStartDate(e.target.value)} />
           </div>
           <div>
             <label className="text-gray-700 font-bold dark:text-gray-50" htmlFor="end_date">End Date</label>
-            <input type="date" id="end_date" className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg" value={projectemployees?.end_date} onChange={e => setProjectEmployees(prev => ({...prev, end_date: e.target.value}))} />
+            <input type="date" id="end_date"
+              className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
+              value={endDate}
+              onChange={e => setEndDate(e.target.value)} />
           </div>
           <div
             className="max-w-md"
-            id="select"
           >
             <div className="mb-2 block">
               <label className="text-gray-700 font-bold dark:text-gray-50"
@@ -119,7 +124,7 @@ const AddProjectEmployees = () => {
               >Status</label>
             </div>
             <Select
-              id="Status"
+              id="status"
               required
               value={status}
               onChange={(e) => setStatus(e.target.value)}
