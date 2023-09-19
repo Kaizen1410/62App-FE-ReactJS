@@ -149,7 +149,7 @@ const Projects = () => {
                 Action
               </Table.HeadCell>
             </Table.Head>
-            <Table.Body className={`divide-y relative ${projects.length===0 && 'h-96'}`}>
+            <Table.Body className='divide-y'>
               {projects.length > 0 ? projects.map((project, i) => (
                 <Table.Row className="text-center" key={i}>
                   <Table.Cell>
@@ -201,7 +201,12 @@ const Projects = () => {
                     </button>
                   </Table.Cell>
                 </Table.Row>
-              )) : <NoData />}
+              )) : (
+                <Table.Row >
+                  <Table.Cell colSpan={10}>
+                    <NoData />
+                  </Table.Cell>
+                </Table.Row>)}
             </Table.Body>
           </Table>}
         </div>

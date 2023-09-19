@@ -137,7 +137,7 @@ const ProjectEmployees = () => {
             <Table.Body className="divide-y">
               {projectEmployees.map((projectEmployee, i) => (
 
-                <Table.Row className="text-center" key={ProjectEmployees.id}>
+                <Table.Row className="text-center" key={projectEmployee.id}>
                   <Table.Cell>
                     {(i + 1) + pagination?.per_page * (page - 1)}
                   </Table.Cell>
