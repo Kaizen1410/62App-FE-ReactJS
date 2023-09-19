@@ -9,6 +9,7 @@ import moment from 'moment';
 import PopUpModal from '../../components/DeleteModal';
 import PerPage from '../../components/PerPage';
 import Pagination from '../../components/Pagination';
+import NoData from '../../components/NoData';
 
 const ProjectEmployees = () => {
   const [projectEmployees, setProjectEmpolyees] = useState([]);
@@ -135,7 +136,7 @@ const ProjectEmployees = () => {
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {projectEmployees.map((projectEmployee, i) => (
+              {projectEmployees.length > 0 ?  projectEmployees.map((projectEmployee, i) => (
 
                 <Table.Row className="text-center" key={projectEmployee.id}>
                   <Table.Cell>
@@ -170,8 +171,12 @@ const ProjectEmployees = () => {
                     </button>
                   </Table.Cell>
                 </Table.Row>
-              ))}
-
+              )) : (
+                <Table.Row >
+                  <Table.Cell colSpan={10}>
+                    <NoData />
+                  </Table.Cell>
+                </Table.Row>)}
             </Table.Body>
           </Table>}
         </div>

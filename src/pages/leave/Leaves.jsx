@@ -10,6 +10,7 @@ import { BeatLoader } from "react-spinners";
 import { UserState } from "../../context/UserProvider";
 import PerPage from "../../components/PerPage";
 import SearchInput from "../../components/SearchInput";
+import NoData from "../../components/NoData";
 
 const Leaves = () => {
   const [leaves, setLeaves] = useState([]);
@@ -167,7 +168,7 @@ const Leaves = () => {
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {leaves.map((leave, i) => (
+              {leaves.length > 0 ? leaves.map((leave, i) => (
                 <Table.Row className="text-center" key={i}>
                   <Table.Cell>
                     {(i + 1) + pagination?.per_page * (page - 1)}
@@ -203,7 +204,12 @@ const Leaves = () => {
                     </button>
                   </Table.Cell>
                 </Table.Row>
-              ))}
+              )) : (
+              <Table.Row >
+              <Table.Cell colSpan={10}>
+                <NoData />
+              </Table.Cell>
+            </Table.Row>)}
             </Table.Body>
           </Table>}
         </div>

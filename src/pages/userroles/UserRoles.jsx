@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Pagination from "../../components/Pagination";
 import PerPage from "../../components/PerPage";
 import SearchInput from "../../components/SearchInput";
+import NoData from "../../components/NoData";
 
 const UserRoles = () => {
   const [userRoles, setUserRoles] = useState([]);
@@ -86,7 +87,7 @@ const UserRoles = () => {
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {userRoles.map((userRole, i) => (
+              {userRoles.length > 0 ? userRoles.map((userRole, i) => (
                 <Table.Row key={i}>
                   <Table.Cell className="text-center">
                     {(i + 1) + pagination?.per_page * (page - 1)}
@@ -115,7 +116,12 @@ const UserRoles = () => {
                     </Link>
                   </Table.Cell>
                 </Table.Row>
-              ))}
+              ))  : (
+                <Table.Row >
+                <Table.Cell colSpan={10}>
+                  <NoData />
+                </Table.Cell>
+              </Table.Row>)}
             </Table.Body>
           </Table>}
         </div>
