@@ -6,7 +6,7 @@ const Notif = () => {
   const { notif } = UserState();
 
   return (
-    <div className="absolute right-10 bottom-10 flex flex-col gap-2">
+    <div className="fixed right-10 bottom-10 flex flex-col gap-2">
       {notif.map((n, i) => (
         n.type==='success'
         ? <SuccessNotif key={`${n.type}-${i}`} notif={n} />

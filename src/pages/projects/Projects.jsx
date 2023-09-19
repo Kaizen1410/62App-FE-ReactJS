@@ -160,7 +160,7 @@ const Projects = () => {
                   </Table.Cell>
                   <TableCell>
                     <div className="w-96" style={{wordWrap:"break-word"}}>
-                    {project.description}
+                      {project.description}
                     </div>
                   </TableCell>
                   <Table.Cell className="whitespace-nowrap">
@@ -170,9 +170,9 @@ const Projects = () => {
                   {project.end_date ? moment(project.end_date).format("DD MMMM YYYY") : "-"}
                   </Table.Cell>
                   <Table.Cell>
-                  {project.image_url
-                    ? <img src={project.image_url} className='mx-auto h-20 aspect-square object-cover' alt="" />
-                    : <Avatar className='mx-auto' size="lg" />}
+                    <div className="w-20">
+                      <img src={project.image_url} className='mx-auto w-full aspect-square object-cover' alt="" />
+                    </div>
                   </Table.Cell>
                   <Table.Cell>
                   {project.total_story_point}

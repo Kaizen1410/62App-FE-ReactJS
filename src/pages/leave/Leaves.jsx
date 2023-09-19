@@ -11,6 +11,7 @@ import { UserState } from "../../context/UserProvider";
 import PerPage from "../../components/PerPage";
 import SearchInput from "../../components/SearchInput";
 import NoData from "../../components/NoData";
+import { deleteLeave, getLeaves, importLeave } from "../../api/ApiLeave";
 
 const Leaves = () => {
   const [leaves, setLeaves] = useState([]);
@@ -30,42 +31,40 @@ const Leaves = () => {
   const [perPage, setPerPage] = useState(10);
 
   useEffect(() => {
-    getLeaves();
+    _getLeaves();
     // eslint-disable-next-line
   }, [search, page, sort, direction, perPage]);
 
   // Retrieve Leaves data
-  const getLeaves = async () => {
+  const _getLeaves = async () => {
     setIsLoading(true);
-    try {
-      const res = await fetchClient.get(`/api/leaves?search=${search}&page=${page}&sort=${sort}&direction=${direction}&per_page=${perPage}`);
-      setLeaves(res.data.data);
-      delete res.data.data;
-      setPagination(res.data);
-    } catch (err) {
-      console.error(err);
+    const { data, error, pagination } = await getLeaves({ search, page, sort, direction, perPage });
+    if (error) {
+      console.error(error);
+    } else {
+      setLeaves(data);
+      setPagination(pagination);
     }
     setIsLoading(false);
   }
 
   // Delete Leave
-  const handleDeleteLeave = (leaveId) => {
+  const handleDeleteLeave = async (leaveId) => {
     setDeleteIsLoading(true);
-    fetchClient.delete(`/api/leaves/${leaveId}`)
-      .then(res => {
-        setOpenModal(null);
-        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-        getLeaves();
-      })
-      .catch((err) => {
-        console.error('Error deleting leaves:', err);
-        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
-      })
-      .finally(() => setDeleteIsLoading(false));
+    const { message, error } = await deleteLeave(leaveId);
+    if (error) {
+      console.error('Error deleting leaves:', error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      setOpenModal(null);
+      setNotif(prev => [...prev, { type: 'success', message }]);
+      _getLeaves();
+    }
+    setDeleteIsLoading(false);
   };
 
   // Add Leave with CSV file
-  const handleImport = (target) => {
+  const handleImport = async (target) => {
     const file = target.files[0];
     if (!file) return;
     setImportIsLoading(true);
@@ -73,17 +72,16 @@ const Leaves = () => {
     const formData = new FormData();
     formData.append('csv', file);
 
-    fetchClient.post(`/api/leaves/import`, formData, { headers: { "Content-Type": 'multipart/form-data' } })
-      .then(res => {
-        target.value = null;
-        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-        getLeaves();
-      })
-      .catch((err) => {
-        console.error('Error Import Leaves', err);
-        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
-      })
-      .finally(() => setImportIsLoading(false));
+    const { error, message } = await importLeave(formData);
+    if (error) {
+      console.error('Error Import Leaves', error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      target.value = null;
+      setNotif(prev => [...prev, { type: 'success', message }]);
+      _getLeaves();
+    }
+    setImportIsLoading(false);
   }
 
   // Sort
@@ -205,11 +203,11 @@ const Leaves = () => {
                   </Table.Cell>
                 </Table.Row>
               )) : (
-              <Table.Row >
-              <Table.Cell colSpan={10}>
-                <NoData />
-              </Table.Cell>
-            </Table.Row>)}
+                <Table.Row >
+                  <Table.Cell colSpan={10}>
+                    <NoData />
+                  </Table.Cell>
+                </Table.Row>)}
             </Table.Body>
           </Table>}
         </div>
