@@ -8,6 +8,7 @@ import Pagination from "../../components/Pagination";
 import { UserState } from "../../context/UserProvider";
 import PerPage from "../../components/PerPage";
 import SearchInput from "../../components/SearchInput";
+import NoData from "../../components/NoData";
 
 const Roles = () => {
   const [roles, setRoles] = useState([]);
@@ -109,7 +110,7 @@ const Roles = () => {
                 <Table.HeadCell>Action</Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
-                {roles.map((role, i) => (
+                {roles.length > 0 ? roles.map((role, i) => (
                   <Table.Row key={i}>
                     <Table.Cell className="text-center">
                       {(i + 1) + pagination?.per_page * (page - 1)}
@@ -135,7 +136,12 @@ const Roles = () => {
                       </button>
                     </Table.Cell>
                   </Table.Row>
-                ))}
+                )) : (
+                  <Table.Row >
+                  <Table.Cell colSpan={10}>
+                    <NoData />
+                  </Table.Cell>
+                </Table.Row>)}
               </Table.Body>
             </Table>)}
         </div>

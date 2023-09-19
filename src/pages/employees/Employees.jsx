@@ -9,6 +9,7 @@ import { UserState } from '../../context/UserProvider';
 import PerPage from '../../components/PerPage';
 import SearchInput from '../../components/SearchInput';
 import initialName from '../../utils/initialName';
+import NoData from '../../components/NoData';
 
 const Employees = () => {
 
@@ -107,7 +108,7 @@ const Employees = () => {
               <Table.HeadCell>Action</Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {employees.map((employee, i) => (
+              {employees.length > 0 ? employees.map((employee, i) => (
                 <Table.Row key={employee.id}>
                   <Table.Cell className="text-center">
                     {(i + 1) + pagination?.per_page * (page - 1)}
@@ -137,7 +138,12 @@ const Employees = () => {
                     </button>
                   </Table.Cell>
                 </Table.Row>
-              ))}
+              )) : (
+                <Table.Row >
+                <Table.Cell colSpan={10}>
+                  <NoData />
+                </Table.Cell>
+              </Table.Row>)}
             </Table.Body>
           </Table>}
         </div>

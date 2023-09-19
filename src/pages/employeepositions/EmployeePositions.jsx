@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { UserState } from '../../context/UserProvider';
 import PerPage from '../../components/PerPage';
 import SearchInput from '../../components/SearchInput';
+import NoData from '../../components/NoData';
 
 function EmployeePositions() {
   const [positions, setPositions] = useState([]);
@@ -105,7 +106,7 @@ function EmployeePositions() {
                 <Table.HeadCell>Action</Table.HeadCell>
               </Table.Head>
               <Table.Body>
-                {positions.map((position, i) => (
+                {positions.length > 0 ? positions.map((position, i) => (
                   <Table.Row key={position.id}>
                     <Table.Cell className='text-center'>
                       {(i + 1) + pagination?.per_page * (page - 1)}
@@ -128,7 +129,12 @@ function EmployeePositions() {
                       </button>
                     </Table.Cell>
                   </Table.Row>
-                ))}
+                )) : (
+                  <Table.Row >
+                  <Table.Cell colSpan={10}>
+                    <NoData/>
+                  </Table.Cell>
+                </Table.Row>)}
               </Table.Body>
             </Table>
           )}
