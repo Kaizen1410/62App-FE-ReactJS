@@ -11,8 +11,8 @@ const EditProjectEmployees = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
-  const [status, setStatus] = useState('');
   const { setNotif } = UserState();
+  const [projectEmployee, setProjectEmployee] = useState()
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -21,8 +21,8 @@ const EditProjectEmployees = () => {
   useEffect(() => {
     const getProjectEmployee = async () => {
       try {
-        const res = await fetchClient.get(`/api/project-employees/${id}`)
-        setStatus(res.data.data.status);
+        const res = await fetchClient.get(`/api/project-employees/${id}`);
+        setProjectEmployee(res.data.data);
       } catch (err) {
         console.error(err);
       }
@@ -36,13 +36,10 @@ const EditProjectEmployees = () => {
     e.preventDefault();
     setUpdateIsLoading(true);
 
-    const startEl = document.querySelector('#start_date');
-    const endEl = document.querySelector('#end_date');
-
     const data = {
-      start_date: moment(startEl.value).format('YYYY-MM-DD'),
-      end_date: moment(endEl.value).format('YYYY-MM-DD'),
-      status
+      start_date: moment(projectEmployee.start_date).format('YYYY-MM-DD'),
+      end_date: moment(projectEmployee.end_date).format('YYYY-MM-DD'),
+      status: projectEmployee.status
     }
 
     fetchClient.put(`/api/project-employees/${id}`, data)
@@ -68,13 +65,19 @@ const EditProjectEmployees = () => {
             <label htmlFor="start_date" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
               Start Date
             </label>
-            <Datepicker id="start_date" />
+            <input type="date" id="date_leave"
+              className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
+              value={projectEmployee?.start_date}
+              onChange={e => setProjectEmployee(prev => ({...prev, start_date: e.target.value}))} />
           </div>
           <div>
             <label htmlFor="end_date" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
               End Date
             </label>
-            <Datepicker id="end_date" />
+            <input type="date" id="end_date"
+              className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
+              value={projectEmployee?.end_date}
+              onChange={e => setProjectEmployee(prev => ({...prev, end_date: e.target.value}))} />
           </div>
           <div
             className="max-w-md"
@@ -89,7 +92,7 @@ const EditProjectEmployees = () => {
               id="status"
               name="status"
               required
-              value={status} className='w-full' onChange={(e) => setStatus(e.target.value)}
+              value={projectEmployee?.status} className='w-full' onChange={(e) => setProjectEmployee(prev => ({...prev, status: e.target.value}))}
             >
               <option value={1} >
                 Planning

@@ -120,11 +120,11 @@ function EditProject() {
                     <label htmlFor="start_date" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
                         Start Date
                     </label>
-                    <Datepicker id="start_date" />
+                    <input type="date" id="start_date" className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg" value={project?.start_date} onChange={e => setProject(prev => ({...prev, start_date: e.target.value}))} />
                     <label htmlFor="end_date" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
                         End Date
                     </label>
-                    <Datepicker id="end_date" />
+                    <input type="date" id="end_date" className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg" value={project?.end_date} onChange={e => setProject(prev => ({...prev, end_date: e.target.value}))} />
                     <div className="flex gap-5">
                         <div className="w-full">
                             <label htmlFor="total_story_point" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">

@@ -15,6 +15,7 @@ function AddLeave() {
   const [addIsLoading, setAddIsLoading] = useState(false);
   const [employees, setEmployees] = useState([]);
   const { setNotif } = UserState();
+  const [leave, setLeave] = useState();
 
   // form
   const [employeeId, setEmployeeId] = useState(1);
@@ -82,7 +83,7 @@ function AddLeave() {
         <label htmlFor="date_leave" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
           Date Leave
         </label>
-        <Datepicker id="date_leave" />
+        <input type="date" id="date_leave" className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg" value={leave?.date_leave} onChange={e => setLeave(prev => ({...prev, date_leave: e.target.value}))} />
 
         <label htmlFor="isApproved" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
           Is Approved
