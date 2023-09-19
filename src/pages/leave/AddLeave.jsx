@@ -33,10 +33,10 @@ function AddLeave() {
     const { data, error } = await getEmployees();
     if (error) {
       console.error(error);
-      return
+    } else {
+      setEmployees(data);
     }
 
-    setEmployees(data);
     setIsLoading(false);
   }
 

@@ -38,7 +38,7 @@ const Leaves = () => {
   // Retrieve Leaves data
   const _getLeaves = async () => {
     setIsLoading(true);
-    const { data, error, pagination } = await getLeaves({ search, page, sort, direction, perPage });
+    const { data, error, pagination } = await getLeaves(search, page, sort, direction, perPage);
     if (error) {
       console.error(error);
     } else {
