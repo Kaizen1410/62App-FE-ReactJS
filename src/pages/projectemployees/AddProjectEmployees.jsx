@@ -14,8 +14,8 @@ const AddProjectEmployees = () => {
   const [projects, setProjects] = useState([])
   const [employeeId, setEmployeeId] = useState(1)
   const [projectId, setProjectId] = useState(1)
-  const [startDate, setStartDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
-  const [endDate, setEndDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [status, setStatus] = useState(1)
   const [isLoading, setIsLoading] = useState(true);
   const [addIsLoading, setAddIsLoading] = useState(false);
@@ -48,9 +48,14 @@ const AddProjectEmployees = () => {
     const body = {
       employee_id: employeeId,
       project_id: projectId,
-      start_date: startDate,
-      end_date: endDate,
       status: status,
+    }
+
+    if(startDate) {
+      body.start_date = startDate
+    }
+    if(endDate) {
+      body.end_date = endDate
     }
 
     const { error, message } = await addProjectEmployee(body);

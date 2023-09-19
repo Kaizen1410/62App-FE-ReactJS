@@ -9,7 +9,7 @@ import Loading from "../../components/Loading";
 import { addLeave } from "../../api/ApiLeave";
 
 function AddLeave() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [addIsLoading, setAddIsLoading] = useState(false);
   const [employees, setEmployees] = useState([]);
   const { setNotif } = UserState();

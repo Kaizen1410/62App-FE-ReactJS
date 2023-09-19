@@ -33,7 +33,7 @@ function EditProject() {
             setIsLoading(true);
 
             const { data, error } = await oneProject(id);
-            if(error) {
+            if (error) {
                 console.error(error);
             } else {
                 setProject(data);
@@ -59,17 +59,21 @@ function EditProject() {
         formData.append('_method', 'PUT');
         formData.append('name', project.name);
         formData.append('description', project.description);
-        formData.append('start_date', moment(project.start_date).format('YYYY-MM-DD'));
-        formData.append('end_date', moment(project.end_date).format('YYYY-MM-DD'));
         formData.append('total_story_point', project.total_story_point);
         formData.append('done_story_point', project.done_story_point);
         formData.append('status', project.status);
         if (newImage) {
             formData.append('image_url', newImage);
         }
+        if (project.start_date) {
+            formData.append('start_date', project.start_date);
+        }
+        if (project.end_date) {
+            formData.append('end_date', project.end_date);
+        }
 
         const { message, error } = await updateProject(id, formData);
-        if(error) {
+        if (error) {
             console.error(error);
             setNotif(prev => [...prev, { type: 'failure', message: error }]);
         } else {
@@ -92,7 +96,7 @@ function EditProject() {
                     </label>
                     <label className="cursor-pointer" htmlFor="image">
                         <img src={newImage ? URL.createObjectURL(newImage) : project?.image_url} className='rounded-full mx-auto h-20 aspect-square object-cover' alt="" />
-                        <input type="file" id="image" hidden onChange={(e) => setNewImage( e.target.files[0] )} />
+                        <input type="file" id="image" hidden onChange={(e) => setNewImage(e.target.files[0])} />
                     </label>
                     <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
                         Project Name
@@ -122,14 +126,14 @@ function EditProject() {
                     <input type="date" id="start_date"
                         className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
                         value={project?.start_date}
-                        onChange={e => setProject(prev => ({...prev, start_date: e.target.value}))} />
+                        onChange={e => setProject(prev => ({ ...prev, start_date: e.target.value }))} />
                     <label htmlFor="end_date" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
                         End Date
                     </label>
                     <input type="date" id="end_date"
                         className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
                         value={project?.end_date}
-                        onChange={e => setProject(prev => ({...prev, end_date: e.target.value}))} />
+                        onChange={e => setProject(prev => ({ ...prev, end_date: e.target.value }))} />
                     <div className="flex gap-5">
                         <div className="w-full">
                             <label htmlFor="total_story_point" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">

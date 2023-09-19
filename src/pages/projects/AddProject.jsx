@@ -1,10 +1,8 @@
 import { Avatar, Button, Select, TextInput, Textarea } from "flowbite-react"
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import fetchClient from "../../utils/fetchClient";
 import { BeatLoader } from 'react-spinners';
 import { UserState } from "../../context/UserProvider";
-import moment from "moment";
 import { addProject } from "../../api/ApiProject";
 
 function AddProject() {
@@ -12,8 +10,8 @@ function AddProject() {
   const [project, setProject] = useState({
     name: '',
     description: '',
-    start_date: moment(new Date()).format('YYYY-MM-DD'),
-    end_date: moment(new Date()).format('YYYY-MM-DD'),
+    start_date: '',
+    end_date: '',
     image_url: '',
     total_story_point: 0,
     done_story_point: 0,
@@ -35,19 +33,22 @@ function AddProject() {
     e.preventDefault();
 
     const formData = new FormData();
+    formData.append('image_url', project.image_url);
     formData.append('name', project.name);
     formData.append('description', project.description);
-    formData.append('start_date',project.start_date);
-    formData.append('end_date',project.end_date);
     formData.append('total_story_point', project.total_story_point);
     formData.append('done_story_point', project.done_story_point);
     formData.append('status', project.status);
-    if (project.image_url) {
-      formData.append('image_url', project.image_url);
+
+    if (project.start_date) {
+      formData.append('start_date', project.start_date);
+    }
+    if (project.end_date) {
+      formData.append('end_date', project.end_date);
     }
 
     const { error, message } = await addProject(formData);
-    if(error) {
+    if (error) {
       console.error(error);
       setNotif(prev => [...prev, { type: 'failure', message: error }]);
     } else {
@@ -104,26 +105,26 @@ function AddProject() {
         <input type="date" id="start_date"
           className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
           value={project?.start_date}
-          onChange={e => setProject(prev => ({...prev, start_date: e.target.value}))} />
+          onChange={e => setProject(prev => ({ ...prev, start_date: e.target.value }))} />
         <label htmlFor="end_date" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
           End Date
         </label>
         <input type="date" id="end_date"
           className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
           value={project?.end_date}
-          onChange={e => setProject(prev => ({...prev, end_date: e.target.value}))} />
+          onChange={e => setProject(prev => ({ ...prev, end_date: e.target.value }))} />
         <div className="flex gap-5">
           <div className="w-full">
             <label htmlFor="total_story_point" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
               Total Story Point
             </label>
-            <TextInput type="number" id="total_story_point" className="w-full" value={project.total_story_point} onChange={(e) => setProject({...project, total_story_point: e.target.value})} />
+            <TextInput type="number" id="total_story_point" className="w-full" value={project.total_story_point} onChange={(e) => setProject({ ...project, total_story_point: e.target.value })} />
           </div>
           <div className="w-full">
             <label htmlFor="done_story_point" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
               Done Story Point
             </label>
-            <TextInput type="number" id="done_story_point" className="w-full" value={project.done_story_point} onChange={(e) => setProject({...project, done_story_point: e.target.value})}/>
+            <TextInput type="number" id="done_story_point" className="w-full" value={project.done_story_point} onChange={(e) => setProject({ ...project, done_story_point: e.target.value })} />
           </div>
         </div>
         <label htmlFor="status" className="block text-gray-700 dark:text-gray-50 font-bold mb-2 mt-5">

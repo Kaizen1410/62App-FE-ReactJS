@@ -61,9 +61,14 @@ const EditProjectEmployees = () => {
     const body = {
       employee_id: projectEmployee.employee_id,
       project_id: projectEmployee.employee_id,
-      start_date: projectEmployee.start_date,
-      end_date: projectEmployee.end_date,
       status: projectEmployee.status
+    }
+
+    if(projectEmployee.start_date) {
+      body.start_date = projectEmployee.start_date
+    }
+    if(projectEmployee.end_date) {
+      body.end_date = projectEmployee.end_date
     }
 
     const { error, message } = await updateProjectEmployee(id, body);
