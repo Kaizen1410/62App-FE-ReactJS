@@ -86,7 +86,7 @@ function EditLeave() {
           <label htmlFor="date_leave" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
             Date Leave
           </label>
-          <input type="date" id="date_leave" className="w-full rounded-md" value={leave?.date_leave} onChange={e => setLeave(prev => ({...prev, date_leave: e.target.value}))} />
+          <input type="date" id="date_leave" className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg" value={leave?.date_leave} onChange={e => setLeave(prev => ({...prev, date_leave: e.target.value}))} />
 
           <label htmlFor="isApproved" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
             Is Approved

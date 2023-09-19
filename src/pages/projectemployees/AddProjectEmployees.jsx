@@ -15,6 +15,7 @@ const AddProjectEmployees = () => {
   const [status, setStatus] = useState(1)
   const [isLoading, setIsLoading] = useState(true);
   const [addIsLoading, setAddIsLoading] = useState(false);
+  const [projectemployees, setProjectEmployees] = useState()
 
   const { setNotif } = UserState();
   const navigate = useNavigate();
@@ -102,15 +103,11 @@ const AddProjectEmployees = () => {
           </div>
           <div>
             <label className="text-gray-700 font-bold dark:text-gray-50" htmlFor="start_date ">Start Date</label>
-            <Datepicker
-              id="start_date"
-            />
+            <input type="date" id="start_date" className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg" value={projectemployees?.start_date} onChange={e => setProjectEmployees(prev => ({...prev, start_date: e.target.value}))} />
           </div>
           <div>
             <label className="text-gray-700 font-bold dark:text-gray-50" htmlFor="end_date">End Date</label>
-            <Datepicker
-              id="end_date"
-            />
+            <input type="date" id="end_date" className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg" value={projectemployees?.end_date} onChange={e => setProjectEmployees(prev => ({...prev, end_date: e.target.value}))} />
           </div>
           <div
             className="max-w-md"
