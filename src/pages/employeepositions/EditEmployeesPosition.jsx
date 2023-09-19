@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Button, TextInput } from 'flowbite-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import fetchClient from '../../utils/fetchClient';
 import { BeatLoader } from 'react-spinners';
 import Loading from "../../components/Loading";
 import { UserState } from '../../context/UserProvider';
+import { oneEmployeePosition, updateEmployeePosition } from '../../api/ApiEmployeePosition';
 
 const EditEmployeesPosition = () => {
   const [position, setPosition] = useState();
@@ -18,11 +18,11 @@ const EditEmployeesPosition = () => {
   // Retrieve selected position data
   useEffect(() => {
     const getPosition = async () => {
-      try {
-        const res = await fetchClient.get(`/api/employee-positions/${id}`);
-        setPosition(res.data.data);
-      } catch (err) {
-        console.error(err);
+      const { data, error } = await oneEmployeePosition(id);
+      if(error) {
+        console.error(error);
+      } else {
+        setPosition(data);
       }
       setIsLoading(false);
     }
@@ -33,13 +33,14 @@ const EditEmployeesPosition = () => {
   const updatePosition = async (e) => {
     e.preventDefault();
     setUpdateIsLoading(true);
-    try {
-      const res = await fetchClient.put(`api/employee-positions/${id}`, position);
-      setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
+
+    const { error, message } = await updateEmployeePosition(id, position);
+    if(error) {
+      console.error(error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      setNotif(prev => [...prev, { type: 'success', message }]);
       navigate(`/employee-positions`);
-    } catch (err) {
-      console.error(err);
-      setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
     }
     setUpdateIsLoading(false);
   }

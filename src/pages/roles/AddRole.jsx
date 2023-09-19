@@ -1,9 +1,9 @@
 import { Button, TextInput } from "flowbite-react"
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import fetchClient from "../../utils/fetchClient";
 import { BeatLoader } from 'react-spinners';
 import { UserState } from "../../context/UserProvider";
+import { addRole } from "../../api/ApiRole";
 
 const AddRole = () => {
   const [name, setName] = useState('');
@@ -13,16 +13,17 @@ const AddRole = () => {
   const navigate = useNavigate();
 
   // Add Role
-  const addRole = async (e) => {
+  const _addRole = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    try {
-      const res = await fetchClient.post('/api/roles', { name });
+
+    const { error, message } = await addRole({ name });
+    if(error) {
+      console.error(error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      setNotif(prev => [...prev, { type: 'success', message }]);
       navigate('/roles');
-      setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-    } catch (err) {
-      console.error(err);
-      setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
     }
     setIsLoading(false);
   }
@@ -30,7 +31,7 @@ const AddRole = () => {
   return (
     <form
       className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
-      onSubmit={addRole}
+      onSubmit={_addRole}
     >
       <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Add Role</h4>
       <div className="mb-4">

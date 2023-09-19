@@ -1,10 +1,10 @@
 import { Button, TextInput } from "flowbite-react"
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import fetchClient from "../../utils/fetchClient";
 import Loading from "../../components/Loading";
 import { BeatLoader } from "react-spinners";
 import { UserState } from "../../context/UserProvider";
+import { oneRole, updateRole } from "../../api/ApiRole";
 
 const EditRole = () => {
   const [role, setRole] = useState();
@@ -18,11 +18,11 @@ const EditRole = () => {
   // Retrieve selected role data
   useEffect(() => {
     const getRole = async () => {
-      try {
-        const res = await fetchClient.get(`/api/roles/${id}`);
-        setRole(res.data.data);
-      } catch (err) {
-        console.error(err);
+      const { data, error } = await oneRole(id);
+      if(error) {
+        console.error(error);
+      } else {
+        setRole(data);
       }
       setIsLoading(false);
     }
@@ -31,17 +31,17 @@ const EditRole = () => {
   }, [id]);
 
   // Update Role
-  const updateRole = async (e) => {
+  const _updateRole = async (e) => {
     e.preventDefault();
     setUpdateIsLoading(true);
-    try {
-      const res = await fetchClient.put(`api/roles/${id}`, role);
-      setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-      navigate('/roles');
 
-    } catch (err) {
-      console.error(err);
-      setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
+    const { message, error } = await updateRole(id, role);
+    if(error) {
+      console.error(error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      setNotif(prev => [...prev, { type: 'success', message }]);
+      navigate('/roles');
     }
     setUpdateIsLoading(false);
   }
@@ -50,7 +50,7 @@ const EditRole = () => {
     isLoading ? <Loading size='xl' /> :
       <form
         className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
-        onSubmit={updateRole}
+        onSubmit={_updateRole}
       >
         <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Edit Role</h4>
         <div className="mb-4">

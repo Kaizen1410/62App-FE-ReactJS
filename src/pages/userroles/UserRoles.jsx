@@ -1,5 +1,4 @@
-import { Dropdown, Table } from "flowbite-react"
-import fetchClient from "../../utils/fetchClient"
+import { Dropdown, Table } from "flowbite-react";
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
@@ -7,6 +6,7 @@ import Pagination from "../../components/Pagination";
 import PerPage from "../../components/PerPage";
 import SearchInput from "../../components/SearchInput";
 import NoData from "../../components/NoData";
+import { getUserRoles } from "../../api/ApiUserRole";
 
 const UserRoles = () => {
   const [userRoles, setUserRoles] = useState([]);
@@ -21,20 +21,21 @@ const UserRoles = () => {
   const [perPage, setPerPage] = useState(10);
 
   useEffect(() => {
-    const getUserRoles = async () => {
+    const _getUserRoles = async () => {
       setIsLoading(true);
-      try {
-        const res = await fetchClient.get(`/api/user-roles?search=${search}&page=${page}&direction=${direction}&per_page=${perPage}`);
-        setUserRoles(res.data.data);
-        delete res.data.data;
-        setPagination(res.data);
-      } catch (err) {
-        console.error(err);
+
+      const { data, pagination, error } = await getUserRoles(search, page, sort, direction, perPage);
+      if(error) {
+        console.error(error);
+      } else {
+        setUserRoles(data);
+        setPagination(pagination);
       }
+
       setIsLoading(false);
     }
 
-    getUserRoles();
+    _getUserRoles();
   }, [search, page, sort, direction, perPage]);
 
   // Sort

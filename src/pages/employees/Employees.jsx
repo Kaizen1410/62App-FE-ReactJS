@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import fetchClient from '../../utils/fetchClient';
 import { Table, Button, Dropdown, Avatar } from "flowbite-react";
 import PopUpModal from "../../components/DeleteModal";
 import Loading from '../../components/Loading';
@@ -10,6 +9,7 @@ import PerPage from '../../components/PerPage';
 import SearchInput from '../../components/SearchInput';
 import initialName from '../../utils/initialName';
 import NoData from '../../components/NoData';
+import { deleteEmployee, getEmployees } from '../../api/ApiEmployee';
 
 const Employees = () => {
 
@@ -30,38 +30,36 @@ const Employees = () => {
   const { setNotif } = UserState();
 
   useEffect(() => {
-    getAllEmployee();
+    _getEmployee();
     // eslint-disable-next-line
   }, [search, page, sort, direction, perPage])
 
   // Retrieve Employees data
-  const getAllEmployee = async () => {
+  const _getEmployee = async () => {
     setIsLoading(true);
-    try {
-      const res = await fetchClient.get(`/api/employees?search=${search}&page=${page}&sort=${sort}&direction=${direction}&per_page=${perPage}`);
-      setEmployees(res.data.data);
-      delete res.data.data;
-      setPagination(res.data);
-    } catch (err) {
-      console.error(err);
+    const { data, pagination, error } = await getEmployees(search, page, sort, direction, perPage);
+    if (error) {
+      console.error(error);
+    } else {
+      setEmployees(data);
+      setPagination(pagination);
     }
     setIsLoading(false);
   }
 
   // Delete Employee
-  const handleDeleteEmployee = (employeesId) => {
+  const handleDeleteEmployee = async (employeesId) => {
     setDeleteIsLoading(true);
-    fetchClient.delete(`/api/employees/${employeesId}`)
-      .then(res => {
-        setOpenModal(null);
-        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-        getAllEmployee()
-      })
-      .catch((err) => {
-        console.error('Error deleting employee position:', err);
-        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
-      })
-      .finally(() => setDeleteIsLoading(false));
+    const { message, error } = await deleteEmployee(employeesId);
+    if (error) {
+      console.error('Error deleting employee position:', error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      setOpenModal(null);
+      setNotif(prev => [...prev, { type: 'success', message }]);
+      _getEmployee()
+    }
+    setDeleteIsLoading(false);
   }
 
   // Sort
@@ -116,8 +114,8 @@ const Employees = () => {
                   <Table.Cell>{employee.name}</Table.Cell>
                   <Table.Cell className='text-center'>
                     {employee.profile_url
-                    ? <img src={employee.profile_url} className='mx-auto h-20 aspect-square object-cover' alt="" />
-                    : <Avatar className='mx-auto object-cover' size="lg" placeholderInitials={initialName(employee.name)} />}
+                      ? <img src={employee.profile_url} className='mx-auto h-20 aspect-square object-cover' alt="" />
+                      : <Avatar className='mx-auto object-cover' size="lg" placeholderInitials={initialName(employee.name)} />}
                   </Table.Cell>
                   <Table.Cell className='text-center'>{employee.employee_position}</Table.Cell>
                   <Table.Cell className='text-center'>
@@ -140,10 +138,10 @@ const Employees = () => {
                 </Table.Row>
               )) : (
                 <Table.Row >
-                <Table.Cell colSpan={10}>
-                  <NoData />
-                </Table.Cell>
-              </Table.Row>)}
+                  <Table.Cell colSpan={10}>
+                    <NoData />
+                  </Table.Cell>
+                </Table.Row>)}
             </Table.Body>
           </Table>}
         </div>

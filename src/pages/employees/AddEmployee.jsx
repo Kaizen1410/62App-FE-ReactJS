@@ -1,10 +1,11 @@
 import { Avatar, Button, Select, TextInput } from "flowbite-react"
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import fetchClient from "../../utils/fetchClient";
 import Loading from "../../components/Loading";
 import { BeatLoader } from 'react-spinners';
 import { UserState } from "../../context/UserProvider";
+import { addEmployee } from "../../api/ApiEmployee";
+import { getEmployeePositions } from "../../api/ApiEmployeePosition";
 
 function AddEmployee() {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,16 +22,16 @@ function AddEmployee() {
 
   // Get Employee Positions for select option
   useEffect(() => {
-    const getEmployeePositions = async () => {
-      try {
-        const res = await fetchClient.get('/api/employee-positions?per_page=999')
-        setEmployeePositions(res.data.data)
-      } catch (err) {
-        console.error(err);
+    const _getEmployeePositions = async () => {
+      const { error, data } = await getEmployeePositions();
+      if(error) {
+        console.error(error);
+      } else {
+        setEmployeePositions(data);
       }
-      setIsLoading(false)
+      setIsLoading(false);
     }
-    getEmployeePositions()
+    _getEmployeePositions();
   }, [])
 
   // Update value input state
@@ -41,7 +42,7 @@ function AddEmployee() {
   }
 
   // Add Employee
-  const saveEmployee = (e) => {
+  const saveEmployee = async (e) => {
     setAddIsLoading(true);
     e.preventDefault();
 
@@ -53,16 +54,15 @@ function AddEmployee() {
       formData.append('profile_url', employee.profile_url);
     }
 
-    fetchClient.post('/api/employees', formData, { headers: { "Content-Type": 'multipart/form-data' } })
-      .then(res => {
-        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-        navigate('/employees');
-      })
-      .catch(err => {
-        console.error(err);
-        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
-      })
-      .finally(() => setAddIsLoading(false));
+    const { error, message } = await addEmployee(formData);
+    if(error) {
+      console.error(error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      setNotif(prev => [...prev, { type: 'success', message }]);
+      navigate('/employees');
+    }
+    setAddIsLoading(false);
   }
 
 

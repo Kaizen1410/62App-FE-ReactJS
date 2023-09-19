@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Loading from "../../components/Loading";
 import PopUpModal from "../../components/DeleteModal";
-import fetchClient from "../../utils/fetchClient";
 import Pagination from "../../components/Pagination";
 import { UserState } from "../../context/UserProvider";
 import PerPage from "../../components/PerPage";
 import SearchInput from "../../components/SearchInput";
 import NoData from "../../components/NoData";
+import { deleteRole, getRoles } from "../../api/ApiRole";
 
 const Roles = () => {
   const [roles, setRoles] = useState([]);
@@ -28,35 +28,36 @@ const Roles = () => {
   const { setNotif } = UserState();
 
   useEffect(() => {
-    getRoles();
+    _getRoles();
     // eslint-disable-next-line
   }, [search, page, sort, direction, perPage])
 
   // Retrieve roles data
-  const getRoles = async () => {
+  const _getRoles = async () => {
     setIsLoading(true);
-    try {
-      const res = await fetchClient.get(`/api/roles?search=${search}&page=${page}&sort=${sort}&direction=${direction}&per_page=${perPage}`);
-      setRoles(res.data.data);
-      delete res.data.data;
-      setPagination(res.data);
-    } catch (err) {
-      console.error(err);
+
+    const { data, error, pagination } = await getRoles(search, page, sort, direction, perPage);
+    if (error) {
+      console.error(error);
+    } else {
+      setRoles(data);
+      setPagination(pagination);
     }
     setIsLoading(false);
   }
 
   // Delete Role
-  const deleteRole = async (id) => {
+  const _deleteRole = async (id) => {
     setDeleteIsLoading(true);
-    try {
-      const res = await fetchClient.delete(`api/roles/${id}`);
+
+    const { message, error } = await deleteRole(id);
+    if(error) {
+      console.error(error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
       setOpenModal(null);
-      setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-      getRoles();
-    } catch (err) {
-      console.error(err);
-      setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
+      setNotif(prev => [...prev, { type: 'success', message }]);
+      _getRoles();
     }
     setDeleteIsLoading(false);
   }
@@ -138,10 +139,10 @@ const Roles = () => {
                   </Table.Row>
                 )) : (
                   <Table.Row >
-                  <Table.Cell colSpan={10}>
-                    <NoData />
-                  </Table.Cell>
-                </Table.Row>)}
+                    <Table.Cell colSpan={10}>
+                      <NoData />
+                    </Table.Cell>
+                  </Table.Row>)}
               </Table.Body>
             </Table>)}
         </div>
@@ -151,7 +152,7 @@ const Roles = () => {
         <Pagination pagination={pagination} page={page} setPage={setPage} />
       </div>
 
-      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => deleteRole(selectedRoles)} isLoading={deleteIsLoading} />
+      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} action={() => _deleteRole(selectedRoles)} isLoading={deleteIsLoading} />
     </>
   );
 }

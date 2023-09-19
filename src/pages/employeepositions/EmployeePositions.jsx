@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Loading from '../../components/Loading';
-import fetchClient from '../../utils/fetchClient';
 import { Button, Dropdown, Table } from 'flowbite-react';
 import Pagination from '../../components/Pagination';
 import PopUpModal from '../../components/DeleteModal';
@@ -9,6 +8,7 @@ import { UserState } from '../../context/UserProvider';
 import PerPage from '../../components/PerPage';
 import SearchInput from '../../components/SearchInput';
 import NoData from '../../components/NoData';
+import { deleteEmployeePosition, getEmployeePositions } from '../../api/ApiEmployeePosition';
 
 function EmployeePositions() {
   const [positions, setPositions] = useState([]);
@@ -29,39 +29,37 @@ function EmployeePositions() {
   const [perPage, setPerPage] = useState(10);
 
   useEffect(() => {
-    getEmployeePositions();
+    _getEmployeePositions();
     // eslint-disable-next-line
   }, [search, page, sort, direction, perPage]);
 
   // Retrive Employee Positions data
-  const getEmployeePositions = () => {
+  const _getEmployeePositions = async () => {
     setIsLoading(true);
-    fetchClient.get(`/api/employee-positions?search=${search}&page=${page}&sort=${sort}&direction=${direction}&per_page=${perPage}`)
-      .then(res => {
-        setPositions(res.data.data);
-        delete res.data.data
-        setPagination(res.data);
-      })
-      .catch(error => {
-        console.error('Error fetching employee positions:', error);
-      })
-      .finally(() => setIsLoading(false));
+    const { data, pagination, error } = await getEmployeePositions(search, page, sort, direction, perPage);
+    if (error) {
+      console.error('Error fetching employee positions:', error);
+    } else {
+      setPositions(data);
+      setPagination(pagination);
+    }
+    setIsLoading(false);
   }
 
   // Delete Employee Position
-  const handleDeletePosition = (positionId) => {
+  const handleDeletePosition = async (positionId) => {
     setDeleteIsLoading(true);
-    fetchClient.delete(`/api/employee-positions/${positionId}`)
-      .then(res => {
-        getEmployeePositions()
-        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-        setOpenModal(null);
-      })
-      .catch((err) => {
-        console.error('Error deleting employee position:', err);
-        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
-      })
-      .finally(() => setDeleteIsLoading(false));
+
+    const { error, message } = await deleteEmployeePosition(positionId);
+    if (error) {
+      console.error('Error deleting employee position:', error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      _getEmployeePositions()
+      setNotif(prev => [...prev, { type: 'success', message }]);
+      setOpenModal(null);
+    }
+    setDeleteIsLoading(false);
   };
 
   // Sort
@@ -131,10 +129,10 @@ function EmployeePositions() {
                   </Table.Row>
                 )) : (
                   <Table.Row >
-                  <Table.Cell colSpan={10}>
-                    <NoData/>
-                  </Table.Cell>
-                </Table.Row>)}
+                    <Table.Cell colSpan={10}>
+                      <NoData />
+                    </Table.Cell>
+                  </Table.Row>)}
               </Table.Body>
             </Table>
           )}

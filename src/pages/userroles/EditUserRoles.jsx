@@ -6,6 +6,8 @@ import Loading from "../../components/Loading";
 import { BeatLoader } from "react-spinners";
 import { UserState } from "../../context/UserProvider";
 import SearchInput from "../../components/SearchInput";
+import { oneUserRole, updateUserRole } from "../../api/ApiUserRole";
+import { getRoles } from "../../api/ApiRole";
 
 const EditUserRoles = () => {
   const [userRoles, setUserRoles] = useState([]);
@@ -19,40 +21,41 @@ const EditUserRoles = () => {
 
   // Retrieve User Roles data
   useEffect(() => {
-    const getUserRoles = async () => {
-      try {
-        const res = await fetchClient.get(`/api/user-roles/${id}`);
-        setUserRoles(res.data.data);
-      } catch (err) {
-        console.error(err);
+    const getUserRole = async () => {
+      setIsLoading(true);
+      const { data, error } = await oneUserRole(id);
+      if(error) {
+        console.error(error);
+      } else {
+        setUserRoles(data);
       }
       setIsLoading(false);
     }
 
-    getUserRoles();
+    getUserRole();
   }, [id]);
 
   // Search roles
   const handleSearch = async (search) => {
-    const res = await fetchClient.get(`/api/roles?search=${search}`);
-    setRoles(res.data.data);
+    const { data } = await getRoles(search);
+    setRoles(data);
   }
 
   // Update User Role
-  const updateUserRoles = async () => {
+  const _updateUserRoles = async () => {
     setUpdateIsLoading(true);
 
     const data = {
       role_id: userRoles.roles.map(role => role.id)
     }
 
-    try {
-      const res = await fetchClient.put(`api/user-roles/${id}`, data);
-      setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-      navigate('/user-roles');
-    } catch (err) {
+    const { error, message } = await updateUserRole(id, data);
+    if(error) {
       console.error(err);
-      setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      setNotif(prev => [...prev, { type: 'success', message }]);
+      navigate('/user-roles');
     }
     setUpdateIsLoading(false);
   }
@@ -123,7 +126,7 @@ const EditUserRoles = () => {
             ? <Button disabled>
               <BeatLoader color="white" size={6} className='my-1 mx-2' />
             </Button>
-            : <Button onClick={updateUserRoles}>
+            : <Button onClick={_updateUserRoles}>
               Save
             </Button>}
         </div>

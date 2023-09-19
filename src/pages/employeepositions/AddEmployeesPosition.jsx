@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Button, TextInput } from 'flowbite-react';
 import { Link, useNavigate } from 'react-router-dom';
-import fetchClient from '../../utils/fetchClient';
 import { BeatLoader } from 'react-spinners';
 import { UserState } from '../../context/UserProvider';
+import { addEmployeePosition } from '../../api/ApiEmployeePosition';
 
 const AddEmployeesPosition = () => {
   const [name, setName] = useState('');
@@ -13,16 +13,17 @@ const AddEmployeesPosition = () => {
   const navigate = useNavigate();
 
   // Add Employee Position
-  const AddEmployeesPositions = async (e) => {
+  const _addEmployeesPosition = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    try {
-      const res = await fetchClient.post('/api/employee-positions', { name });
+
+    const { error, message } = await addEmployeePosition({ name })
+    if(error) {
+      console.error(error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
       navigate('/employee-positions');
-      setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-    } catch (err) {
-      console.error(err);
-      setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
+      setNotif(prev => [...prev, { type: 'success', message }]);
     }
     setIsLoading(false);
   }
@@ -30,7 +31,7 @@ const AddEmployeesPosition = () => {
   return (
     <form
       className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
-      onSubmit={AddEmployeesPositions}
+      onSubmit={_addEmployeesPosition}
     >
       <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Add Position</h4>
       <div className="mb-4">

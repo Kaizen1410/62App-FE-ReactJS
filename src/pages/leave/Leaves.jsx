@@ -1,5 +1,4 @@
 import { Table, Button, Dropdown, Tooltip } from "flowbite-react"
-import fetchClient from "../../utils/fetchClient"
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";

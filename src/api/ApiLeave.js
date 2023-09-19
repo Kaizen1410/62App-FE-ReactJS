@@ -1,6 +1,6 @@
 import fetchClient from "../utils/fetchClient"
 
-export const getLeaves = async (search='', page=1, sort='name', direction='asc', perPage=999) => {
+export const getLeaves = async (search='', page=1, sort='date_leave', direction='desc', perPage=999) => {
     const result = {
         data: null,
         pagination: null,

@@ -1,10 +1,11 @@
 import { Avatar, Button, Select, TextInput } from "flowbite-react"
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import fetchClient from "../../utils/fetchClient";
 import Loading from "../../components/Loading";
 import { BeatLoader } from 'react-spinners';
 import { UserState } from "../../context/UserProvider";
+import { oneEmployee, updateEmployee } from "../../api/ApiEmployee";
+import { getEmployeePositions } from "../../api/ApiEmployeePosition";
 
 function EditEmployee() {
   const [employeePositions, setEmployeePositions] = useState([])
@@ -22,25 +23,26 @@ function EditEmployee() {
 
   // Get Employee Positions for select option
   useEffect(() => {
-    const getEmployeePositions = async () => {
-      try {
-        const res = await fetchClient.get('/api/employee-positions?per_page=999')
-        setEmployeePositions(res.data.data)
-      } catch (err) {
-        console.error(err);
+    const _getEmployeePositions = async () => {
+      const { error, data } = await getEmployeePositions();
+      if(error) {
+        console.error(error);
+      } else {
+        setEmployeePositions(data);
       }
+      setIsLoading(false);
     }
-    getEmployeePositions()
+    _getEmployeePositions();
   }, []);
 
   // Retrieve selected employee data
   useEffect(() => {
     const getEmployee = async () => {
-      try {
-        const res = await fetchClient.get(`/api/employees/${id}`)
-        setEmployee(res.data.data)
-      } catch (err) {
-        console.error(err);
+      const { data, error } = await oneEmployee();
+      if(error) {
+        console.error(error);
+      } else {
+        setEmployee(data);
       }
       setIsLoading(false)
     }
@@ -55,7 +57,7 @@ function EditEmployee() {
   }
 
   // Update Employee
-  const updateEmployee = async (e) => {
+  const _updateEmployee = async (e) => {
     e.preventDefault();
     setUpdateIsLoading(true);
 
@@ -68,23 +70,22 @@ function EditEmployee() {
       formData.append('profile_url', employee.profile_url);
     }
 
-    fetchClient.post(`/api/employees/${id}`, formData, { headers: { "Content-Type": 'multipart/form-data' } })
-      .then(res => {
-        setNotif(prev => [...prev, { type: 'success', message: res.data.message }]);
-        navigate('/employees');
-      })
-      .catch(err => {
-        console.error(err);
-        setNotif(prev => [...prev, { type: 'failure', message: err.response?.data.message }]);
-      })
-      .finally(() => setUpdateIsLoading(false));
+    const { error, message } = await updateEmployee(id, formData);
+    if(error) {
+      console.error(error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    } else {
+      setNotif(prev => [...prev, { type: 'success', message }]);
+      navigate('/employees');
+    }
+    setUpdateIsLoading(false);
   }
 
   return (
     isLoading ? <Loading size='xl' /> :
       <form
         className="max-w-md mx-auto p-4 bg-white shadow-md dark:bg-gray-800 rounded-md"
-        onSubmit={updateEmployee}
+        onSubmit={_updateEmployee}
       >
         <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Edit Employee</h4>
         <div className="mb-4">
