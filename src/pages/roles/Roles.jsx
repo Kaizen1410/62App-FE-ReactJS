@@ -75,7 +75,7 @@ const Roles = () => {
     <>
       <div className="bg-white rounded-md p-4 dark:bg-gray-800">
         <h1 className="font-bold text-2xl mb-8 dark:text-white">Roles List</h1>
-        <div className="flex justify-between mb-4">
+        <div className="flex flex-wrap gap-2 justify-between mb-4">
           <div className="flex gap-2">
             <Dropdown label="Sort By">
               <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('name')}>
