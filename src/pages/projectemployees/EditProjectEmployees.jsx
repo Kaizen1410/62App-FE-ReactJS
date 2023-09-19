@@ -5,12 +5,16 @@ import { BeatLoader } from 'react-spinners'
 import Loading from '../../components/Loading'
 import { UserState } from '../../context/UserProvider'
 import { oneProjectEmployee, updateProjectEmployee } from '../../api/ApiProjectEmployee'
+import { getProjects } from '../../api/ApiProject'
+import { getEmployees } from '../../api/ApiEmployee'
 
 const EditProjectEmployees = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
   const { setNotif } = UserState();
   const [projectEmployee, setProjectEmployee] = useState()
+  const [employees, setEmployees] = useState([])
+  const [projects, setProjects] = useState([])
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -29,8 +33,25 @@ const EditProjectEmployees = () => {
 
       setIsLoading(false)
     }
+
+    getRequiredData();
     getProjectEmployee()
   }, [id]);
+
+  const getRequiredData = async () => {
+    setIsLoading(true);
+    const employeesData = getEmployees();
+    const projectsData = getProjects();
+
+    const [employees, projects] = await Promise.all([employeesData, projectsData]);
+    if(employees.data) {
+      setEmployees(employees.data);
+    }
+    if(projects.data) {
+      setProjects(projects.data);
+    }
+    setIsLoading(false);
+  }
 
   // Update Project
   const _updateProjectEmployee = async (e) => {
@@ -38,6 +59,8 @@ const EditProjectEmployees = () => {
     setUpdateIsLoading(true);
 
     const body = {
+      employee_id: projectEmployee.employee_id,
+      project_id: projectEmployee.employee_id,
       start_date: projectEmployee.start_date,
       end_date: projectEmployee.end_date,
       status: projectEmployee.status
@@ -62,6 +85,36 @@ const EditProjectEmployees = () => {
         <h4 className="text-xl font-semibold text-center dark:text-gray-50 mb-5">Edit Project Employee</h4>
 
         <div className="mb-4 dark:text-gray-50">
+        <div>
+            <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
+              Employee Name
+            </label>
+            <Select
+              value={projectEmployee?.employee_id}
+              onChange={(e) => setProjectEmployee(prev => ({...prev, employee_id: e.target.value}))}
+              id="name"
+              className="w-full"
+            >
+              {employees.map(employee => (
+                <option key={employee.id} value={employee.id}>{employee.name}</option>
+              ))}
+            </Select>
+          </div>
+          <div>
+            <label htmlFor="project" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
+              Project Name
+            </label>
+            <Select
+              value={projectEmployee?.project_id}
+              onChange={(e) => setProjectEmployee(prev => ({...prev, project_id: e.target.value}))}
+              id="project"
+              className="w-full"
+            >
+              {projects.map(project => (
+                <option key={project.id} value={project.id}>{project.name}</option>
+              ))}
+            </Select>
+            </div>
           <div>
             <label htmlFor="start_date" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
               Start Date
@@ -102,6 +155,7 @@ const EditProjectEmployees = () => {
               </option>
             </Select>
           </div>
+ 
 
 
         </div>
