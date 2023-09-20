@@ -1,32 +1,39 @@
 import { useState, useEffect } from 'react';
 import Loading from '../components/Loading';
 import { Link } from 'react-router-dom';
-import { Select, Table } from 'flowbite-react';
+import { Badge, Card, Select, Table } from 'flowbite-react';
 import { getLeavesSummary } from '../api/ApiLeave';
 import NoData from '../components/NoData';
+import { getProjectsSummary } from '../api/ApiProject';
 
 const Dashboard = () => {
     const [year, setYear] = useState(new Date().getFullYear());
     const [monthData, setMonthData] = useState([]);
+    const [projectSummary, setProjectSummary] = useState([])
     const [isLoading, setIsLoading] = useState(true);
     const currentYear = new Date().getFullYear();
     const yearOptions = Array.from({ length: 6 }, (_, i) => currentYear - 3 + i);
 
     // Retrieve Leaves per month in specific year
     useEffect(() => {
-        const getMonthData = async () => {
+        const getRequiredData = async () => {
             setIsLoading(true);
 
-            const { data, error } = await getLeavesSummary(year);
-            if(error) {
-                console.error(error);
+            const leavesSummaryData = getLeavesSummary(year);
+            const projectsSummaryData = getProjectsSummary();
+
+            const [leavesSummary, projectsSummary] = await Promise.all([leavesSummaryData, projectsSummaryData]);
+            if (leavesSummary.error || projectsSummary.error) {
+                console.error(leavesSummary.error);
+                console.error(projectsSummary.error);
             } else {
-                setMonthData(data)
+                setMonthData(leavesSummary.data);
+                setProjectSummary(projectsSummary.data);
             }
             setIsLoading(false);
         }
 
-        getMonthData();
+        getRequiredData();
     }, [year]);
 
     return (
@@ -34,7 +41,7 @@ const Dashboard = () => {
             <div className='mb-10'>
                 <h1 className='text-4xl font-bold text-black dark:text-white'>Dashboard</h1>
             </div>
-            <div className="bg-white rounded-md p-4 dark:bg-gray-800">
+            <div className="bg-white rounded-md p-4 dark:bg-gray-800 mb-3">
                 <h1 className="font-bold dark:text-white text-2xl mb-8">Leaves Summary</h1>
 
                 <div className="mb-4">
@@ -44,12 +51,12 @@ const Dashboard = () => {
                         value={year}
                         onChange={(e) => setYear(e.target.value)}
                     >
-                       {yearOptions.map((year) => (
-                         <option key={year} value={year}>
-                          {year}
-                         </option>
-                       ))}
-                      </Select>
+                        {yearOptions.map((year) => (
+                            <option key={year} value={year}>
+                                {year}
+                            </option>
+                        ))}
+                    </Select>
                 </div>
 
                 <div className='overflow-x-auto'>
@@ -79,12 +86,33 @@ const Dashboard = () => {
                                     </Table.Row>
                                 )) : (
                                     <Table.Row >
-                                      <Table.Cell colSpan={10}>
-                                        <NoData />
-                                      </Table.Cell>
+                                        <Table.Cell colSpan={10}>
+                                            <NoData />
+                                        </Table.Cell>
                                     </Table.Row>)}
                             </Table.Body>
                         </Table>)}
+                </div>
+
+            </div>
+
+            <div className="bg-white rounded-md p-4 dark:bg-gray-800">
+                <h1 className="font-bold dark:text-white text-2xl mb-8">Projects Summary</h1>
+
+                <div className='flex flex-wrap gap-3'>
+                    {projectSummary.map(project => (
+                        <Card className='max-w-md'>
+                            <div className='flex items-center gap-2'>
+                                <h2 className='text-black dark:text-white'>{project.name}</h2>
+                                {project.status===1
+                                ? <Badge>Proposal</Badge>
+                                : project.status===2
+                                ? <Badge color='warning'>Ongoing</Badge>
+                                : <Badge color='success'>Done</Badge>
+                                }
+                            </div>
+                        </Card>
+                    ))}
                 </div>
             </div>
         </>
