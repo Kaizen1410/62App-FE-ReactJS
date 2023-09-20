@@ -17,7 +17,7 @@ const Leaves = () => {
   const [pagination, setPagination] = useState();
   const [openModal, setOpenModal] = useState();
   const [selectedLeave, setSelectedLeave] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const [importIsLoading, setImportIsLoading] = useState(false);
   const { setNotif } = UserState();

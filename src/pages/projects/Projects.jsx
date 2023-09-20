@@ -17,7 +17,7 @@ const Projects = () => {
   const [pagination, setPagination] = useState();
   const [openModal, setOpenModal] = useState();
   const [selectedProject, setSelectedProject] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const { setNotif } = UserState();
 
