@@ -11,8 +11,8 @@ import { addProjectEmployee } from '../../api/ApiProjectEmployee';
 const AddProjectEmployees = () => {
   const [employees, setEmployees] = useState([])
   const [projects, setProjects] = useState([])
-  const [employeeId, setEmployeeId] = useState(1)
-  const [projectId, setProjectId] = useState(1)
+  const [employeeId, setEmployeeId] = useState('')
+  const [projectId, setProjectId] = useState('')
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [status, setStatus] = useState(1)
@@ -86,6 +86,7 @@ const AddProjectEmployees = () => {
               id="name"
               className="w-full"
             >
+              <option value=''>---Select Employee---</option>
               {employees.map(employee => (
                 <option key={employee.id} value={employee.id}>{employee.name}</option>
               ))}
@@ -101,6 +102,7 @@ const AddProjectEmployees = () => {
               id="project"
               className="w-full"
             >
+              <option value=''>---Select Project---</option>
               {projects.map(project => (
                 <option key={project.id} value={project.id}>{project.name}</option>
               ))}

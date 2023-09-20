@@ -104,7 +104,7 @@ function EditEmployee() {
                 img={newImage ? URL.createObjectURL(newImage) : employee?.profile_url}
                 size="lg"
                 rounded/>
-            <input type="file" hidden onChange={(e) => setNewImage(e.target.files[0])} />
+            <input id="image" type="file" hidden onChange={(e) => setNewImage(e.target.files[0])} />
           </label>
           <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
             Name

@@ -86,7 +86,7 @@ function AddEmployee() {
           </label>
           <label className="cursor-pointer">
             <Avatar theme={avatarTheme} img={employee?.profile_url && URL.createObjectURL(employee?.profile_url)} className='mx-auto' size="lg" rounded/>
-            <input type="file" hidden onChange={(e) => setEmployee({ ...employee, profile_url: e.target.files[0] })} />
+            <input type="file" id="image" hidden onChange={(e) => setEmployee({ ...employee, profile_url: e.target.files[0] })} />
           </label>
 
           <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">

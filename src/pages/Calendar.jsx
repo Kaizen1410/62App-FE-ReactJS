@@ -1,7 +1,7 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
+import listPlugin from '@fullcalendar/list';
 import { useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import Loading from '../components/Loading'
@@ -31,20 +31,20 @@ const Calendar = () => {
   }
 
   return (
-    <div className="border overflow-auto py-4 px-4 bg-white dark:bg-gray-800 dark:text-white shadow-md rounded-lg text-sm">
+    <div className="border overflow-auto py-4 px-4 bg-gray-50 dark:bg-gray-800 dark:text-white shadow-md rounded-lg text-sm">
       {isLoading
         ? <div className='h-96'>
           <Loading size='xl' />
         </div>
         : <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
           initialView="dayGridMonth"
           initialDate={location.state?.date || undefined}
           events={events}
           headerToolbar={{
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,list',
           }}
         />}
     </div>
