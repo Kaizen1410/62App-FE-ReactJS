@@ -33,10 +33,11 @@ const AddProjectEmployees = () => {
     const projectsData = getProjects();
 
     const [employees, projects] = await Promise.all([employeesData, projectsData]);
-    if(employees.data) {
+    if(employees.error || projects.error) {
+      console.error(employees.error);
+      console.error(projects.error);
+    } else {
       setEmployees(employees.data);
-    }
-    if(projects.data) {
       setProjects(projects.data);
     }
     setIsLoading(false);

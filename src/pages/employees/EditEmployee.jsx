@@ -6,6 +6,7 @@ import { BeatLoader } from 'react-spinners';
 import { UserState } from "../../context/UserProvider";
 import { oneEmployee, updateEmployee } from "../../api/ApiEmployee";
 import { getEmployeePositions } from "../../api/ApiEmployeePosition";
+import initialName from "../../utils/initialName";
 
 function EditEmployee() {
   const [employeePositions, setEmployeePositions] = useState([])
@@ -21,39 +22,30 @@ function EditEmployee() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Get Employee Positions for select option
   useEffect(() => {
-    const _getEmployeePositions = async () => {
-      const { error, data } = await getEmployeePositions();
-      if(error) {
-        console.error(error);
+    // Get Employee Positions for select option and selected employee data
+    const getRequiredData = async () => {
+      setIsLoading(true);
+      const employeePositionsData = getEmployeePositions();
+      const employeeData = oneEmployee(id);
+
+      const [employeePositions, employee] = await Promise.all([employeePositionsData, employeeData]);
+      if(employeePositions.error || employee.error) {
+        console.error(employeePositions.error);
+        console.error(employee.error);
       } else {
-        setEmployeePositions(data);
+        setEmployeePositions(employeePositions.data);
+        setEmployee(employee.data);
       }
       setIsLoading(false);
     }
-    _getEmployeePositions();
-  }, []);
-
-  // Retrieve selected employee data
-  useEffect(() => {
-    const getEmployee = async () => {
-      const { data, error } = await oneEmployee();
-      if(error) {
-        console.error(error);
-      } else {
-        setEmployee(data);
-      }
-      setIsLoading(false)
-    }
-    getEmployee()
+    getRequiredData();
   }, [id]);
 
   // Update value input state
   const handleInput = (e) => {
     e.persist();
-    let value = e.target.value;
-    setEmployee({ ...employee, [e.target.name]: value });
+    setEmployee({ ...employee, [e.target.name]: e.target.value });
   }
 
   // Update Employee
@@ -93,9 +85,9 @@ function EditEmployee() {
             Profile Image
           </label>
           <label className="cursor-pointer">
-            {employee.profile_url
+            {employee?.profile_url
               ? <img src={employee?.profile_url && URL.createObjectURL(employee?.profile_url)} className='rounded-full mx-auto h-20 aspect-square object-cover' alt="" />
-              : <Avatar className='mx-auto object-cover' size="lg" rounded/>}
+              : <Avatar className='mx-auto object-cover' placeholderInitials={initialName(employee?.name)} size="lg" rounded/>}
             <input type="file" hidden onChange={(e) => setEmployee({ ...employee, profile_url: e.target.files[0] })} />
           </label>
           <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
@@ -111,7 +103,7 @@ function EditEmployee() {
           <label htmlFor="position" className="block text-gray-700 dark:text-gray-50 font-bold mb-2 mt-5">
             Positions
           </label>
-          <Select name="employee_position_id" id="position" className='w-full' value={employee.employee_position_id} onChange={handleInput}>
+          <Select name="employee_position_id" id="position" className='w-full' value={employee?.employee_position_id} onChange={handleInput}>
             {employeePositions.map(p => (
               <option key={p.id} value={p.id}>{p.name}</option>
             ))}

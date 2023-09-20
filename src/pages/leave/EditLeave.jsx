@@ -17,33 +17,26 @@ function EditLeave() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Retrieve selected leave data
+  // Retrieve selected leave data & all Employees
   useEffect(() => {
-    const getLeave = async () => {
+    const getRequiredData = async () => {
       setIsLoading(true);
-      const { data, error } = await oneLeave(id);
-      if(error) {
-        console.error(error);
+      const leaveData = oneLeave(id);
+      const employeesData = getEmployees();
+
+      const [leave, employees] = await Promise.all([leaveData, employeesData]);
+      if(leave.error || employees.error) {
+        console.error(leave.error);
+        console.error(employees.error);
       } else {
-        setLeave(data);
+        setLeave(leave.data);
+        setEmployees(employees.data);
       }
       setIsLoading(false);
     }
     
-    getAllEmployees();
-    getLeave();
+    getRequiredData();
   }, [id]);
-
-  const getAllEmployees = async () => {
-    setIsLoading(true);
-    const { data, error } = await getEmployees();
-    if (error) {
-      console.error(error);
-      setIsLoading(false);
-    } else {
-      setEmployees(data);
-    }
-  }
 
   // Update Leave
   const _updateLeave = async (e) => {

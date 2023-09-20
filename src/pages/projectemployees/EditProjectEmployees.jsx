@@ -21,37 +21,27 @@ const EditProjectEmployees = () => {
 
   // Retrieve selected Project data
   useEffect(() => {
-    const getProjectEmployee = async () => {
+    const getRequiredData = async () => {
       setIsLoading(true);
-
-      const { data, error } = await oneProjectEmployee(id);
-      if (error) {
-        console.error(error);
+      const projectEmployeeData = oneProjectEmployee(id);
+      const employeesData = getEmployees();
+      const projectsData = getProjects();
+  
+      const [employees, projects, projectEmployee] = await Promise.all([employeesData, projectsData, projectEmployeeData]);
+      if(employees.error || projects.error || projectEmployee.error) {
+        console.error(employees.error);
+        console.error(projects.error);
+        console.error(projectEmployee.error);
       } else {
-        setProjectEmployee(data);
+        setProjectEmployee(projectEmployee.data);
+        setEmployees(employees.data);
+        setProjects(projects.data);
       }
-
-      setIsLoading(false)
+      setIsLoading(false);
     }
 
     getRequiredData();
-    getProjectEmployee()
   }, [id]);
-
-  const getRequiredData = async () => {
-    setIsLoading(true);
-    const employeesData = getEmployees();
-    const projectsData = getProjects();
-
-    const [employees, projects] = await Promise.all([employeesData, projectsData]);
-    if(employees.data) {
-      setEmployees(employees.data);
-    }
-    if(projects.data) {
-      setProjects(projects.data);
-    }
-    setIsLoading(false);
-  }
 
   // Update Project
   const _updateProjectEmployee = async (e) => {
