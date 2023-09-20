@@ -1,4 +1,4 @@
-import { Button, DarkThemeToggle, Navbar } from 'flowbite-react';
+import { Avatar, Button, DarkThemeToggle, Navbar } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 
 const NavbarReact = ({ setIsOpenOnSmallScreen }) => {
@@ -14,8 +14,9 @@ const NavbarReact = ({ setIsOpenOnSmallScreen }) => {
                     </svg>
                 </Button>
                 <Navbar.Brand as={Link} to='/'>
+                    <Avatar className='mr-2' img="https://media.licdn.com/dms/image/C560BAQH-v4w0SCX3FA/company-logo_200_200/0/1672744149377?e=2147483647&v=beta&t=kkr08N7rHSAaoDKCSPXveuLug6rKOzpoNOrXxYmLBZw"/>
                     <span className="self-center whitespace-nowrap text-xl font-bold dark:text-white">
-                        Employee Leave
+                        62 Teknologi
                     </span>
                 </Navbar.Brand>
             </div>

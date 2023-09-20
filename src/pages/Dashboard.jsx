@@ -138,7 +138,7 @@ const Dashboard = () => {
                             <div className="font-normal text-gray-700 dark:text-gray-400">
                                 Progress :
                                 <Progress
-                                    progress={(project.done_story_point / project.total_story_point) * 100}
+                                    progress={Math.floor((project.done_story_point / project.total_story_point) * 100)}
                                     size="lg"
                                     labelProgress={(project.done_story_point / project.total_story_point) * 100}
                                     progressLabelPosition='inside'

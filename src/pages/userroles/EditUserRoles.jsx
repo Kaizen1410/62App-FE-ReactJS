@@ -1,7 +1,6 @@
 import { Button } from "flowbite-react"
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import fetchClient from "../../utils/fetchClient";
 import Loading from "../../components/Loading";
 import { BeatLoader } from "react-spinners";
 import { UserState } from "../../context/UserProvider";
