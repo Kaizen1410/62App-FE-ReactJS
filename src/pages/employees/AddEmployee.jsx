@@ -6,6 +6,7 @@ import { BeatLoader } from 'react-spinners';
 import { UserState } from "../../context/UserProvider";
 import { addEmployee } from "../../api/ApiEmployee";
 import { getEmployeePositions } from "../../api/ApiEmployeePosition";
+import initialName from "../../utils/initialName";
 
 function AddEmployee() {
   const [isLoading, setIsLoading] = useState(true);
@@ -85,7 +86,7 @@ function AddEmployee() {
             Profile Image
           </label>
           <label className="cursor-pointer">
-            <Avatar theme={avatarTheme} img={employee?.profile_url && URL.createObjectURL(employee?.profile_url)} className='mx-auto' size="lg" rounded/>
+            <Avatar theme={avatarTheme} img={employee.profile_url && URL.createObjectURL(employee.profile_url)} placeholderInitials={initialName(employee.name)} className='mx-auto' size="lg" rounded/>
             <input type="file" id="image" hidden onChange={(e) => setEmployee({ ...employee, profile_url: e.target.files[0] })} />
           </label>
 
@@ -93,7 +94,7 @@ function AddEmployee() {
             Name
           </label>
           <TextInput
-            value={employee?.name}
+            value={employee.name}
             id="name"
             name="name"
             className="w-full"

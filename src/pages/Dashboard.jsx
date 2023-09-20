@@ -9,11 +9,12 @@ import { getProjectsSummary } from '../api/ApiProject';
 const Dashboard = () => {
     const [year, setYear] = useState(new Date().getFullYear());
     const [monthData, setMonthData] = useState([]);
-    const [projectSummary, setProjectSummary] = useState([])
+    const [projectSummary, setProjectSummary] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [projectYear, setProjectYear] = useState('');
+
     const currentYear = new Date().getFullYear();
     const yearOptions = Array.from({ length: 6 }, (_, i) => currentYear - 3 + i);
-    const [projectYear, setProjectYear] = useState(new Date().getFullYear());
 
     // Retrieve Leaves per month in specific year
     useEffect(() => {
@@ -107,6 +108,7 @@ const Dashboard = () => {
                         value={projectYear}
                         onChange={(e) => setProjectYear(e.target.value)}
                     >
+                        <option value="">All</option>
                         {yearOptions.map((projectYear) => (
                             <option key={projectYear} value={projectYear}>
                                 {projectYear}
@@ -116,7 +118,7 @@ const Dashboard = () => {
                 </div>
 
                 <div className='flex flex-wrap gap-5'>
-                    {projectSummary.length > 0 ? projectSummary.map(project => (
+                    {isLoading ? <Loading size='xl' /> : projectSummary.length > 0 ? projectSummary.map(project => (
                         <Card style={{ width: '32%' }}>
                             <div className='flex items-center justify-center gap-2'>
                                 <h5 className='text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>{project.name}</h5>
@@ -140,7 +142,7 @@ const Dashboard = () => {
                                 <Progress
                                     progress={Math.floor((project.done_story_point / project.total_story_point) * 100)}
                                     size="lg"
-                                    labelProgress={(project.done_story_point / project.total_story_point) * 100}
+                                    labelProgress={true}
                                     progressLabelPosition='inside'
                                 />
                             </div>

@@ -15,10 +15,10 @@ function AddLeave() {
   const { setNotif } = UserState();
 
   // form
-  const [employeeId, setEmployeeId] = useState(1);
+  const [employeeId, setEmployeeId] = useState('');
   const [dateLeave, setDateLeave] = useState(moment(new Date()).format('YYYY-MM-DD'));
   const [isApproved, setIsApproved] = useState(false);
-  const [approvedBy, setApprovedBy] = useState(1);
+  const [approvedBy, setApprovedBy] = useState('');
 
   const navigate = useNavigate();
 
@@ -72,6 +72,7 @@ function AddLeave() {
       <div className="mb-4">
         <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">Name</label>
         <Select id="name" value={employeeId} onChange={e => setEmployeeId(e.target.value)}>
+          <option value=''>---Select Employee---</option>
           {employees.map(employee => (
             <option key={employee.id} value={employee.id}>{employee.name}</option>
           ))}
@@ -98,6 +99,7 @@ function AddLeave() {
           <>
             <label htmlFor="approvedBy" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">Approved By</label>
             <Select id="approvedBy" value={approvedBy} onChange={e => setApprovedBy(e.target.value)}>
+              <option value=''>---Select Employee---</option> 
               {employees.map(employee => (
                 <option key={employee.id} value={employee.id}>{employee.name}</option>
               ))}
