@@ -3,11 +3,14 @@ import Loading from '../components/Loading';
 import { Link } from 'react-router-dom';
 import { Select, Table } from 'flowbite-react';
 import { getLeavesSummary } from '../api/ApiLeave';
+import NoData from '../components/NoData';
 
 const Dashboard = () => {
     const [year, setYear] = useState(new Date().getFullYear());
     const [monthData, setMonthData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const currentYear = new Date().getFullYear();
+    const yearOptions = Array.from({ length: 6 }, (_, i) => currentYear - 3 + i);
 
     // Retrieve Leaves per month in specific year
     useEffect(() => {
@@ -38,11 +41,15 @@ const Dashboard = () => {
                     <Select
                         className="w-56"
                         icon={() => <i className="fa-solid fa-calendar absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>}
+                        value={year}
                         onChange={(e) => setYear(e.target.value)}
                     >
-                        <option value={new Date().getFullYear()}>{new Date().getFullYear()}</option>
-                        <option value={new Date().getFullYear() - 1}>{new Date().getFullYear() - 1}</option>
-                    </Select>
+                       {yearOptions.map((year) => (
+                         <option key={year} value={year}>
+                          {year}
+                         </option>
+                       ))}
+                      </Select>
                 </div>
 
                 <div className='overflow-x-auto'>
@@ -53,7 +60,7 @@ const Dashboard = () => {
                                 <Table.HeadCell className="w-1">Total Leave</Table.HeadCell>
                             </Table.Head>
                             <Table.Body className="divide-y">
-                                {monthData.map((month, i) => (
+                                {monthData.length > 0 ? monthData.map((month, i) => (
                                     <Table.Row key={i} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                                         <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white text-center">
                                             {month.monthname}
@@ -70,7 +77,12 @@ const Dashboard = () => {
                                             </Link>
                                         </Table.Cell>
                                     </Table.Row>
-                                ))}
+                                )) : (
+                                    <Table.Row >
+                                      <Table.Cell colSpan={10}>
+                                        <NoData />
+                                      </Table.Cell>
+                                    </Table.Row>)}
                             </Table.Body>
                         </Table>)}
                 </div>
