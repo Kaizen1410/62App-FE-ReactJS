@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserState } from '../context/UserProvider';
-import fetchClient from '../utils/fetchClient';
 import { Button, DarkThemeToggle, TextInput } from 'flowbite-react';
 import { BeatLoader } from 'react-spinners';
+import { login } from '../api/ApiAuth';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -18,14 +18,15 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    try {
-      const res = await fetchClient.post('/api/auth/login', { email, password });
-      localStorage.setItem('token', res.data.token);
-      setUser(res.data.data);
+
+    const { data, error, token } = await login({ email, password });
+    if(error) {
+      console.error(error);
+      setMessage(error);
+    } else {
+      localStorage.setItem('token', token);
+      setUser(data);
       navigate('/');
-    } catch (err) {
-      console.error(err.response);
-      setMessage(err.response?.data.message || 'Cant send data to server');
     }
     setIsLoading(false);
   };
@@ -75,8 +76,8 @@ function Login() {
                   placeholder="Masukkan kata sandi Anda"
                 />
                 {showPw
-                ? <i class="fa-solid fa-eye absolute top-1/2 -translate-y-1/2 right-3 cursor-pointer dark:text-white" onClick={() => setShowPw(prev => !prev)}></i>
-                : <i class="fa-solid fa-eye-slash absolute top-1/2 -translate-y-1/2 right-3 cursor-pointer dark:text-white" onClick={() => setShowPw(prev => !prev)}></i>}
+                ? <i className="fa-solid fa-eye absolute top-1/2 -translate-y-1/2 right-3 cursor-pointer dark:text-white" onClick={() => setShowPw(prev => !prev)}></i>
+                : <i className="fa-solid fa-eye-slash absolute top-1/2 -translate-y-1/2 right-3 cursor-pointer dark:text-white" onClick={() => setShowPw(prev => !prev)}></i>}
               </div>
 
             </div>

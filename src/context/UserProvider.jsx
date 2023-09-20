@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Spinner } from "flowbite-react"
-import fetchClient from '../utils/fetchClient';
+import { getUser } from '../api/ApiAuth';
 
 const UserContext = createContext();
 
@@ -14,15 +14,14 @@ const UserProvider = ({children}) => {
     useEffect(() => {
         // Get user login info
         const fetchUser = async () => {
-            try {
-                const res = await fetchClient.get('/api/auth/user');
-                setUser(res.data.data);
-                setIsLoading(false);
-            } catch (err) {
-                console.error(err);
-                setIsLoading(false);
+            const { data, error } = await getUser()
+            if(error) {
+                console.error(error);
                 navigate('/login');
+            } else {
+                setUser(data);
             }
+            setIsLoading(false);
         }
         fetchUser();
         // eslint-disable-next-line

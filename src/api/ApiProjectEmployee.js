@@ -13,7 +13,7 @@ export const getProjectEmployees = async (search='', page=1, sort='name', direct
         delete res.data.data
         result.pagination = res.data
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }
@@ -28,7 +28,7 @@ export const oneProjectEmployee = async (id) => {
         const res = await fetchClient.get(`/api/project-employees/${id}`);
         result.data = res.data.data
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }
@@ -45,7 +45,7 @@ export const addProjectEmployee = async (body) => {
         result.data = res.data.data
         result.message = res.data.message
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }
@@ -62,7 +62,7 @@ export const updateProjectEmployee = async (id, body) => {
         result.data = res.data.data
         result.message = res.data.message
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }
@@ -77,7 +77,7 @@ export const deleteProjectEmployee = async (id) => {
         const res = await fetchClient.delete(`/api/project-employees/${id}`);
         result.message = res.data.message
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }

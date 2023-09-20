@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Loading from '../components/Loading';
 import { Link } from 'react-router-dom';
 import { Select, Table } from 'flowbite-react';
-import fetchClient from '../utils/fetchClient';
+import { getLeavesSummary } from '../api/ApiLeave';
 
 const Dashboard = () => {
     const [year, setYear] = useState(new Date().getFullYear());
@@ -11,12 +11,16 @@ const Dashboard = () => {
 
     // Retrieve Leaves per month in specific year
     useEffect(() => {
-        const getMonthData = () => {
+        const getMonthData = async () => {
             setIsLoading(true);
-            fetchClient.get(`/api/leaves/year/${year}`)
-                .then(res => setMonthData(res.data.data))
-                .catch(error => console.error(error))
-                .finally(() => setIsLoading(false));
+
+            const { data, error } = await getLeavesSummary(year);
+            if(error) {
+                console.error(error);
+            } else {
+                setMonthData(data)
+            }
+            setIsLoading(false);
         }
 
         getMonthData();

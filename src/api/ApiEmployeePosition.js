@@ -13,7 +13,7 @@ export const getEmployeePositions = async (search='', page=1, sort='name', direc
         delete res.data.data
         result.pagination = res.data
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }
@@ -28,7 +28,7 @@ export const oneEmployeePosition = async (id) => {
         const res = await fetchClient.get(`/api/employee-positions/${id}`);
         result.data = res.data.data
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }
@@ -45,7 +45,7 @@ export const addEmployeePosition = async (body) => {
         result.data = res.data.data
         result.message = res.data.message
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }
@@ -62,7 +62,7 @@ export const updateEmployeePosition = async (id, body) => {
         result.data = res.data.data
         result.message = res.data.message
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }
@@ -77,7 +77,7 @@ export const deleteEmployeePosition = async (id) => {
         const res = await fetchClient.delete(`/api/employee-positions/${id}`);
         result.message = res.data.message
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }

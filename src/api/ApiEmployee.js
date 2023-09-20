@@ -13,7 +13,7 @@ export const getEmployees = async (search='', page=1, sort='name', direction='as
         delete res.data.data
         result.pagination = res.data
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }
@@ -28,7 +28,7 @@ export const oneEmployee = async (id) => {
         const res = await fetchClient.get(`/api/employees/${id}`);
         result.data = res.data.data
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }
@@ -45,7 +45,7 @@ export const addEmployee = async (formData) => {
         result.data = res.data.data
         result.message = res.data.message
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }
@@ -62,7 +62,7 @@ export const updateEmployee = async (id, formData) => {
         result.data = res.data.data
         result.message = res.data.message
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }
@@ -77,7 +77,7 @@ export const deleteEmployee = async (id) => {
         const res = await fetchClient.delete(`/api/employee/${id}`);
         result.message = res.data.message
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }

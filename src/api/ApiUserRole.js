@@ -13,7 +13,7 @@ export const getUserRoles = async (search='', page=1, sort='email', direction='a
         delete res.data.data
         result.pagination = res.data
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }
@@ -28,7 +28,7 @@ export const oneUserRole = async (id) => {
         const res = await fetchClient.get(`/api/user-roles/${id}`);
         result.data = res.data.data
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }
@@ -45,7 +45,7 @@ export const updateUserRole = async (id, body) => {
         result.data = res.data.data
         result.message = res.data.message
     } catch (err) {
-        result.error = err.response?.data.message
+        result.error = err.response?.data.message || err
     }
     return result;
 }

@@ -4,8 +4,8 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import fetchClient from '../utils/fetchClient'
 import Loading from '../components/Loading'
+import { getLeavesCalendar } from '../api/ApiLeave'
 
 const Calendar = () => {
   const [events, setEvents] = useState([]);
@@ -19,13 +19,13 @@ const Calendar = () => {
   // Retrieve Leaves data for calendar event
   const getLeaves = async () => {
     setIsLoading(true);
-    try {
-      const res = await fetchClient.get('/api/leaves/calendar');
-      const data = res.data.data.map(d => ({ title: d.employee?.name || '(Deleted Employee)', date: d.date_leave }));
-      setEvents(data);
-    } catch (err) {
-      ;
-      console.error(err)
+
+    const { data, error } = await getLeavesCalendar();
+    if (error) {
+      console.error(error);
+    } else {
+      const dataEvents = data.map(d => ({ title: d.employee?.name, date: d.date_leave }));
+      setEvents(dataEvents);
     }
     setIsLoading(false);
   }

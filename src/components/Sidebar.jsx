@@ -1,10 +1,10 @@
 import { Avatar, Dropdown, Sidebar } from 'flowbite-react';
 import { Link, useNavigate } from "react-router-dom";
-import fetchClient from "../utils/fetchClient";
 import { useState } from 'react';
 import { UserState } from '../context/UserProvider';
 import { BeatLoader } from 'react-spinners';
 import initialName from '../utils/initialName';
+import { logout } from '../api/ApiAuth';
 
 const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
     const navigate = useNavigate();
@@ -13,12 +13,13 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
 
     const handleLogout = async () => {
         setIsLoading(true);
-        try {
-            await fetchClient.get('/api/auth/logout');
+
+        const { error } = await logout();
+        if(error) {
+            console.error(error);
+        } else {
             localStorage.removeItem('token');
             navigate('/login');
-        } catch (err) {
-            console.error(err);
         }
         setIsLoading(false);
     }
