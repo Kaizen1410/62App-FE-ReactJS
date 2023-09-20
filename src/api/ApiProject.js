@@ -81,3 +81,18 @@ export const deleteProject = async (id) => {
     }
     return result;
 }
+
+export const getProjectsSummary = async () => {
+    const result = {
+        data: null,
+        error: null
+    }
+
+    try {
+        const res = await fetchClient.get('/api/projects/summary');
+        result.data = res.data.data
+    } catch (err) {
+        result.error = err.response?.data.message || err
+    }
+    return result;
+}

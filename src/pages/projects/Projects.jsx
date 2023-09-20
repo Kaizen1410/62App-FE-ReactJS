@@ -38,7 +38,7 @@ const Projects = () => {
     setIsLoading(true);
 
     const { data, pagination, error } = await getProjects(search, page, sort, direction, perPage);
-    if(error) {
+    if (error) {
       console.error(error);
     } else {
       setProjects(data);
@@ -53,9 +53,9 @@ const Projects = () => {
     setDeleteIsLoading(true);
 
     const { error, message } = await deleteProject(projectId);
-    if(error) {
-        console.error('Error deleting project:', error);
-        setNotif(prev => [...prev, { type: 'failure', message: error }]);
+    if (error) {
+      console.error('Error deleting project:', error);
+      setNotif(prev => [...prev, { type: 'failure', message: error }]);
     } else {
       setOpenModal(null);
       setNotif(prev => [...prev, { type: 'success', message }]);
@@ -168,15 +168,15 @@ const Projects = () => {
                     {project.name}
                   </Table.Cell>
                   <TableCell>
-                    <div className="w-96" style={{wordWrap:"break-word"}}>
+                    <div className="w-96" style={{ wordWrap: "break-word" }}>
                       {project.description}
                     </div>
                   </TableCell>
                   <Table.Cell className="whitespace-nowrap">
-                  {project.start_date ? moment(project.start_date).format("DD MMMM YYYY") : "-"}
+                    {project.start_date ? moment(project.start_date).format("DD MMMM YYYY") : "-"}
                   </Table.Cell>
                   <Table.Cell className="whitespace-nowrap">
-                  {project.end_date ? moment(project.end_date).format("DD MMMM YYYY") : "-"}
+                    {project.end_date ? moment(project.end_date).format("DD MMMM YYYY") : "-"}
                   </Table.Cell>
                   <Table.Cell>
                     <div className="w-20">
@@ -184,13 +184,13 @@ const Projects = () => {
                     </div>
                   </Table.Cell>
                   <Table.Cell>
-                  {project.total_story_point}
+                    {project.total_story_point}
                   </Table.Cell>
                   <Table.Cell>
-                  {project.done_story_point}
+                    {project.done_story_point}
                   </Table.Cell>
                   <Table.Cell>
-                  {project.status === 1? 'Proposal' : project.status === 2? 'On Going' : 'Done'}
+                    {project.status === 1 ? 'Proposal' : project.status === 2 ? 'On Going' : 'Done'}
                   </Table.Cell>
                   <Table.Cell className="text-center">
                     <Link

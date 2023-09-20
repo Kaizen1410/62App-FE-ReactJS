@@ -104,7 +104,7 @@ export const getLeavesSummary = async (year) => {
     }
 
     try {
-        const res = await fetchClient.get(`/api/leaves/year/${year}`);
+        const res = await fetchClient.get(`/api/leaves/summary/${year}`);
         result.data = res.data.data;
     } catch (err) {
         result.error = err.response?.data.message || err;
