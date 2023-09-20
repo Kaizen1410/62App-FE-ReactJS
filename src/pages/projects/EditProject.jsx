@@ -1,10 +1,9 @@
-import { Button, Select, TextInput, Textarea } from "flowbite-react"
+import { Avatar, Button, Select, TextInput, Textarea } from "flowbite-react"
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { BeatLoader } from 'react-spinners';
 import { UserState } from "../../context/UserProvider";
-import moment from "moment";
 import { oneProject, updateProject } from "../../api/ApiProject";
 
 function EditProject() {
@@ -84,6 +83,14 @@ function EditProject() {
         setUpdateIsLoading(false);
     }
 
+    const avatarTheme = {
+        "root": {
+            "img": {
+                "base": "rounded object-cover"
+            }
+        }
+    }
+
     return (
         isLoading ? <Loading size='xl' /> :
             <div
@@ -95,7 +102,7 @@ function EditProject() {
                         Profile Image
                     </label>
                     <label className="cursor-pointer" htmlFor="image">
-                        <img src={newImage ? URL.createObjectURL(newImage) : project?.image_url} className='rounded-full mx-auto h-20 aspect-square object-cover' alt="" />
+                        <Avatar size='lg' rounded theme={avatarTheme} img={newImage ? URL.createObjectURL(newImage) : project?.image_url} className='mx-auto' alt="" />
                         <input type="file" id="image" hidden onChange={(e) => setNewImage(e.target.files[0])} />
                     </label>
                     <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
@@ -125,14 +132,14 @@ function EditProject() {
                     </label>
                     <input type="date" id="start_date"
                         className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
-                        value={project?.start_date}
+                        value={project?.start_date || ''}
                         onChange={e => setProject(prev => ({ ...prev, start_date: e.target.value }))} />
                     <label htmlFor="end_date" className="block mt-2 text-gray-700 dark:text-gray-50 font-bold mb-2">
                         End Date
                     </label>
                     <input type="date" id="end_date"
                         className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
-                        value={project?.end_date}
+                        value={project?.end_date || ''}
                         onChange={e => setProject(prev => ({ ...prev, end_date: e.target.value }))} />
                     <div className="flex gap-5">
                         <div className="w-full">

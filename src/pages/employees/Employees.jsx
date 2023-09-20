@@ -73,6 +73,14 @@ const Employees = () => {
     setDirection('asc');
   }
 
+  const avatarTheme = {
+    "root": {
+      "img": {
+        "base": "rounded object-cover"
+      }
+    }
+  }
+
   return (
     <>
       <div className="bg-white rounded-md p-4 dark:bg-gray-800">
@@ -113,9 +121,9 @@ const Employees = () => {
                   </Table.Cell>
                   <Table.Cell>{employee.name}</Table.Cell>
                   <Table.Cell className='text-center'>
-                    {employee.profile_url
-                      ? <img src={employee.profile_url} className='mx-auto h-20 aspect-square object-cover' alt="" />
-                      : <Avatar className='mx-auto object-cover' size="lg" placeholderInitials={initialName(employee.name)} />}
+                      <Avatar theme={avatarTheme} className='mx-auto object-cover' size="lg"
+                        placeholderInitials={initialName(employee.name)}
+                        img={employee.profile_url} />
                   </Table.Cell>
                   <Table.Cell className='text-center'>{employee.employee_position}</Table.Cell>
                   <Table.Cell className='text-center'>

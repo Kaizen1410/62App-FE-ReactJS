@@ -116,7 +116,7 @@ const EditProjectEmployees = () => {
             </label>
             <input type="date" id="start_date"
               className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
-              value={projectEmployee?.start_date}
+              value={projectEmployee?.start_date || ''}
               onChange={e => setProjectEmployee(prev => ({ ...prev, start_date: e.target.value }))} />
           </div>
           <div>
@@ -125,7 +125,7 @@ const EditProjectEmployees = () => {
             </label>
             <input type="date" id="end_date"
               className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
-              value={projectEmployee?.end_date}
+              value={projectEmployee?.end_date || ''}
               onChange={e => setProjectEmployee(prev => ({ ...prev, end_date: e.target.value }))} />
           </div>
           <div

@@ -17,7 +17,8 @@ function EditEmployee() {
     profile_url: '',
     employee_position_id: ''
   });
-  const { setNotif } = UserState();
+  const [newImage, setNewImage] = useState();
+  const { user, setUser, setNotif } = UserState();
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -58,19 +59,31 @@ function EditEmployee() {
     formData.append('name', employee.name);
     formData.append('employee_position_id', employee.employee_position_id);
 
-    if (employee.profile_url) {
-      formData.append('profile_url', employee.profile_url);
+    if (newImage) {
+      formData.append('profile_url', newImage);
     }
 
-    const { error, message } = await updateEmployee(id, formData);
+    const { data, error, message } = await updateEmployee(id, formData);
     if(error) {
       console.error(error);
       setNotif(prev => [...prev, { type: 'failure', message: error }]);
     } else {
       setNotif(prev => [...prev, { type: 'success', message }]);
+
+      if(user?.employee.id.toString() === id) {
+        setUser(prev => ({...prev, employee: data}))
+      }
       navigate('/employees');
     }
     setUpdateIsLoading(false);
+  }
+
+  const avatarTheme = {
+    "root": {
+      "img": {
+        "base": "rounded object-cover"
+      }
+    }
   }
 
   return (
@@ -85,10 +98,13 @@ function EditEmployee() {
             Profile Image
           </label>
           <label className="cursor-pointer">
-            {employee?.profile_url
-              ? <img src={employee?.profile_url && URL.createObjectURL(employee?.profile_url)} className='rounded-full mx-auto h-20 aspect-square object-cover' alt="" />
-              : <Avatar className='mx-auto object-cover' placeholderInitials={initialName(employee?.name)} size="lg" rounded/>}
-            <input type="file" hidden onChange={(e) => setEmployee({ ...employee, profile_url: e.target.files[0] })} />
+              <Avatar theme={avatarTheme}
+                className='mx-auto object-cover'
+                placeholderInitials={initialName(employee?.name)}
+                img={newImage ? URL.createObjectURL(newImage) : employee?.profile_url}
+                size="lg"
+                rounded/>
+            <input type="file" hidden onChange={(e) => setNewImage(e.target.files[0])} />
           </label>
           <label htmlFor="name" className="block text-gray-700 dark:text-gray-50 font-bold mb-2">
             Name

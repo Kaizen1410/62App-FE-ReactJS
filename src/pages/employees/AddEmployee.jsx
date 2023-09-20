@@ -65,6 +65,13 @@ function AddEmployee() {
     setAddIsLoading(false);
   }
 
+  const avatarTheme = {
+    "root": {
+      "img": {
+        "base": "rounded object-cover"
+      }
+    }
+  }
 
   return (
     isLoading ? <Loading size='xl' /> :
@@ -78,9 +85,7 @@ function AddEmployee() {
             Profile Image
           </label>
           <label className="cursor-pointer">
-            {employee.profile_url
-              ? <img src={employee?.profile_url && URL.createObjectURL(employee?.profile_url)} className='rounded-full mx-auto h-20 aspect-square object-cover' alt="" />
-              : <Avatar className='mx-auto object-cover' size="lg" rounded/>}
+            <Avatar theme={avatarTheme} img={employee?.profile_url && URL.createObjectURL(employee?.profile_url)} className='mx-auto' size="lg" rounded/>
             <input type="file" hidden onChange={(e) => setEmployee({ ...employee, profile_url: e.target.files[0] })} />
           </label>
 

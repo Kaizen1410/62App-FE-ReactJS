@@ -1,4 +1,4 @@
-import { Table, Button, Dropdown } from "flowbite-react"
+import { Table, Button, Dropdown, Avatar } from "flowbite-react"
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
@@ -74,6 +74,14 @@ const Projects = () => {
 
     setSort(field);
     setDirection('asc');
+  }
+
+  const avatarTheme = {
+    "root": {
+      "img": {
+        "base": "rounded object-cover"
+      }
+    }
   }
 
   return (
@@ -172,7 +180,7 @@ const Projects = () => {
                   </Table.Cell>
                   <Table.Cell>
                     <div className="w-20">
-                      <img src={project.image_url} className='mx-auto w-full aspect-square object-cover' alt="" />
+                      <Avatar theme={avatarTheme} img={project.image_url} size='lg' className='mx-auto w-full' alt="" />
                     </div>
                   </Table.Cell>
                   <Table.Cell>

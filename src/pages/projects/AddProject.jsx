@@ -59,6 +59,13 @@ function AddProject() {
     setAddIsLoading(false);
   }
 
+  const avatarTheme = {
+    "root": {
+      "img": {
+        "base": "rounded object-cover"
+      }
+    }
+  }
 
   return (
     <div
@@ -70,9 +77,7 @@ function AddProject() {
           Project Image
         </label>
         <label className="cursor-pointer" htmlFor="image">
-          {project.image_url
-            ? <img src={project?.image_url && URL.createObjectURL(project?.image_url)} className='rounded-full mx-auto h-20 aspect-square object-cover' alt="" />
-            : <Avatar className='mx-auto object-cover' size="lg" rounded />}
+            <Avatar theme={avatarTheme} img={project?.image_url && URL.createObjectURL(project?.image_url)} className='mx-auto object-cover' size="lg" rounded />
           <input type="file" id="image" hidden onChange={(e) => setProject({ ...project, image_url: e.target.files[0] })} />
         </label>
 

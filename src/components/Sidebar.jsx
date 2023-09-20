@@ -86,7 +86,9 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
                         <Dropdown placement='top' className='' renderTrigger={() =>
                             <button className='w-full flex pr-2 items-center justify-between gap-2 z-50 text-left rounded-lg p-1 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700'>
                                 <div className='flex gap-2 overflow-hidden'>
-                                    <Avatar rounded placeholderInitials={initialName(user?.employee.name)} />
+                                    {user?.employee.profile_url
+                                        ? <img src={user?.employee.profile_url} className='rounded-full w-10 h-10' alt="" />
+                                        : <Avatar rounded size='md'  className='aspect-square' placeholderInitials={initialName(user?.employee.name)} />}
                                     {isLoading
                                         ? <div className='flex justify-center items-center w-96'>
                                             <BeatLoader color='rgb(8 145 178)' size={12} />
