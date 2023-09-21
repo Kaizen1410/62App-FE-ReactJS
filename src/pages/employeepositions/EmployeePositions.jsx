@@ -33,6 +33,10 @@ function EmployeePositions() {
     // eslint-disable-next-line
   }, [search, page, sort, direction, perPage]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
+
   // Retrive Employee Positions data
   const _getEmployeePositions = async () => {
     setIsLoading(true);

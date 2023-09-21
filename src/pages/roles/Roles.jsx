@@ -30,7 +30,11 @@ const Roles = () => {
   useEffect(() => {
     _getRoles();
     // eslint-disable-next-line
-  }, [search, page, sort, direction, perPage])
+  }, [search, page, sort, direction, perPage]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
 
   // Retrieve roles data
   const _getRoles = async () => {

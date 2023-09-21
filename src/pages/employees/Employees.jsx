@@ -32,7 +32,11 @@ const Employees = () => {
   useEffect(() => {
     _getEmployee();
     // eslint-disable-next-line
-  }, [search, page, sort, direction, perPage])
+  }, [search, page, sort, direction, perPage]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
 
   // Retrieve Employees data
   const _getEmployee = async () => {

@@ -38,6 +38,10 @@ const UserRoles = () => {
     _getUserRoles();
   }, [search, page, sort, direction, perPage]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
+
   // Sort
   const handleSort = (field) => {
     if (field === sort) {

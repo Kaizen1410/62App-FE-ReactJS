@@ -1,10 +1,12 @@
+import { disabled, showLabel } from "../utils/paginationLogics";
+
 const Pagination = ({ pagination, page, setPage }) => {
     const handlePage = (p) => {
         if (p === '&laquo; Previous' || p === 'Next &raquo;') {
             setPage(prev => p === '&laquo; Previous' ? prev - 1 : prev + 1);
             return;
         }
-        setPage(p);
+        setPage(parseInt(p));
     }
 
     return (
@@ -17,16 +19,16 @@ const Pagination = ({ pagination, page, setPage }) => {
                                 // Active
                                 ? 'bg-cyan-700 text-white'
                                 // Not Active
-                                : l.url
-                                // Clickable
-                                ? 'cursor-pointer dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700'
+                                : disabled(pagination, page, l)
                                 // Not Clickable
-                                : 'cursor-not-allowed text-gray-400'
+                                ? 'cursor-not-allowed text-gray-400'
+                                // Clickable
+                                : 'cursor-pointer dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700'
                             }`}
                         onClick={() => handlePage(l.label)}
-                        disabled={!l.url}
+                        disabled={disabled(pagination, page, l)}
                     >
-                        {l.label === '&laquo; Previous' ? '<' : l.label === 'Next &raquo;' ? '>' : l.label}
+                        {showLabel(l)}
                     </button>
                 ))}
             </div>

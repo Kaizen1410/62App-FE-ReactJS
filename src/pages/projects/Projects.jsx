@@ -33,6 +33,10 @@ const Projects = () => {
     // eslint-disable-next-line
   }, [search, page, sort, direction, perPage]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
+
   // Retrieve Leaves data
   const _getProjects = async () => {
     setIsLoading(true);

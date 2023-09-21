@@ -27,11 +27,14 @@ const ProjectEmployees = () => {
   const [direction, setDirection] = useState('asc');
   const [perPage, setPerPage] = useState(10);
 
-
   useEffect(() => {
     _getProjectEmployees();
     // eslint-disable-next-line
   }, [search, page, sort, direction, perPage]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
 
   // Retrieve Leaves data
   const _getProjectEmployees = async () => {
