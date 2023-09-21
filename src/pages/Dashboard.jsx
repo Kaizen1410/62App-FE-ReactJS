@@ -23,7 +23,7 @@ const Dashboard = () => {
         const _getLeavesSummary = async () => {
             setLeaveIsLoading(true);
             const { data, error } = await getLeavesSummary(leaveYear);
-            if(error) {
+            if (error) {
                 console.error(error);
             } else {
                 setLeaveSummary(data);
@@ -39,7 +39,7 @@ const Dashboard = () => {
             setProjectIsLoading(true);
 
             const { data, error } = await getProjectsSummary(projectYear);
-            if(error) {
+            if (error) {
                 console.error(error);
             } else {
                 setProjectSummary(data);
@@ -50,7 +50,7 @@ const Dashboard = () => {
 
         _getProjectsSummary();
     }, [projectYear])
-    
+
 
     return (
         <>
