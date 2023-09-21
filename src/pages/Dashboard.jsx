@@ -23,7 +23,7 @@ const Dashboard = () => {
         const _getLeavesSummary = async () => {
             setLeaveIsLoading(true);
             const { data, error } = await getLeavesSummary(leaveYear);
-            if(error) {
+            if (error) {
                 console.error(error);
             } else {
                 setLeaveSummary(data);
@@ -39,7 +39,7 @@ const Dashboard = () => {
             setProjectIsLoading(true);
 
             const { data, error } = await getProjectsSummary(projectYear);
-            if(error) {
+            if (error) {
                 console.error(error);
             } else {
                 setProjectSummary(data);
@@ -51,7 +51,7 @@ const Dashboard = () => {
         _getProjectsSummary();
     }, [projectYear])
 
-    
+
     return (
         <>
             <div className='mb-10'>
@@ -133,7 +133,7 @@ const Dashboard = () => {
 
                 <div className='flex flex-wrap'>
                     {projectIsLoading ? <Loading size='xl' /> : projectSummary.length > 0 ? projectSummary.map(project => (
-                        <div className='w-full md:w-1/2 xl:w-1/3 p-2'>
+                        <div className='w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-2'>
                             <Card className='h-full' >
                                 <div className='flex items-center justify-center gap-2'>
                                     <h5 className='text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>{project.name}</h5>
@@ -146,11 +146,14 @@ const Dashboard = () => {
                                 </div>
                                 <img className='object-cover aspect-square -p-6' src={project.image_url} alt="" />
                                 <div className="font-normal text-gray-700 dark:text-gray-400">
-                                    Employee :
-                                    {project.project_employees.map(employee => (
-                                        <p className="font-normal text-gray-700 dark:text-gray-400">
-                                            {employee.employee.name}
-                                        </p>))}
+
+                                    Employees :
+                                    <ul className='list-disc list-inside'>
+                                        {project.project_employees.map(employee => (
+                                            <li className="font-normal text-gray-700 dark:text-gray-400">
+                                                {employee.employee.name}
+                                            </li>))}
+                                    </ul>
                                 </div>
                                 <div className="mt-auto font-normal text-gray-700 dark:text-gray-400">
                                     Progress :
