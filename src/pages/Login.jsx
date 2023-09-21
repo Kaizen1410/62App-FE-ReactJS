@@ -31,9 +31,18 @@ function Login() {
     setIsLoading(false);
   };
 
+  const changeMode = () => {
+    const dark = document.querySelector('html').classList.toggle('dark');
+    if(dark) {
+        localStorage.setItem('theme', 'dark');
+    } else {
+        localStorage.setItem('theme', 'light');
+    }
+}
+
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <DarkThemeToggle className='absolute top-5 right-5' />
+      <DarkThemeToggle className='absolute top-5 right-5' onClick={changeMode} />
       <div className="max-w-md w-full bg-gray-50 dark:bg-gray-800 p-8 rounded-lg shadow-lg">
         <div>
           <h2 className="text-3xl font-extrabold text-cyan-950 dark:text-white text-center mb-6">

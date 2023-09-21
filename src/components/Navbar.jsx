@@ -2,6 +2,15 @@ import { Avatar, Button, DarkThemeToggle, Navbar } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 
 const NavbarReact = ({ setIsOpenOnSmallScreen }) => {
+    const changeMode = () => {
+        const dark = document.querySelector('html').classList.toggle('dark');
+        if(dark) {
+            localStorage.setItem('theme', 'dark');
+        } else {
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
     return (
         <Navbar
             fluid
@@ -21,7 +30,7 @@ const NavbarReact = ({ setIsOpenOnSmallScreen }) => {
                 </Navbar.Brand>
             </div>
 
-            <DarkThemeToggle />
+            <DarkThemeToggle onClick={changeMode} />
         </Navbar>
     )
 }
