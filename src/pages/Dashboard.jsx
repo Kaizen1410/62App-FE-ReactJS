@@ -133,7 +133,7 @@ const Dashboard = () => {
 
                 <div className='flex flex-wrap'>
                     {projectIsLoading ? <Loading size='xl' /> : projectSummary.length > 0 ? projectSummary.map(project => (
-                        <div className='w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-2'>
+                        <div className='w-full sm:w-1/2 lg:w-1/3 p-2'>
                         <Card className='h-full' >
                             <div className='flex items-center justify-center gap-2'>
                                 <h5 className='text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>{project.name}</h5>

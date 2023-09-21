@@ -50,7 +50,7 @@ const EditProjectEmployees = () => {
 
     const body = {
       employee_id: projectEmployee.employee_id,
-      project_id: projectEmployee.employee_id,
+      project_id: projectEmployee.project_id,
       status: projectEmployee.status
     }
 
