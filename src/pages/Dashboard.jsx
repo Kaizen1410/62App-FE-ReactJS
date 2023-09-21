@@ -7,36 +7,50 @@ import NoData from '../components/NoData';
 import { getProjectsSummary } from '../api/ApiProject';
 
 const Dashboard = () => {
-    const [year, setYear] = useState(new Date().getFullYear());
-    const [monthData, setMonthData] = useState([]);
-    const [projectSummary, setProjectSummary] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [leaveYear, setLeaveYear] = useState(new Date().getFullYear());
+    const [leaveSummary, setLeaveSummary] = useState([]);
+    const [leaveIsLoading, setLeaveIsLoading] = useState(true);
+
     const [projectYear, setProjectYear] = useState('');
+    const [projectSummary, setProjectSummary] = useState([]);
+    const [projectIsLoading, setProjectIsLoading] = useState(true);
 
     const currentYear = new Date().getFullYear();
     const yearOptions = Array.from({ length: 6 }, (_, i) => currentYear - 3 + i);
 
     // Retrieve Leaves per month in specific year
     useEffect(() => {
-        const getRequiredData = async () => {
-            setIsLoading(true);
-
-            const leavesSummaryData = getLeavesSummary(year);
-            const projectsSummaryData = getProjectsSummary(projectYear);
-
-            const [leavesSummary, projectsSummary] = await Promise.all([leavesSummaryData, projectsSummaryData]);
-            if (leavesSummary.error || projectsSummary.error) {
-                console.error(leavesSummary.error);
-                console.error(projectsSummary.error);
+        const _getLeavesSummary = async () => {
+            setLeaveIsLoading(true);
+            const { data, error } = await getLeavesSummary(leaveYear);
+            if(error) {
+                console.error(error);
             } else {
-                setMonthData(leavesSummary.data);
-                setProjectSummary(projectsSummary.data);
+                setLeaveSummary(data);
             }
-            setIsLoading(false);
+            setLeaveIsLoading(false);
         }
 
-        getRequiredData();
-    }, [year, projectYear]);
+        _getLeavesSummary();
+    }, [leaveYear]);
+
+    useEffect(() => {
+        const _getProjectsSummary = async () => {
+            setProjectIsLoading(true);
+
+            const { data, error } = await getProjectsSummary(projectYear);
+            if(error) {
+                console.error(error);
+            } else {
+                setProjectSummary(data);
+            }
+
+            setProjectIsLoading(false);
+        }
+
+        _getProjectsSummary();
+    }, [projectYear])
+    
 
     return (
         <>
@@ -50,8 +64,8 @@ const Dashboard = () => {
                     <Select
                         className="w-56"
                         icon={() => <i className="fa-solid fa-calendar absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>}
-                        value={year}
-                        onChange={(e) => setYear(e.target.value)}
+                        value={leaveYear}
+                        onChange={(e) => setLeaveYear(e.target.value)}
                     >
                         {yearOptions.map((year) => (
                             <option key={year} value={year}>
@@ -62,14 +76,14 @@ const Dashboard = () => {
                 </div>
 
                 <div className='overflow-x-auto'>
-                    {isLoading ? <Loading size='xl' /> : (
+                    {leaveIsLoading ? <Loading size='xl' /> : (
                         <Table striped>
                             <Table.Head className="text-center sticky top-0">
                                 <Table.HeadCell className="w-1">Month</Table.HeadCell>
                                 <Table.HeadCell className="w-1">Total Leave</Table.HeadCell>
                             </Table.Head>
                             <Table.Body className="divide-y">
-                                {monthData.length > 0 ? monthData.map((month, i) => (
+                                {leaveSummary.length > 0 ? leaveSummary.map((month, i) => (
                                     <Table.Row key={i} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                                         <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white text-center">
                                             {month.monthname}
@@ -78,7 +92,7 @@ const Dashboard = () => {
                                             <Link
                                                 className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 text-center"
                                                 to={`/calendar`}
-                                                state={{ date: new Date(`${year}-${month.month}`) }}
+                                                state={{ date: new Date(`${leaveYear}-${month.month}`) }}
                                             >
                                                 <p>
                                                     {month.data_count}
@@ -118,7 +132,7 @@ const Dashboard = () => {
                 </div>
 
                 <div className='flex flex-wrap gap-5'>
-                    {isLoading ? <Loading size='xl' /> : projectSummary.length > 0 ? projectSummary.map(project => (
+                    {projectIsLoading ? <Loading size='xl' /> : projectSummary.length > 0 ? projectSummary.map(project => (
                         <Card style={{ width: '32%' }}>
                             <div className='flex items-center justify-center gap-2'>
                                 <h5 className='text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>{project.name}</h5>
@@ -137,10 +151,10 @@ const Dashboard = () => {
                                         {employee.employee.name}
                                     </p>))}
                             </div>
-                            <div className="font-normal text-gray-700 dark:text-gray-400">
+                            <div className="mt-auto font-normal text-gray-700 dark:text-gray-400">
                                 Progress :
                                 <Progress
-                                    progress={Math.floor((project.done_story_point / project.total_story_point) * 100)}
+                                    progress={Math.floor((project.done_story_point / project.total_story_point) * 100) || 0}
                                     size="lg"
                                     labelProgress={true}
                                     progressLabelPosition='inside'
