@@ -50,8 +50,8 @@ const Dashboard = () => {
 
         _getProjectsSummary();
     }, [projectYear])
-    
 
+    
     return (
         <>
             <div className='mb-10'>
@@ -134,34 +134,34 @@ const Dashboard = () => {
                 <div className='flex flex-wrap'>
                     {projectIsLoading ? <Loading size='xl' /> : projectSummary.length > 0 ? projectSummary.map(project => (
                         <div className='w-full md:w-1/2 xl:w-1/3 p-2'>
-                        <Card className='h-full' >
-                            <div className='flex items-center justify-center gap-2'>
-                                <h5 className='text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>{project.name}</h5>
-                                {project.status === 1
-                                    ? <Badge>Proposal</Badge>
-                                    : project.status === 2
-                                        ? <Badge color='warning'>Ongoing</Badge>
-                                        : <Badge color='success'>Done</Badge>
-                                }
-                            </div>
-                            <img className='object-cover aspect-square -p-6' src={project.image_url} alt="" />
-                            <div className="font-normal text-gray-700 dark:text-gray-400">
-                                Employee :
-                                {project.project_employees.map(employee => (
-                                    <p className="font-normal text-gray-700 dark:text-gray-400">
-                                        {employee.employee.name}
-                                    </p>))}
-                            </div>
-                            <div className="mt-auto font-normal text-gray-700 dark:text-gray-400">
-                                Progress :
-                                <Progress
-                                    progress={Math.floor((project.done_story_point / project.total_story_point) * 100) || 0}
-                                    size="lg"
-                                    labelProgress={true}
-                                    progressLabelPosition='inside'
-                                />
-                            </div>
-                        </Card>
+                            <Card className='h-full' >
+                                <div className='flex items-center justify-center gap-2'>
+                                    <h5 className='text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>{project.name}</h5>
+                                    {project.status === 1
+                                        ? <Badge>Proposal</Badge>
+                                        : project.status === 2
+                                            ? <Badge color='warning'>Ongoing</Badge>
+                                            : <Badge color='success'>Done</Badge>
+                                    }
+                                </div>
+                                <img className='object-cover aspect-square -p-6' src={project.image_url} alt="" />
+                                <div className="font-normal text-gray-700 dark:text-gray-400">
+                                    Employee :
+                                    {project.project_employees.map(employee => (
+                                        <p className="font-normal text-gray-700 dark:text-gray-400">
+                                            {employee.employee.name}
+                                        </p>))}
+                                </div>
+                                <div className="mt-auto font-normal text-gray-700 dark:text-gray-400">
+                                    Progress :
+                                    <Progress
+                                        progress={Math.floor((project.done_story_point / project.total_story_point) * 100) || 0}
+                                        size="lg"
+                                        labelProgress={true}
+                                        progressLabelPosition='inside'
+                                    />
+                                </div>
+                            </Card>
                         </div>
                     )) : <NoData />}
                 </div>
