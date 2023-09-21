@@ -131,9 +131,10 @@ const Dashboard = () => {
                     </Select>
                 </div>
 
-                <div className='flex flex-wrap gap-5'>
+                <div className='flex flex-wrap'>
                     {projectIsLoading ? <Loading size='xl' /> : projectSummary.length > 0 ? projectSummary.map(project => (
-                        <Card style={{ width: '32%' }}>
+                        <div className='w-full md:w-1/2 xl:w-1/3 p-2'>
+                        <Card className='h-full' >
                             <div className='flex items-center justify-center gap-2'>
                                 <h5 className='text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>{project.name}</h5>
                                 {project.status === 1
@@ -143,7 +144,7 @@ const Dashboard = () => {
                                         : <Badge color='success'>Done</Badge>
                                 }
                             </div>
-                            <img className='object-cover aspect-square' src={project.image_url} alt="" />
+                            <img className='object-cover aspect-square -p-6' src={project.image_url} alt="" />
                             <div className="font-normal text-gray-700 dark:text-gray-400">
                                 Employee :
                                 {project.project_employees.map(employee => (
@@ -161,6 +162,7 @@ const Dashboard = () => {
                                 />
                             </div>
                         </Card>
+                        </div>
                     )) : <NoData />}
                 </div>
             </div>
