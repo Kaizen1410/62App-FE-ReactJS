@@ -15,7 +15,7 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
         setIsLoading(true);
 
         const { error } = await logout();
-        if(error) {
+        if (error) {
             console.error(error);
         } else {
             localStorage.removeItem('token');
@@ -37,7 +37,7 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
             <Sidebar theme={sidebarTheme} className={`fixed z-40 ${!isOpenOnSmallScreen && 'w-0'} overflow-x-hidden md:w-64 transition-all`}>
                 <Sidebar.Items>
                     <Sidebar.ItemGroup>
-                    <Sidebar.Item as={Link} to='/' className="group"
+                        <Sidebar.Item as={Link} to='/' className="group"
                             icon={() => <i className="fa-solid fa-house text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>}
                         >
                             Dashboard
@@ -70,10 +70,8 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
                                 <span>User Roles</span>
                             </Sidebar.Item>
                             <Sidebar.Item as={Link} to='/employees'>
-                                <Link to='/employees' className='inline-block w-full'>
-                                    <i className="fa-solid fa-briefcase mr-4 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
-                                    <span>Employees</span>
-                                </Link>
+                                <i className="fa-solid fa-briefcase mr-4 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+                                <span>Employees</span>
                             </Sidebar.Item>
                             <Sidebar.Item as={Link} to='/employee-positions'>
                                 <i className="fa-solid fa-network-wired mr-3 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
@@ -88,7 +86,7 @@ const SidebarReact = ({ isOpenOnSmallScreen, setIsOpenOnSmallScreen }) => {
                                 <div className='flex gap-2 overflow-hidden'>
                                     {user?.employee.profile_url
                                         ? <img src={user?.employee.profile_url} className='rounded-full w-10 h-10' alt="" />
-                                        : <Avatar rounded size='md'  className='aspect-square' placeholderInitials={initialName(user?.employee.name)} />}
+                                        : <Avatar rounded size='md' className='aspect-square' placeholderInitials={initialName(user?.employee.name)} />}
                                     {isLoading
                                         ? <div className='flex justify-center items-center w-96'>
                                             <BeatLoader color='rgb(8 145 178)' size={12} />

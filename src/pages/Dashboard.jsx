@@ -133,7 +133,7 @@ const Dashboard = () => {
 
                 <div className='flex flex-wrap'>
                     {projectIsLoading ? <Loading size='xl' /> : projectSummary.length > 0 ? projectSummary.map(project => (
-                        <div className='w-full sm:w-1/2 lg:w-1/3 p-2'>
+                        <div key={project.id} className='w-full sm:w-1/2 lg:w-1/3 p-2'>
                         <Card className='h-full' >
                             <div className='flex items-center justify-center gap-2'>
                                 <h5 className='text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>{project.name}</h5>
@@ -149,7 +149,7 @@ const Dashboard = () => {
                                 Employees :
                                 <ul className='list-disc list-inside'>
                                     {project.project_employees.map(employee => (
-                                        <li className="font-normal text-gray-700 dark:text-gray-400">
+                                        <li key={employee.id} className="font-normal text-gray-700 dark:text-gray-400">
                                             {employee.employee.name}
                                         </li>))}
                                 </ul>
