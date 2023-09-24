@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Table, Button, Dropdown, Avatar } from "flowbite-react";
+import { Table, Button, Avatar } from "flowbite-react";
 import PopUpModal from "../../components/DeleteModal";
 import Loading from '../../components/Loading';
 import Pagination from '../../components/Pagination';
@@ -10,6 +10,7 @@ import SearchInput from '../../components/SearchInput';
 import initialName from '../../utils/initialName';
 import NoData from '../../components/NoData';
 import { deleteEmployee, getEmployees } from '../../api/ApiEmployee';
+import SortBy from '../../components/SortBy';
 
 const Employees = () => {
 
@@ -66,16 +67,16 @@ const Employees = () => {
     setDeleteIsLoading(false);
   }
 
-  // Sort
-  const handleSort = (field) => {
-    if (field === sort) {
-      setDirection(prev => prev === 'asc' ? 'desc' : 'asc');
-      return;
-    }
-
-    setSort(field);
-    setDirection('asc');
-  }
+  const items = [
+    {
+      field: 'name',
+      name: 'Name'
+    },
+    {
+      field: 'employee_position',
+      name: 'Position'
+    },
+  ]
 
   const avatarTheme = {
     "root": {
@@ -91,16 +92,8 @@ const Employees = () => {
         <h1 className="font-bold dark:text-white text-2xl mb-8"> Employees List</h1>
         <div className="flex flex-wrap gap-2 justify-between mb-4">
           <div className="flex gap-2">
-            <Dropdown label="Sort By">
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('name')}>
-                {sort === 'name' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Name
-              </Dropdown.Item>
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('employee_position')}>
-                {sort === 'employee_position' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Position
-              </Dropdown.Item>
-            </Dropdown>
+            <SortBy items={items} sort={sort} setSort={setSort} direction={direction} setDirection={setDirection} />
+
             <SearchInput setSearch={setSearch} />
           </div>
           <Button as={Link} to="/employees/add">

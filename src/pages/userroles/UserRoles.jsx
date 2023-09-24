@@ -1,4 +1,4 @@
-import { Dropdown, Table } from "flowbite-react";
+import { Table } from "flowbite-react";
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
@@ -7,6 +7,7 @@ import PerPage from "../../components/PerPage";
 import SearchInput from "../../components/SearchInput";
 import NoData from "../../components/NoData";
 import { getUserRoles } from "../../api/ApiUserRole";
+import SortBy from "../../components/SortBy";
 
 const UserRoles = () => {
   const [userRoles, setUserRoles] = useState([]);
@@ -42,16 +43,16 @@ const UserRoles = () => {
     setPage(1);
   }, [search]);
 
-  // Sort
-  const handleSort = (field) => {
-    if (field === sort) {
-      setDirection(prev => prev === 'asc' ? 'desc' : 'asc');
-      return;
-    }
-
-    setSort(field);
-    setDirection('asc');
-  }
+  const items = [
+    {
+      field: 'email',
+      name: 'Email'
+    },
+    {
+      field: 'name',
+      name: 'Name'
+    },
+  ]
 
   return (
     <>
@@ -59,16 +60,8 @@ const UserRoles = () => {
         <h1 className="font-bold dark:text-white text-2xl mb-8">User Roles List</h1>
 
         <div className="mb-4 flex gap-2">
-          <Dropdown label="Sort By">
-            <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('email')}>
-              {sort === 'email' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-              Email
-            </Dropdown.Item>
-            <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('name')}>
-              {sort === 'name' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-              Name
-            </Dropdown.Item>
-          </Dropdown>
+          <SortBy items={items} sort={sort} setSort={setSort} direction={direction} setDirection={setDirection} />
+
           <SearchInput setSearch={setSearch} />
         </div>
 

@@ -1,4 +1,4 @@
-import { Table, Button, Dropdown, Avatar } from "flowbite-react"
+import { Table, Button, Avatar } from "flowbite-react"
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
@@ -11,6 +11,7 @@ import { TableCell } from "flowbite-react/lib/esm/components/Table/TableCell";
 import moment from "moment";
 import NoData from "../../components/NoData";
 import { deleteProject, getProjects } from "../../api/ApiProject";
+import SortBy from "../../components/SortBy";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -69,16 +70,32 @@ const Projects = () => {
     setDeleteIsLoading(false);
   };
 
-  // Sort
-  const handleSort = (field) => {
-    if (field === sort) {
-      setDirection(prev => prev === 'asc' ? 'desc' : 'asc');
-      return;
-    }
-
-    setSort(field);
-    setDirection('asc');
-  }
+  const items = [
+    {
+      field: 'name',
+      name: 'Name'
+    },
+    {
+      field: 'start_date',
+      name: 'Start Date'
+    },
+    {
+      field: 'end_date',
+      name: 'End Date'
+    },
+    {
+      field: 'total_story_point',
+      name: 'Totaol Story Point'
+    },
+    {
+      field: 'done_story_point',
+      name: 'Done Story Point'
+    },
+    {
+      field: 'status',
+      name: 'Status'
+    },
+  ]
 
   const avatarTheme = {
     "root": {
@@ -95,31 +112,7 @@ const Projects = () => {
 
         <div className="flex flex-wrap gap-2 justify-between mb-4">
           <div className="flex gap-2">
-            <Dropdown label="Sort By">
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('name')}>
-                {sort === 'name' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Name
-              </Dropdown.Item>
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('start_date')}>
-                {sort === 'start_date' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Start Date
-              </Dropdown.Item>
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('end_date')}>
-                {sort === 'end_date' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                End Date
-              </Dropdown.Item>
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('total_story_point')}>
-                {sort === 'total_story_point' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Total Story Point
-              </Dropdown.Item>
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('done_story_point')}>
-                {sort === 'done_story_point' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Done Story Point
-              </Dropdown.Item><Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('status')}>
-                {sort === 'status' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Status
-              </Dropdown.Item>
-            </Dropdown>
+            <SortBy items={items} sort={sort} setSort={setSort} direction={direction} setDirection={setDirection} />
 
             <SearchInput setSearch={setSearch} />
           </div>

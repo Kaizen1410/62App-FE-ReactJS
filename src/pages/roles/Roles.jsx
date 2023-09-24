@@ -1,4 +1,4 @@
-import { Table, Button, Dropdown } from "flowbite-react"
+import { Table, Button } from "flowbite-react"
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Loading from "../../components/Loading";
@@ -9,6 +9,7 @@ import PerPage from "../../components/PerPage";
 import SearchInput from "../../components/SearchInput";
 import NoData from "../../components/NoData";
 import { deleteRole, getRoles } from "../../api/ApiRole";
+import SortBy from "../../components/SortBy";
 
 const Roles = () => {
   const [roles, setRoles] = useState([]);
@@ -66,16 +67,16 @@ const Roles = () => {
     setDeleteIsLoading(false);
   }
 
-  // Sort
-  const handleSort = (field) => {
-    if (field === sort) {
-      setDirection(prev => prev === 'asc' ? 'desc' : 'asc');
-      return;
-    }
-
-    setSort(field);
-    setDirection('asc');
-  }
+  const items = [
+    {
+      field: 'name',
+      name: 'Roles'
+    },
+    {
+      field: 'users_count',
+      name: 'members'
+    },
+  ]
 
   return (
     <>
@@ -83,16 +84,8 @@ const Roles = () => {
         <h1 className="font-bold text-2xl mb-8 dark:text-white">Roles List</h1>
         <div className="flex flex-wrap gap-2 justify-between mb-4">
           <div className="flex gap-2">
-            <Dropdown label="Sort By">
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('name')}>
-                {sort === 'name' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Roles
-              </Dropdown.Item>
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('users_count')}>
-                {sort === 'users_count' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Members
-              </Dropdown.Item>
-            </Dropdown>
+            <SortBy items={items} sort={sort} setSort={setSort} direction={direction} setDirection={setDirection} />
+
             <SearchInput setSearch={setSearch} />
           </div>
 

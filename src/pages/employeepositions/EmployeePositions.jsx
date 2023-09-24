@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Loading from '../../components/Loading';
-import { Button, Dropdown, Table } from 'flowbite-react';
+import { Button, Table } from 'flowbite-react';
 import Pagination from '../../components/Pagination';
 import PopUpModal from '../../components/DeleteModal';
 import { Link } from 'react-router-dom';
@@ -9,6 +9,7 @@ import PerPage from '../../components/PerPage';
 import SearchInput from '../../components/SearchInput';
 import NoData from '../../components/NoData';
 import { deleteEmployeePosition, getEmployeePositions } from '../../api/ApiEmployeePosition';
+import SortBy from '../../components/SortBy';
 
 function EmployeePositions() {
   const [positions, setPositions] = useState([]);
@@ -66,16 +67,12 @@ function EmployeePositions() {
     setDeleteIsLoading(false);
   };
 
-  // Sort
-  const handleSort = (field) => {
-    if (field === sort) {
-      setDirection(prev => prev === 'asc' ? 'desc' : 'asc');
-      return;
-    }
-
-    setSort(field);
-    setDirection('asc');
-  }
+  const items = [
+    {
+      field: 'name',
+      name: 'Position'
+    },
+  ]
 
   return (
     <>
@@ -83,12 +80,8 @@ function EmployeePositions() {
         <h1 className="text-2xl font-bold mb-8 dark:text-white">Employee Positions List</h1>
         <div className="flex flex-wrap gap-2 justify-between mb-4">
           <div className="flex gap-2">
-            <Dropdown label="Sort By">
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('name')}>
-                {sort === 'name' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Position
-              </Dropdown.Item>
-            </Dropdown>
+            <SortBy items={items} sort={sort} setSort={setSort} direction={direction} setDirection={setDirection} />
+
             <SearchInput setSearch={setSearch} />
           </div>
 

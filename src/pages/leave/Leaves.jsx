@@ -1,4 +1,4 @@
-import { Table, Button, Dropdown, Tooltip } from "flowbite-react"
+import { Table, Button, Tooltip } from "flowbite-react"
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
@@ -11,6 +11,7 @@ import PerPage from "../../components/PerPage";
 import SearchInput from "../../components/SearchInput";
 import NoData from "../../components/NoData";
 import { deleteLeave, getLeaves, importLeave } from "../../api/ApiLeave";
+import SortBy from "../../components/SortBy";
 
 const Leaves = () => {
   const [leaves, setLeaves] = useState([]);
@@ -88,16 +89,24 @@ const Leaves = () => {
     setImportIsLoading(false);
   }
 
-  // Sort
-  const handleSort = (field) => {
-    if (field === sort) {
-      setDirection(prev => prev === 'asc' ? 'desc' : 'asc');
-      return;
-    }
-
-    setSort(field);
-    setDirection('asc');
-  }
+  const items = [
+    {
+      field: 'employee_name',
+      name: 'Name'
+    },
+    {
+      field: 'date_leave',
+      name: 'Date Leave'
+    },
+    {
+      field: 'is_approved',
+      name: 'Is Approved'
+    },
+    {
+      field: 'approved_by',
+      name: 'Approved By'
+    },
+  ]
 
   return (
     <>
@@ -106,24 +115,7 @@ const Leaves = () => {
 
         <div className="flex flex-wrap gap-2 justify-between mb-4">
           <div className="flex gap-2">
-            <Dropdown label="Sort By">
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('employee_name')}>
-                {sort === 'employee_name' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Name
-              </Dropdown.Item>
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('date_leave')}>
-                {sort === 'date_leave' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Date Leave
-              </Dropdown.Item>
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('is_approved')}>
-                {sort === 'is_approved' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-xmark text-red-600"></i> : <i className="fa-solid fa-fade fa-2xs fa-check text-green-400"></i>)}
-                Is Approved
-              </Dropdown.Item>
-              <Dropdown.Item className="cursor-pointer gap-2" onClick={() => handleSort('approved_by')}>
-                {sort === 'approved_by' && (direction === 'asc' ? <i className="fa-solid fa-fade fa-2xs fa-arrow-up"></i> : <i className="fa-solid fa-fade fa-2xs fa-arrow-down"></i>)}
-                Approved By
-              </Dropdown.Item>
-            </Dropdown>
+            <SortBy items={items} sort={sort} setSort={setSort} direction={direction} setDirection={setDirection} />
 
             <SearchInput setSearch={setSearch} />
           </div>
