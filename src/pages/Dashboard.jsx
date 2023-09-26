@@ -135,7 +135,7 @@ const Dashboard = () => {
                     {projectIsLoading ? <Loading size='xl' /> : projectSummary.length > 0 ? projectSummary.map(project => (
                         <div key={project.id} className='w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 p-2'>
                         <Card className='h-full' >
-                            <div className='flex items-center justify-center gap-2'>
+                            <div className='flex items-center justify-start gap-2'>
                                 <h5 className='text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>{project.name}</h5>
                                 {project.status === 1
                                     ? <Badge>Proposal</Badge>
@@ -144,7 +144,7 @@ const Dashboard = () => {
                                         : <Badge color='success'>Done</Badge>
                                 }
                             </div>
-                            <img className='object-cover aspect-square -p-6' src={project.image_url} alt="" />
+                            <img className='object-cover aspect-square -p-6 w-16 rounded' src={project.image_url} alt="" />
                             <div className="font-normal text-gray-700 dark:text-gray-400">
                                 Employees :
                                 <ul className='list-disc list-inside'>
@@ -155,8 +155,8 @@ const Dashboard = () => {
                                 </ul>
                             </div>
                             <div className="mt-auto font-normal text-gray-700 dark:text-gray-400">
-                                Progress :
                                 <Progress
+                                    className='progress-project text-[9px]'
                                     progress={Math.floor((project.done_story_point / project.total_story_point) * 100) || 0}
                                     size="lg"
                                     labelProgress={true}
